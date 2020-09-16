@@ -1,0 +1,786 @@
+body::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+body::-webkit-scrollbar-track {
+  background: #323d61; 
+}
+ 
+/* Handle */
+body::-webkit-scrollbar-thumb {
+  background: #ee2265; 
+}
+
+.flex {
+    display: flex;
+}
+a.button{
+    background: none repeat scroll 0 0 #fff;
+    color: #666;
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    line-height: normal;
+    padding: 6px 12px;
+    text-transform: uppercase;
+    border: 1px #d1d1d1 solid;
+    font-weight: 600;
+}
+a.button:hover {
+    padding: 6px 12px;
+    transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -webkit-transition: all 0.3s linear;
+}
+
+.button:hover, a.button.button-clear {
+    background: #ee2265;
+    border-color: #ee2265;
+    color: #fff;
+}
+.jtv-testimonial-block .item .col-lg-3{
+	width:24.5%!important;
+}
+.action a {
+	padding-right: 10px;
+}
+.grocery-banner a img:hover {
+	opacity: .7;
+	transform: scale(1.01);
+	transition: .2s ease-in-out;
+}
+ a.button.btn-cart{
+  line-height: 2.5
+}
+/*================ Sidebar ================*/
+
+.cd-accordion-menu {
+  width: 100%;
+  max-width: 600px;
+  margin: 4em auto;
+}
+
+.cd-accordion-menu ul {
+  /* by default hide all sub menus */
+  display: none;
+  height:0px;
+  transition:all 0.5s ease-in-out
+}
+
+.cd-accordion-menu li {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.cd-accordion-menu input[type=checkbox] {
+  /* hide native checkbox */
+  position: absolute;
+  opacity: 0;
+}
+
+.cd-accordion-menu label,
+.cd-accordion-menu a {
+  position: relative;
+  display: block;
+  color: #333;
+  font-size: 1.6rem;
+}
+
+.no-touch .cd-accordion-menu label:hover,
+.no-touch .cd-accordion-menu a:hover {
+  background: #52565d;
+}
+
+.cd-accordion-menu label::before {
+  /* icons */
+  content: "\f105";
+  font-family: FontAwesome;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 43%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.cd-accordion-menu label {
+  cursor: pointer;
+}
+.cd-accordion-menu li:not(.has-children) {
+  padding-bottom: 2px;
+}
+
+.cd-accordion-menu label::before {
+  /* arrow icon */
+  right: 8px;
+  background-position: 0 0;
+  -webkit-transform: translateY(-50%) rotate(-90deg);
+  -moz-transform: translateY(-50%) rotate(-90deg);
+  -ms-transform: translateY(-50%) rotate(-90deg);
+  -o-transform: translateY(-50%) rotate(-90deg);
+  transform: translateY(-50%) rotate(-90deg);
+}
+
+.cd-accordion-menu label::after {
+  /* folder icons */
+  left: 41px;
+  background-position: -16px 0;
+}
+
+.cd-accordion-menu a::after {
+  /* image icon */
+  right: -25px;
+}
+
+.cd-accordion-menu input[type=checkbox]:checked + label::before {
+  /* rotate arrow */
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.cd-accordion-menu input[type=checkbox]:checked + label::after {
+  /* show open folder icon if item is checked */
+  background-position: -32px 0;
+}
+
+.cd-accordion-menu input[type=checkbox]:checked + label + ul,
+.cd-accordion-menu input[type=checkbox]:checked + label:nth-of-type(n) + ul {
+  /* use label:nth-of-type(n) to fix a bug on safari (<= 8.0.8) with multiple adjacent-sibling selectors*/
+  /* show children when item is checked */
+  display: block;
+  transition: all 0.3s ease-in-out;
+  height:auto;
+  background: #eee;
+  padding: 5px 0 1px;
+  border-radius: 5px;
+}
+
+.cd-accordion-menu ul label,
+.cd-accordion-menu ul a {
+  padding-left: 30px;
+}
+
+.no-touch .cd-accordion-menu ul label:hover,
+.no-touch .cd-accordion-menu ul a:hover {
+  background: #3c3f45;
+}
+
+.cd-accordion-menu > li:last-of-type > label,
+.cd-accordion-menu > li:last-of-type > a,
+.cd-accordion-menu > li > ul > li:last-of-type label,
+.cd-accordion-menu > li > ul > li:last-of-type a {
+  box-shadow: none;
+}
+
+.cd-accordion-menu ul label::after,
+.cd-accordion-menu ul a::after {
+  left: 59px;
+}
+
+.cd-accordion-menu ul ul label,
+.cd-accordion-menu ul ul a {
+  padding-left: 40px;
+}
+
+.cd-accordion-menu ul ul label::before {
+  left: 54px;
+}
+
+.cd-accordion-menu ul ul label::after,
+.cd-accordion-menu ul ul a::after {
+  left: 77px;
+}
+
+.cd-accordion-menu ul ul ul label,
+.cd-accordion-menu ul ul ul a {
+  padding-left: 118px;
+}
+
+.cd-accordion-menu ul ul ul label::before {
+  left: 72px;
+}
+
+.cd-accordion-menu ul ul ul label::after,
+.cd-accordion-menu ul ul ul a::after {
+  left: 95px;
+}
+
+@media only screen and (min-width: 600px) {
+  .cd-accordion-menu label,
+  .cd-accordion-menu a {
+    padding: 0 15px;
+    font-size: 15px;
+  }
+  .cd-accordion-menu ul label,
+  .cd-accordion-menu ul a {
+    padding-left: 30px;
+  }
+  .cd-accordion-menu ul label::after,
+  .cd-accordion-menu ul a::after {
+    left: 77px;
+  }
+  .cd-accordion-menu ul ul label,
+  .cd-accordion-menu ul ul a {
+    padding-left: 45px;
+  }
+  .cd-accordion-menu ul ul label::before {
+    left: 72px;
+  }
+  .cd-accordion-menu ul ul label::after,
+  .cd-accordion-menu ul ul a::after {
+    left: 101px;
+  }
+  .cd-accordion-menu ul ul ul label,
+  .cd-accordion-menu ul ul ul a {
+    padding-left: 154px;
+  }
+  .cd-accordion-menu ul ul ul label::before {
+    left: 96px;
+  }
+  .cd-accordion-menu ul ul ul label::after,
+  .cd-accordion-menu ul ul ul a::after {
+    left: 125px;
+  }
+}
+
+.cd-accordion-menu.animated label::before {
+  /* this class is used if you're using jquery to animate the accordion */
+  -webkit-transition: -webkit-transform 0.3s;
+  -moz-transition: -moz-transform 0.3s;
+  transition: transform 0.3s;
+}
+/*================== Product List Sort By ======================*/
+.sort-by select {
+	margin-top: -6px ;
+	margin-bottom: 0;
+}
+/*================== Color Select ===========================*/
+.product-view .form-option .list-color li span {
+    width: 22px;
+    height: 22px;
+    border: 1px solid #eaeaea;
+    float: left;
+    margin-right: 10px;
+    list-style: none;
+}
+.product-view .form-option .list-color li.selected {
+    border: 1px solid #323d61;
+}
+/*================== Size Select ===========================*/
+.product-view .form-option .list-size li span {
+    width: 35px;
+    height: 22px;
+    float: left;
+    margin-right: 10px;
+    list-style: none;
+}
+.product-view .form-option .list-size li.selected {
+    border: 1px solid #323d61;
+    opacity: 1
+}
+.product-view .form-option .list-size li:hover, .product-view .form-option .list-size li.active {
+    border: 1px solid #394771;
+}
+.product-view .form-option .list-size li {
+    width: 35px;
+    height: 25px;
+    border: 1px solid #bbb;
+    float: left;
+    margin-right: 10px;
+    list-style: none;
+    text-align: center;
+    line-height: 1.8;
+    opacity: 0.8;
+    cursor: pointer;
+}
+.product-view .form-option .list-size {
+    overflow: hidden;
+    padding-top: 5px;
+    padding: 0px;
+    cursor: pointer;
+}
+/*=============== CART ===============-*/
+.singleorder {
+  border: 1px solid #e3e3e3;
+  background-color: #fff;
+  margin-bottom: 15px;
+}
+.singleorder .singleorderimg {
+  padding: 10px;
+}
+.singleorder .singleorderimg img{
+  width: 100%;
+}
+.singleorder .singleordercontent {
+  padding: 20px 10px 10px;
+}
+.singleorder .singleordercontent .sub-tag {
+  font-weight: 500;
+  opacity: .8
+}
+.singleorder .quantity{
+ margin: 5px;  
+ margin-left: 0;
+}
+.singleorder .quantity button{
+  margin-bottom: 0;
+  font-size: 12px;
+}
+.singleorder .quantity input {
+    width: 50px;
+    margin: 0;
+    padding: 0 5px;
+    text-align: center;
+    background: #fff;
+}
+.singleorder .quantity b{
+    padding-right: 15px;
+}
+.singleorder .quantity p{
+    width: 25%;
+    float: left;
+    margin-bottom: 0;
+    color: #333;
+    font-size: 16px;
+    font-weight: 700;
+}
+.singleorder .quantity p small{
+    color: #a7a7a7;
+    text-decoration: line-through;
+    font-size: 16px;
+}
+.singleorder .singleordercontent .editproduct{
+  font-size: 15px;
+  color: #ffffff;
+  padding: 3px 8px;
+  background: #ee2265;
+  border:1px solid #ee2265;
+  margin-right: 10px;
+  text-decoration: none;
+}
+.singleorder .singleordercontent .editproduct.oth{
+  border:1px solid #ee2265;
+  color: #ee2265;
+  background: #fff;
+}
+.singleorder .singleordercontent .editproduct:hover{
+  background: #dc1e5d;
+  box-shadow: 2px 4px 2px 1px #ddd;
+}
+.singleorder .singleordercontent .editproduct.oth:hover{
+  color: #fff;
+  box-shadow: 2px 4px 2px 1px #ddd;
+}
+.singleorder .singleordercontent a {
+  font-size: 18px;
+}
+.singleorder .action{
+  padding-top: 5px;
+}
+.singleorder .cart-price span{
+  font-size: 14px;
+}
+.singleordercontent .sub-tag.spl:before {
+  content: "|";
+  padding: 0 10px;
+  color: #333;
+  font-size: 15px;
+}
+.singleordercontent .varient .sub-tag{
+    opacity: 1
+}
+.singleordercontent .varient .sub-tag span{
+    width: 15px;
+    height: 15px;
+    display: table-caption;
+    margin-bottom: -2px;
+    margin-left: 3px;
+}
+.singleorder .row{
+  margin: 0;
+  border-bottom: 1px dotted #ccc;
+}
+.singleorder .row:last-child {
+  border-bottom: 0px dotted #ccc;
+}
+.cartcalculation {
+    background-color: #ee226599;
+    padding: 15px;
+    border: 1px solid #eaeaea;
+    display: table;
+    width: 100%;    
+    border-top: 0;
+    color: #000;
+    border-radius: 10px;
+}
+.paymttotal h4 {
+    width: 50%;
+    float: left;
+    padding: 12px 0;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 15px;
+    margin: 0;
+}
+.ordernav{
+    padding-bottom: 10px;
+}
+.ordernav ul{
+    list-style: none;
+    padding-bottom: 10px;
+}
+.ordernav ul li{
+    border-bottom: 3px solid #ddd;
+    width: 33.3%;
+    text-align: right;
+    float: left;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+.ordernav ul li>div {
+    display: inline-block;
+    background: #323d61;
+    color: #fff;
+    padding: 6px;
+    border-radius: 20px 20px 0 20px;
+    opacity: 0;
+}
+.ordernav ul li.step>div {
+    opacity: 1;
+}
+.ordernav ul li.step {
+    opacity: 1;    
+    border-bottom: 3px solid #323d61;
+}
+/**/
+.text-center {
+    text-align: center!important;
+}
+.my-account {
+    padding: 20px;
+    background-color: #fff;
+    border: 1px #e8e6e2 solid;
+    margin-bottom: 30px;
+}
+.dashboard {
+    margin-top: 10px
+}
+.dashboard .welcome-msg {
+    text-align: left;
+    padding: 0px 0 5px;
+    color: #333;
+    margin: auto;
+}
+.dashboard .welcome-msg strong {
+    font-weight: bold;
+    font-size: 13px;
+}
+.box-account {
+    margin-top: 0px;
+}
+.box-account .page-title {
+    margin: 0 !important;
+    padding: 0;
+    background: none;
+    border-bottom: none !important;
+}
+.box-account .page-title h2 {
+    font-size: 15px;
+    font-weight: 600;
+}
+.box-account address {
+    color: #333;
+    text-align: left;
+    border-bottom: none;
+}
+.box-account .col2-set a {
+    text-decoration: underline
+}
+.col2-set .col-1 {
+    border: 0 solid #336600;
+    padding-bottom: 0;
+    padding-top: 0;
+    text-align: left;
+    width: 32.3%;
+    display: inline-block;
+    margin-right: 6px;
+}
+.col2-set {
+    width: 100%;
+    display: inline-block;
+}
+.recent-orders .title-buttons {
+    margin-bottom: 8px;
+    text-align: right;
+}
+.recent-orders .title-buttons strong {
+    color: #333;
+    float: left;
+    font-size: 13px;
+    font-weight: 600;
+}
+.my-account {
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+    box-shadow: 0 0 8px 0 rgba(0,0,0,.05);
+    border-radius: 3px;
+}
+.single-address {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #eaeaea;
+}
+.single-address-content {
+    padding-left: 10px;
+}
+/*---------- Custom Radio Button -----------*/
+/* The container */
+.radio-container {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.radio-container input[type=radio] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #e2e0e0;
+  border-radius: 50%;
+  border: 1px solid #999;
+}
+
+/* On mouse-over, add a grey background color */
+.radio-container:hover input ~ .checkmark {
+  background-color: #6680cc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio-container input:checked ~ .checkmark {
+  background-color: #394771;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio-container .checkmark:after {
+    top: 5px;
+    left: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+/*---------- Custom Radio Button -----------*/
+.manage_add{
+    padding: 10px;
+    background: #fff;
+    margin: 20px auto 0;
+    border: 1px solid #eaeaea;
+    width: 50%;
+}
+.manage_add:hover {
+    background: #394771;
+}
+.manage_add:hover h5{
+    color: #fff;
+}
+/*============= CONFIRMATION =============*/
+ @import "bourbon";
+
+.orderconfim .checkmark__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #ee2265;
+  fill: none;
+  animation: stroke .6s cubic-bezier(0.650, 0.000, 0.450, 1.000) forwards;
+}
+
+.orderconfim .checkmark1 {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+  margin: 0 auto 10px;
+  box-shadow: inset 0px 0px 0px #ee2265;
+  animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+
+.orderconfim .checkmark__check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke .3s cubic-bezier(0.650, 0.000, 0.450, 1.000) .8s forwards;
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scale {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+
+@keyframes fill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px #ee2265;
+  }
+}
+.orderconfim .single-address-content p {
+    margin-bottom: 0
+}
+.wishlist ul.products-grid li.item {
+  width: 20%;
+}
+.wishlist .icon-heart:before{
+    content: "\f1f8"!important;
+    font-family: FontAwesome;
+    font-size: 17px;
+    display: table;
+    margin: -2px auto;
+}
+.checkout-page textarea.form-control{
+    height: 57px;
+}
+/*================= PROFILE =================*/
+.profile .static-contain {
+  margin-top: 0px;
+  padding: 15px;
+  background: #fff;
+  border: 1px solid #ddd;
+}    
+  .profile .col-main {
+    width: 100%
+}
+.profile .static-contain h2{
+  text-transform: uppercase;
+  font-size: 25px;
+  font-weight: 700;
+}
+/*================== HEADER =====================*/
+.jtv-logo-box .logo a h1 {
+    color: #323d61;
+    margin: 0;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+.chngpas{
+  font-weight: 500;
+}
+.chngpas:hover{
+  text-decoration: underline;
+  padding-left: 5px;
+  transition: .2s ease-in-out;
+}
+/*======== Swarch ========*/
+#livesearch .row img {
+  width: 120%;
+}
+.livesrc {
+  border-bottom: 1px solid #ddd;
+  padding: 3px;
+}
+.livesrc:last-child {
+  border-bottom: 0;
+  padding: 0;
+}
+#livesearch {
+  color: black;
+  z-index: 1111;
+  position: absolute;
+  background: white;
+  display: none;
+  padding: 10px;
+  width: 89.9%;
+  margin-top: 10px;
+  border: 1px solid #dedbdc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 #dedbdc;
+  max-height: 450px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+#livesearch::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 0 10px 10px 0
+}
+
+/* Track */
+#livesearch::-webkit-scrollbar-track {
+  background: transparent; 
+  border-radius: 0 10px 10px 0
+}
+ 
+/* Handle */
+#livesearch::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 10px
+}
+
+/* Handle on hover */
+#livesearch::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+.triup {
+  position: absolute;
+  margin-top: -15px;
+  left: 49%;
+  z-index: 999;
+  color: #fff;
+  font-size: 20px;
+}
+#livesearch .col-md-9 {
+  padding-left: 0
+}
+.jtv-mobile-menu li:nth-child(1) { 
+  margin-top: 50px;
+} 
