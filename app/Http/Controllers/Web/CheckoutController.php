@@ -19,7 +19,7 @@ class CheckoutController extends Controller
     public function showCheckoutForm()
     {
         $all_address = Address::where('user_id', Auth::guard('users')->user()->id)->orderBY('id', "DESC")->get();
-        
+
         // $cart = DB::table('cart')
         //     ->leftjoin('product_stock', 'cart.stock_id', '=', 'product_stock.id')
     	// 	->leftjoin('product','product_stock.product_id','=','product.id')
@@ -62,7 +62,7 @@ class CheckoutController extends Controller
         
         if($request->input('payment_type') == 1){
             try {
-                $id = DB::transaction(function () use($address_id) {
+                DB::transaction(function () use($address_id) {
                     $order_id = DB::table('order')
                     ->insertGetId([
                         'order_id' => time(),
@@ -161,9 +161,9 @@ class CheckoutController extends Controller
                             // $arr = array('msg' => 'Payment successfully credited', 'status' => true);
                             
                             // return Response()->json($arr); 
-                            return $order_id;
+                            // return $order_id;
                 });
-                    return redirect()->route('web.confirm', encrypt(['id' => $id, 'address_id' => $address_id]));
+                    return redirect()->route('web.confirm', encrypt(['address_id' => $address_id]));
             } catch (\Exception $e) {
                 return redirect()->back()->with('error', 'Something went Wrong! Try after sometime!');
             }
