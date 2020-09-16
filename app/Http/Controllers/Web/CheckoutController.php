@@ -39,17 +39,15 @@ class CheckoutController extends Controller
         // }
     	return view('web.checkout.checkout', ['all_address' => $all_address]);
     }
-    public function showConfirm($id, $address_id)
+    public function showConfirm($id)
     {
         try{
             $id = decrypt($id);
-            $address_id = decrypt($address_id);
         }catch(DecryptException $e) {
             abort(404);
         }
         $orders = Order::find($id);
-        $address = Address::find($id);
-		return view('web.checkout.confirm', compact('orders', 'address'));
+		return view('web.checkout.confirm', compact('orders'));
     }
     public function placeOrder(Request $request)
     {
@@ -162,8 +160,9 @@ class CheckoutController extends Controller
                             
                             // return Response()->json($arr); 
                             // return $order_id;
+                            Cart::destroy();
                 });
-                    return redirect()->route('web.confirm', encrypt(['address_id' => $address_id]));
+                    return redirect()->route('web.confirm', encrypt(['id' => $address_id]));
             } catch (\Exception $e) {
                 return redirect()->back()->with('error', 'Something went Wrong! Try after sometime!');
             }

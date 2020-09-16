@@ -46,7 +46,7 @@ Route::group(['namespace'=>'Web'],function(){
 	Route::get('set-password/{user_id}', 'UsersLoginController@setPassword')->name('web.set_password');
 
 	Route::group(['middleware'=>'auth:users'],function(){
-		Route::get('confirm/{id}/{address_id}', 'CheckoutController@showConfirm')->name('web.confirm');
+		Route::get('confirm/{id}', 'CheckoutController@showConfirm')->name('web.confirm');
 		/** Checkout Page **/
 		Route::get('checkout', 'CheckoutController@showCheckoutForm')->name('web.checkout');
 		/** Place Order **/

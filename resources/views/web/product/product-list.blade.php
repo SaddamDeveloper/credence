@@ -53,15 +53,11 @@
                                 <div class="item-price">
                                   <div class="price-box"> <span class="regular-price"> 
                                     <span class="price">
-                                      @if (!empty($item->discount))
-                                        @php
-                                          $discount_amount = ($item->price * $item->discount) / 100;
-                                          $amount = ($item->price - $discount_amount);
-                                        @endphp
-                                       <span class="old-price"> ₹{{ $item->price }}</span>
-                                       <span class="special-price">₹{{ $amount }}</span>
+                                      @if (!empty($item->price))
+                                       <span class="old-price"> ₹{{ number_format($item->discount, 2) }}</span>
+                                       <span class="special-price">₹{{ number_format($item->price, 2) }}</span>
                                       @else
-                                        <span class="special-price">₹{{ $item->price }}</span>
+                                        <span class="special-price">₹{{ number_format($item->price, 2) }}</span>
                                       @endif
                                     </span> </span> </div>
                                 </div>
