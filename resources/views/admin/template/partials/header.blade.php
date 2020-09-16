@@ -172,14 +172,14 @@
                   <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-envelope-o"></i>
                     <span class="badge bg-green">
-                        {{-- @if($header_data['new_order_cnt'] > 0)
+                        @if($header_data['new_order_cnt'] > 0)
                             {{ $header_data['new_order_cnt'] }}
                         @else
                             {{ 0 }}
-                        @endif --}}
+                        @endif
                     </span>
                   </a>
-                  {{-- @if($header_data['new_order_cnt'] > 0)
+                  @if($header_data['new_order_cnt'] > 0)
                   <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                     <li>
                       <a>
@@ -195,7 +195,7 @@
                       </div>
                     </li>
                   </ul>
-                  @endif --}}
+                  @endif
                 </li>
               </ul>
             </nav>

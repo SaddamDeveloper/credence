@@ -80,7 +80,7 @@ class AppServiceProvider extends ServiceProvider
             $cart_data = [];
             if( Auth::guard('users')->user() && !empty(Auth::guard('users')->user()->id))
             {
-                // $user_id = Auth::guard('users')->user()->id;
+                $user_id = Auth::guard('users')->user()->id;
 
                 // $cart = Cart::content();
                 // if (count($cart) > 0) {
