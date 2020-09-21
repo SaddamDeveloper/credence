@@ -152,7 +152,7 @@
                 </div>
                 <div class="paymttotal">
                   <h4 style="text-align: left;">Shipping  </h4>
-                  <h4 style="text-align: right;" id="total">30</h4>
+                  <h4 style="text-align: right;" id="total">0.00</h4>
                 </div>
                 <div class="paymttotal">
                   <h4 style="text-align: left;font-weight: 700">Grand Total </h4>
