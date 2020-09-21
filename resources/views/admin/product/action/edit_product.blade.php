@@ -25,22 +25,23 @@
                             <input class="form-control" name="p_id" disabled value="{{ $product_record->sku_id }}">
                             <input class="form-control" type="hidden" name="sku_id" value="{{ $product_record->sku_id }}">
                         </div>
-
+                    </div>
+                    <div class="form-row mb-3">
                         <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
-                            <label for="sub_cate_name">Product Type</label>
-                            @if($product_record->product_type == 1)
-                            <input type="text" class="form-control" value="Cloths" required disabled>
-                            <input type="hidden" name="product_type" class="form-control" value="1" required>
-                            @elseif($product_record->product_type == 2)
-                            <input type="text" class="form-control" value="Cosmetic/Perfumes" required disabled>
-                            <input type="hidden" name="product_type" class="form-control" value="2" required>
-                            @else
-                            <input type="text" class="form-control" value="Other" required disabled>
-                            <input type="hidden" name="product_type" class="form-control" value="3" required>
-                            @endif
+                            <label for="product_name">Product Name</label>
+                            <input type="text" class="form-control" name="product_name" id="product_name" value="{{ $product_record->product_name }}" required>
+                            @error('product_name')
+                                {{ $message }}
+                            @enderror
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
+                            <label for="slug">Slug</label>
+                            <input type="text" class="form-control" name="slug" id="slug" value="{{ $product_record->slug }}" required readonly>
+                            @error('slug')
+                                {{ $message }}
+                            @enderror
                         </div>
                     </div>
-
                     <div class="form-row mb-3">
                         <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
                             <label for="top_cate_name">Top-Category</label>
@@ -89,7 +90,7 @@
                         <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
                             <label for="brand">Brand</label>
                             <select name="brand" id="brand" class="form-control col-md-7 col-xs-12">
-                                <option selected></option>
+                                <option value="" selected disabled></option>
                                 @if(count($brand_list) > 0)
                                     @foreach($brand_list as $key => $value)
                                         @if($product_record->brand_id == $value->id)
@@ -106,87 +107,29 @@
                         </div>
                     </div>
 
-                    <div class="form-row mb-3">
-                        <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
-                            <label for="product_name">Product Name</label>
-                            <input type="text" class="form-control" name="product_name" id="product_name" value="{{ $product_record->product_name }}" required>
-                            @error('product_name')
-                                {{ $message }}
-                            @enderror
-                        </div>
-                        <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
-                            <label for="slug">Slug</label>
-                            <input type="text" class="form-control" name="slug" id="slug" value="{{ $product_record->slug }}" required readonly>
-                            @error('slug')
-                                {{ $message }}
-                            @enderror
-                        </div>
-                    </div>
-
-                    @if(($product_record->product_type == 1) || ($product_record->product_type == 3))
-                    <div class="form-row mb-3">
-                        <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
-                            <label for="price">Price</label>
-                            <input type="number" min="1" step="0.01" class="form-control" name="price" value="{{ $product_record->price }}">
-                            </select>
-                            @error('price')
-                                {{ $message }}
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
-                            <label for="discount">MRP</label>
-                            <input type="number" min="0" class="form-control" name="discount" value="{{ $product_record->discount }}">
-                            @error('discount')
-                                {{ $message }}
-                            @enderror
-                        </div>
-                    </div>
-                    @endif
-
-                    @if($product_record->product_type == 1)
-                    <div class="form-row mb-3">
-                        <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
-                            <label for="stock_type">Size Chart (In Image)</label>
-                            <input type="file" class="form-control" name="size_chart" id="input_size_chart">
-                            @error('size_chart')
-                                {{ $message }}
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="form-row mb-3">
-                        <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
-                            <img src="{{ asset('assets/product_size_chart/'.$product_record->size_chart.'') }}" width="80px" height="80px" id="img_size_chart">
-                        </div>
-                    </div>
-                    @endif
-
-                    @if($product_record->product_type == 3)
-                    <div class="form-row mb-3">
-                        <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
-                            <label for="stock">Stock</label>
-                            <input type="number" min="0" class="form-control" name="stock" value="{{ $product_record->stock }}" id="input_stock">
-                            </select>
-                            @error('stock')
-                                {{ $message }}
-                            @enderror
-                        </div>
-                    </div>
-                    @endif
+                    {{-- Price & Discount & Stock--}}
                 </div>
-
-                @if(!empty($stocks) && ($product_record->product_type == 1))
+                @if(isset($stocks) && !empty($stocks))
                 <div class="well" style="overflow: auto">
                     <div class="form-row mb-3">
                         @foreach ($stocks as $key => $item)
                             <div class="col-md-12 col-sm-12 col-xs-12 mb-3 multple_stock_div">
-                                <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
+                                    <label for="size">Size Name</label>
                                     <input type="hidden" value="{{ $item->id }}" name="stock_id[]" required >
                                     <input type="text" class="form-control"  placeholder="Enter size" name="size[]" value="{{ $item->size }}" required>
                                 </div>
-                                <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
+                                    <label for="stock">Stock</label>
                                     <input type="number" min="0" class="form-control" value="{{ $item->stock }}" placeholder="Enter stock" name="stock[]" required>
+                                </div>
+                                <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
+                                    <label for="price">Price</label>
+                                    <input type="number" min="1" step="0.01" class="form-control" name="price" value="{{ $product_record->price }}">
+                                </div>
+                                <div class = "col-md-2 col-sm-12 col-xs-12 mb-3">
+                                    <label for="mrp">MRP</label>
+                                    <input type="number" min="0" class="form-control" name="discount" value="{{ $product_record->discount }}">
                                 </div>
                                 <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
                                 @if ($item->status == 1)
@@ -201,90 +144,26 @@
                         @endforeach
                     </div>
                 </div>
-
                 <div class="well" style="overflow: auto;" id="whole_stock_div">
                     <div class="form-row mb-3">
                         <div class="col-md-12 col-sm-12 col-xs-12 mb-3" id="stock_div">
-                            <div class="col-md-12 col-sm-12 col-xs-12 mb-3"> 
-                                <button type="button" class="btn btn-primary" onclick="addClothRow();">Add</button>
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12 mb-3">
-                                <div class="col-md-4 col-sm-12 col-xs-12 mb-3"> 
-                                    <label for="size">Size</label> 
-                                    <input type="text" class="form-control" name="size[]">
+                            <div class="col-md-10 col-sm-12 col-xs-12 mb-3 input_fields_wrap">
+                                <div class="col-md-2 col-sm-12 col-xs-12 mb-3"> 
+                                    <input type="text" class="form-control" name="size[]" placeholder="Size" required>
                                 </div>
-                                <div class="col-md-4 col-sm-12 col-xs-12 mb-3"> 
-                                    <label for="stock">Stock</label> 
-                                    <input type="number" min="0" class="form-control" name="stock[]" >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endif
-
-                @if(!empty($stocks) && ($product_record->product_type == 2))
-                <div class="well" style="overflow: auto">
-                    <div class="form-row mb-3">
-                    @foreach ($stocks as $key => $item)
-                        <div class="col-md-12 col-sm-12 col-xs-12 mb-3">
-                            <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                <label for="size">Size</label>
-                                <input type="text" class="form-control" value="{{ $item->size }}" name="size[]">
-                            </div>
-                            <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                <label for="stock">Stock</label>
-                                <input type="hidden" value="{{ $item->id }}" name="stock_id[]" required >
-                                <input type="number" min="0" class="form-control" value="{{ $item->stock }}" name="stock[]" required>
-                            </div>
-                            <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                <label for="price">Price</label>
-                                <input type="number" min="0" class="form-control" value="{{ $item->price }}" name="price[]" required>
-                            </div>
-                            <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                <label for="discount">MRP</label>
-                                <input type="number" class="form-control" value="{{ $item->discount }}" name="discount[]">
-                            </div>
-                            <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                @if ($item->status == 1)
-                                    <a class="btn btn-success btn-sm" style="margin-top: 25px;">Active</a>
-                                    <a class="btn btn-danger btn-sm" href="{{ route('admin.update_product_stock_status', ['stock_id' => $item->id, 'status' => 2]) }}" style="margin-top: 25px;">In-Active</a>
-                                @else
-                                    <a class="btn btn-danger btn-sm" style="margin-top: 25px;">In-Active</a>
-                                    <a class="btn btn-success btn-sm" href="{{ route('admin.update_product_stock_status', ['stock_id' => $item->id, 'status' => 1]) }}" style="margin-top: 25px;">Active</a>
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
-                    </div>
-                </div>
-
-                <div class="well" style="overflow: auto;" id="whole_stock_div">
-                    <div class="form-row mb-3">
-                        <div class="col-md-12 col-sm-12 col-xs-12 mb-3" id="stock_div">
-                            <div class="col-md-12 col-sm-12 col-xs-12 mb-3">
-                                <button type="button" class="btn btn-primary" onclick="addCosPerRow();">Add</button>
-                            </div>
-                            <div class="col-md-12 col-sm-12 col-xs-12 mb-3">
-                                <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                    <label for="size">Size</label>
-                                    <input type="text" class="form-control" name="size[]">
+                                <div class="col-md-2 col-sm-12 col-xs-12 mb-3"> 
+                                    <input type="number" min="0" class="form-control" placeholder="Stock" name="stock[]" required>
                                 </div>
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                    <label for="stock">Stock</label>
-                                    <input type="number" min="0" class="form-control" name="stock[]">
+                                    <input type="number" class="form-control" placeholder="Price" name="price[]" required>
                                 </div>
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                    <label for="price">Price</label>
-                                    <input type="number" min="0" class="form-control" name="price[]">
+                                    <input type="number" class="form-control" name="discount[]" placeholder="MRP" required>
                                 </div>
-                                <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                    <label for="discount">MRP</label>
-                                    <input type="number" class="form-control" name="discount[]" >
+                                <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                    <button type="button" class="btn btn-primary" id="add_stock_btn">Add</button>
                                 </div>
-                                <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                    
-                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -322,7 +201,7 @@
                 <div class="well" style="overflow: auto;" id="whole_color_div">
                     <div class="form-row mb-3">
                         <div class="col-md-12 col-sm-12 col-xs-12 mb-3" id="color_div">
-                            <button type="button" id="add_color_btn" class="btn btn-primary" >Add Color</button>
+                            
                             <div class="col-md-12 col-sm-12 col-xs-12 mb-3"> 
                                 <div class="col-md-4 col-sm-12 col-xs-12 mb-3"> 
                                     <input type="text" class="form-control" placeholder="Enter color" name="color[]" id="input_color"> 
@@ -331,6 +210,7 @@
                                     <input type="color" class="form-control" placeholder="Enter color code" name="color_code[]" id="input_color_code"> 
                                 </div>
                                 <div class="col-md-4 col-sm-12 col-xs-12 mb-3">  
+                                    <button type="button" id="add_color_btn" class="btn btn-primary" >Add Color</button>
                                 </div>
                             </div>
                         </div>
@@ -438,10 +318,28 @@ $(document).ready(function(){
         $("#slug").val($("#product_name").val().toLowerCase());
     });
 
-    $("#add_color_btn").click(function(){
+    var max_fields_color      = 10; //maximum input boxes allowed
+    var wrapper_color   		= $("#color_div"); //Fields wrapper
+    var add_color_button      = $("#add_color_btn"); //Add button ID
+    var y = 1; //initlal text box count
 
-        color_cnt++;
-        $("#color_div").append('<div class=\"col-md-12 col-sm-12 col-xs-12 mb-3\" id=\"color_row'+color_cnt+'\"> <div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <input type=\"text\" class=\"form-control\" placeholder=\"Enter color\" name=\"color[]\" required> </div><div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <input type=\"color\" class=\"form-control\" placeholder=\"Enter color code\" name=\"color_code[]\" required> </div><div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <button type=\"button\" onclick=\"removeColorRow('+color_cnt+')\" class=\"btn btn-danger\">Remove</button> </div></div>');
+    $(add_color_btn).click(function(){
+
+        y++;
+        $("#color_div").append('<div class=\"col-md-12 col-sm-12 col-xs-12 mb-3\" id=\"color_row'+y+'\"> <div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <input type=\"text\" class=\"form-control\" placeholder=\"Enter color\" name=\"color[]\" required> </div><div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <input type=\"color\" class=\"form-control\" placeholder=\"Enter color code\" name=\"color_code[]\" required> </div><div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <button type=\"button\" onclick=\"removeColorRow('+y+')\" class=\"btn btn-danger\">Remove</button> </div></div>');
+    });
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper   		= $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $("#add_stock_btn"); //Add button ID
+    var x = 1; //initlal text box count
+
+
+    $(add_button).click(function(e){
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+                x++; //text box increment
+                $(wrapper).append('<div class=\"col-md-12 col-sm-12 col-xs-12 mb-3\" id=\"stock_row'+x+'\"><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"text\" class=\"form-control\" name=\"size[]\" required></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"number\" min=\"0\" class=\"form-control\" name=\"stock[]\" required></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"number\" min=\"0\" class=\"form-control\" name=\"price[]\" required></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"number\" class=\"form-control\" name=\"discount[]\" required></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><button type=\"button\" onclick=\"removeCosPerRow('+x+')\" class=\"btn btn-danger\">Remove</button></div></div>'); //add input box
+            }
     });
 });
 

@@ -39,15 +39,17 @@ class CheckoutController extends Controller
         // }
     	return view('web.checkout.checkout', ['all_address' => $all_address]);
     }
-    public function showConfirm($id)
+    public function showConfirm($id, $address_id)
     {
         try{
             $id = decrypt($id);
+            $address_id = decrypt($address_id);
         }catch(DecryptException $e) {
             abort(404);
         }
         $orders = Order::find($id);
-		return view('web.checkout.confirm', compact('orders'));
+        $address = Address::find($address_id);
+		return view('web.checkout.confirm', compact('orders', 'address'));
     }
     public function placeOrder(Request $request)
     {
@@ -60,7 +62,8 @@ class CheckoutController extends Controller
         
         if($request->input('payment_type') == 1){
             try {
-                DB::transaction(function () use($address_id) {
+                $order_id = null;
+                DB::transaction(function () use($address_id, &$order_id) {
                     $order_id = DB::table('order')
                     ->insertGetId([
                         'order_id' => time(),
@@ -162,13 +165,13 @@ class CheckoutController extends Controller
                             // return $order_id;
                             Cart::destroy();
                 });
-                    return redirect()->route('web.confirm', encrypt(['id' => $address_id]));
+                    return redirect()->route('web.confirm', ['order_id' => encrypt($order_id), 'address_id' => encrypt($address_id)]);
             } catch (\Exception $e) {
                 return redirect()->back()->with('error', 'Something went Wrong! Try after sometime!');
             }
         }else{
             // Online Payment
-            dd(2);
+            dd("Online Payment Inbtegration");
         }
 
 

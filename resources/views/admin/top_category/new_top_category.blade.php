@@ -38,9 +38,9 @@
 
               <div class="ln_solid"></div>
                 <div class="form-group">
-                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <button type="submit" name="submit" class="btn btn-success">Add</button>
+                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 pull-right">
                     <a href="{{ route('admin.all_top_category') }}" class="btn btn-warning">Back</a>
+                    <button type="submit" name="submit" class="btn btn-success">Submit</button>
                   </div>
                 </div>
             </form>

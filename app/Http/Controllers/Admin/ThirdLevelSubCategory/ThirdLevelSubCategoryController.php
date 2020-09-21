@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use DB;
 use Str;
 use Carbon\Carbon;
-
+use App\Models\Categories\SubCategory;
 class ThirdLevelSubCategoryController extends Controller
 {
     public function showThirdLevelSubCategoryForm () 
@@ -38,7 +38,18 @@ class ThirdLevelSubCategoryController extends Controller
         if ($count > 0) 
             $msg = 'Sub-Category already added';
         else {
-            DB::table('third_level_sub_category')
+            $sub_category = SubCategory::find($request->input('sub_cate_name'));
+            if($sub_category->hasSubcategory == 2){
+                $insertThirdLevelCategory = DB::table('third_level_sub_category')
+                                                            ->insert([ 
+                                                                'top_category_id' => $request->input('top_cate_name'), 
+                                                                'sub_category_id' => $request->input('sub_cate_name'), 
+                                                                'third_level_sub_category_name' => $request->input('third_level_sub_cate_name'), 
+                                                                'slug' => strtolower(Str::slug($request->input('slug'), '-')),
+                                                                'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),  
+                                                            ]);
+            }else{
+                $insertThirdLevelCategory = DB::table('third_level_sub_category')
                 ->insert([ 
                     'top_category_id' => $request->input('top_cate_name'), 
                     'sub_category_id' => $request->input('sub_cate_name'), 
@@ -46,6 +57,13 @@ class ThirdLevelSubCategoryController extends Controller
                     'slug' => strtolower(Str::slug($request->input('slug'), '-')),
                     'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),  
                 ]);
+                if($insertThirdLevelCategory){
+                    // Check Associate Top Category
+                    $sub_category->hasSubcategory = "2";
+                    $sub_category->save();
+                    $msg = 'Sub-Category has been added successfully';
+                }
+            }
 
             $msg = 'Sub-Category has been added successfully';
         }

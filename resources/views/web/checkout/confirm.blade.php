@@ -54,10 +54,12 @@
                         <label style="font-weight: 700">Shipping</label>
                         <div class="single-address orderconfim">
                           <div class="single-address-content">
-                            <p>Vishal Nag</p>
-                            <p>56/C Nowhere ,Downtown, guwahati,Assam </p>
-                            <p>Pincode: 784125</p>
-                            <p>Phone: 4565456233 Email: im@vsishal.com</p>
+                            <p>Name: {{ $address->name }}</p>
+                            <p>Address: {{ $address->address }} </p>
+                            <p>Email: {{ $address->email }} </p>
+                            <p>Mobile No: {{ $address->mobile_no }} </p>
+                            <p>City: {{ $address->city }} </p>
+                            <p>Pincode: {{ $address->pin_code }}</p>
                             <p></p>
                           </div>
                         </div>
@@ -71,7 +73,7 @@
             </article>
             <!--  ///*///======    End article  ========= //*/// --> 
           </div>
-          <div class="sidebar col-sm-3 col-xs-12">
+          {{-- <div class="sidebar col-sm-3 col-xs-12">
             <aside class="sidebar">
               <div class="block-title" style="border-bottom: 0">PAYMENT INFORMATION</div>
               <div class="cartcalculation">
@@ -89,7 +91,7 @@
                 </div>
               </div>
             </aside>
-          </div>
+          </div> --}}
         </div>
       </div>
     </section>

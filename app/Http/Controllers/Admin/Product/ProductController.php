@@ -10,7 +10,8 @@ use File;
 use Str;
 use Response;
 use Carbon\Carbon;
-
+use App\Models\Product;
+use App\Models\ProductAdditionalImage;
 class ProductController extends Controller
 {
     public function retriveSubCategory(Request $request)
@@ -162,201 +163,101 @@ class ProductController extends Controller
 
     public function addProduct(Request $request) 
     {
-        $request->validate([
+        $this->validate($request,[
         	'top_cate_name' => 'required',
             'product_name'  => 'required',
             'slug'  => 'required',
-            'desc'          => 'required',
+            'desc'  => 'required',
             'product_images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240|dimensions:max_width=700,max_height=700',
-            'product_type'       => 'required'
         ]);
+        // Lowest Price 
+        $lowest_price = min($request->input('price'));
+        // MRP price
+        $mrp_price = min($request->input('discount'));
 
-        // dd($request);
-
-        if($request->hasFile('product_images'))
-        {
-            
-            /** If Product name already exist **/
-            $count_product_name = DB::table('product')
-                ->where('product_name', ucwords(strtolower($request->input('product_name'))))
-                ->count();
-
-            if ($count_product_name > 0) {
-                return redirect()->back()->with('error', 'Product Name already exist');
+        $product = new Product;
+        $product->product_name = $request->input('product_name');
+        $product->slug = $request->input('slug');
+        $product->top_category_id = $request->input('top_cate_name');
+        $product->sub_category_id = $request->input('sub_cate_name');
+        $product->third_level_sub_category_id = $request->input('third_level_sub_cate_name');
+        $product->brand_id = $request->input('brand');
+        $product->desc = $request->desc;
+        $product->price = $lowest_price;
+        $product->discount = $mrp_price;
+        if($product->save()){
+        /** Product Stock and Size **/
+            if($request->has('size')){
+                for($i = 0; $i < count($request->input('size')); $i++) 
+                {
+                    DB::table('product_stock')
+                        ->insert([ 
+                            'product_id' => $product->id,
+                            'size' => $request->input('size')[$i], 
+                            'stock' => $request->input('stock')[$i], 
+                            'price' => $request->input('price')[$i], 
+                            'discount' => $request->input('discount')[$i], 
+                            'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
+                        ]);
+                }
             }
-
-            /** Creating folder **/
-            if(!File::exists(public_path()."/assets"))
+            
+        /** Product Color **/
+            if($request->has('color')){
+                for($i = 0; $i < count($request->input('color')); $i++) 
+                {
+                    DB::table('product_color_mapping')
+                        ->insert([ 
+                            'product_id' => $product->id,
+                            'color' => $request->input('color')[$i], 
+                            'color_code' => $request->input('color_code')[$i], 
+                            'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
+                        ]);
+                }
+            }
+                         
+                /** Creating folder **/
+                if(!File::exists(public_path()."/assets"))
                 File::makeDirectory(public_path()."/assets");
 
             if(!File::exists(public_path()."/assets/product_images"))
                 File::makeDirectory(public_path()."/assets/product_images");
+                $banner = null;
 
-            /** Banner inserting **/
-            $original_file = $request->file('product_images')[0];
-            $file   = time().'.'.$original_file->getClientOriginalExtension();
-                
-            $destinationPath = public_path('/assets/product_images');
-            $img = Image::make($original_file->getRealPath());
-            $img->save($destinationPath.'/'.$file);
-
-            if ($request->input('product_type') == 1) {
-
-                if($request->hasFile('size_chart')){
-
-                    /** Creating folder **/
-                    if(!File::exists(public_path()."/assets"))
-                        File::makeDirectory(public_path()."/assets");
-
-                    if(!File::exists(public_path()."/assets/product_size_chart"))
-                        File::makeDirectory(public_path()."/assets/product_size_chart");
-
-                    /** Banner inserting **/
-                    $original_file = $request->file('size_chart');
-                    $size_chart_file   = time().'.'.$original_file->getClientOriginalExtension();
-                        
-                    $destinationPath = public_path('/assets/product_size_chart');
-                    $img = Image::make($original_file->getRealPath());
-                    $img->save($destinationPath.'/'.$size_chart_file);
-                }
-                /** Product Info. Inserting **/
-                $product_id = DB::table('product')
-                    ->insertGetId([ 
-                        'product_name' => ucwords(strtolower($request->input('product_name'))), 
-                        'slug' => strtolower(Str::slug($request->input('slug'), '-')),
-                        'product_type' => $request->input('product_type'), 
-                        'top_category_id' => $request->input('top_cate_name'), 
-                        'sub_category_id' => $request->input('sub_cate_name'),
-                        'third_level_sub_category_id' => $request->input('third_level_sub_cate_name'), 
-                        'brand_id' => $request->input('brand'), 
-                        'desc' => $request->desc, 
-                        'price' => $request->input('price'), 
-                        'discount' => $request->input('discount'), 
-                        'banner' => $file, 
-                        'size_chart' => $size_chart_file,
-                        'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                    ]);
-
-                    $productId = $this->productId($product_id);
-                    $product_update = DB::table('product')
-                            ->where('id', $product_id)
-                            ->update([
-                                'sku_id' =>  $productId,
-                            ]);
-                /** Product Stock and Size **/
-                if($request->has('size')){
-                    for($i = 0; $i < count($request->input('size')); $i++) 
-                    {
-                        DB::table('product_stock')
-                            ->insert([ 
-                                'product_id' => $product_id,
-                                'size' => $request->input('size')[$i], 
-                                'stock' => $request->input('stock')[$i], 
-                                'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                            ]);
+            if($request->hasFile('product_images')){
+                for($i = 0; $i < count($request->file('product_images')); $i++) 
+                {
+                    $original_file = $request->file('product_images')[$i];
+                    $file   = time().$i.'.'.$original_file->getClientOriginalExtension();
+                    if ($i == 0){
+                        $banner = $file;
                     }
+                     // Original Image
+                     $destinationPath = public_path('/assets/product_images');
+                     $img = Image::make($original_file->getRealPath());
+                     $img->save($destinationPath.'/'.$file);
+                     // Thumb Image
+                     $destinationPath = public_path('/assets/product_images/thumb');
+                     $img = Image::make($original_file->getRealPath());
+                     $img->resize(600, 600, function ($constraint) {
+                         $constraint->aspectRatio();
+                     })->save($destinationPath.'/'.$file);
+                     $product_image = new ProductAdditionalImage;
+                     $product_image->product_id = $product->id;
+                     $product_image->additional_image = $file;
+                     $product_image->save();
+
                 }
-
-                /** Product Color **/
-                if($request->has('color')){
-                    for($i = 0; $i < count($request->input('color')); $i++) 
-                    {
-                        DB::table('product_color_mapping')
-                            ->insert([ 
-                                'product_id' => $product_id,
-                                'color' => $request->input('color')[$i], 
-                                'color_code' => $request->input('color_code')[$i], 
-                                'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                            ]);
-                    }
-                }
-            } 
-            elseif ($request->input('product_type') == 2) {
-
-                /** Product Info. Inserting **/
-                $product_id = DB::table('product')
-                    ->insertGetId([ 
-                        'product_name' => ucwords(strtolower($request->input('product_name'))), 
-                        'slug' => strtolower(Str::slug($request->input('slug'), '-')),
-                        'product_type' => $request->input('product_type'), 
-                        'top_category_id' => $request->input('top_cate_name'), 
-                        'sub_category_id' => $request->input('sub_cate_name'),
-                        'third_level_sub_category_id' => $request->input('third_level_sub_cate_name'), 
-                        'brand_id' => $request->input('brand'), 
-                        'desc' => $request->desc,  
-                        'banner' => $file, 
-                        'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                    ]);
-
-                    $productId = $this->productId($product_id);
-                    $product_update = DB::table('product')
-                            ->where('id', $product_id)
-                            ->update([
-                                'sku_id' =>  $productId,
-                            ]);
-                /** Product Stock and Size **/
-                if($request->has('size')){
-                    for($i = 0; $i < count($request->input('size')); $i++) 
-                    {
-                        DB::table('product_stock')
-                            ->insert([ 
-                                'product_id' => $product_id,
-                                'size' => $request->input('size')[$i], 
-                                'stock' => $request->input('stock')[$i], 
-                                'price' => $request->input('price')[$i],
-                                'discount' => $request->input('discount')[$i],
-                                'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                            ]);
-                    }
-                }
-            } 
-            else {
-
-                /** Product Info. Inserting **/
-                $product_id = DB::table('product')
-                    ->insertGetId([ 
-                        'product_name' => ucwords(strtolower($request->input('product_name'))), 
-                        'slug' => strtolower(Str::slug($request->input('slug'), '-')),
-                        'product_type' => $request->input('product_type'), 
-                        'top_category_id' => $request->input('top_cate_name'), 
-                        'sub_category_id' => $request->input('sub_cate_name'),
-                        'third_level_sub_category_id' => $request->input('third_level_sub_cate_name'), 
-                        'brand_id' => $request->input('brand'), 
-                        'stock' => $request->input('stock'),
-                        'desc' => $request->desc, 
-                        'price' => $request->input('price'), 
-                        'discount' => $request->input('discount'), 
-                        'banner' => $file, 
-                        'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                    ]);
-                    $productId = $this->productId($product_id);
-                    $product_update = DB::table('product')
-                            ->where('id', $product_id)
-                            ->update([
-                                'sku_id' =>  $productId,
-                            ]);
+                $product->banner = $banner;
+                $productId = $this->productId($product->id);
+                $product->sku_id = $productId;
+                $product->save();
             }
-
-            /** Product Images **/
-            for($i = 0; $i < count($request->file('product_images')); $i++) 
-            {
-                $original_file = $request->file('product_images')[$i];
-                $file   = time().$i.'.'.$original_file->getClientOriginalExtension();
-                
-                $destinationPath = public_path('/assets/product_images');
-                $img = Image::make($original_file->getRealPath());
-                $img->save($destinationPath.'/'.$file);
-
-                DB::table('product_additional_images')
-                    ->insert([ 
-                        'product_id' => $product_id,
-                        'additional_image' => $file, 
-                    ]);
-            }
-
+            
             return redirect()->back()->with('msg', 'Product has added successfully');
-        } else 
-            return redirect()->back()->with('error', 'Please ! select a banner');
+        }else{
+            return redirect()->back()->with('error', 'Something went wrong! Try after sometime');
+        } 
     }
 
     public function productList()
@@ -597,7 +498,6 @@ class ProductController extends Controller
         $colors = DB::table('product_color_mapping')
             ->where('product_id', $product_id)
             ->get();
-
         return view('admin.product.action.edit_product', ['product_record' => $product_record, 'top_category' => $top_category, 'brand_list' => $brand_list, 'sub_category_list' => $sub_category_list, 'third_level_sub_category_list' => $third_level_sub_category_list, 'stocks' => $stocks, 'colors' => $colors]);
     }
 

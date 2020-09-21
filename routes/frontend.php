@@ -11,7 +11,7 @@ Route::group(['namespace'=>'Web'],function(){
 	/** Product Detail **/ 
 	Route::get('product-detail/{slug}/{product_id}', 'ProductController@productDetail')->name('web.product_detail');
 	/** Product List: No id means 0 **/ 
-	Route::get('product-list/{slug}/{top_category_id}/{sub_category_id}/{last_category_id}/{sorted_by}', 'ProductController@productList')->name('web.product_list');
+	Route::get('product-list/{slug}/{top_category_id}/{sub_category_id}/{last_category_id}', 'ProductController@productList')->name('web.product_list');
 	/** AJAX Operations **/
 	Route::get('product-search/{keyword}', 'ProductController@productSearch');
 	Route::post('product-price-check', 'ProductController@productPriceCheck');
@@ -46,7 +46,7 @@ Route::group(['namespace'=>'Web'],function(){
 	Route::get('set-password/{user_id}', 'UsersLoginController@setPassword')->name('web.set_password');
 
 	Route::group(['middleware'=>'auth:users'],function(){
-		Route::get('confirm/{id}', 'CheckoutController@showConfirm')->name('web.confirm');
+		Route::get('confirm/{order_id}/{address_id}', 'CheckoutController@showConfirm')->name('web.confirm');
 		/** Checkout Page **/
 		Route::get('checkout', 'CheckoutController@showCheckoutForm')->name('web.checkout');
 		/** Place Order **/

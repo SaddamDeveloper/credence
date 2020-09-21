@@ -39,7 +39,6 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->top_cate_name }}</td>
                                     <td>{{ $item->slug }}</td>
-                                   
                                     <td>
                                         <a href="{{ route('admin.show_edit_grocery_top_category_form', ['topCategoryId' => encrypt($item->id)]) }}" class="btn btn-warning form-text-element">Edit Info.</a>
                                     </td>

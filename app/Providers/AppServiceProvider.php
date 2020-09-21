@@ -8,6 +8,8 @@ use DB;
 use Session;
 use Auth;
 use Cart;
+use App\Models\Categories\TopCategory;
+use App\Models\Categories\SubCategory;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -31,10 +33,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('web.include.header', function ($view) {
 
             /******  Categories *****/
-            $top_category = DB::table('top_category')
-                ->where('status', 1)
-                ->get();
-
+            $top_category = TopCategory::where('status', 1)->get();
             $categories = [];
             foreach ($top_category as $key => $item) {
                 $sub_categories = DB::table('sub_category')
@@ -42,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
                     ->where('status', 1)
                     ->orderBy('id', 'ASC')
                     ->get();
-
+                
                 if(!empty($sub_categories) && count($sub_categories) > 0){
 
                     foreach($sub_categories as $keys => $items){

@@ -65,9 +65,9 @@
 
               <div class="ln_solid"></div>
                 <div class="form-group">
-                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <button type="submit" name="submit" class="btn btn-success">Add</button>
-                    <a href="{{ route('admin.all_third_level_sub_category') }}" class="btn btn-warning">Back</a>
+                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 pull-right">
+                      <a href="{{ route('admin.all_third_level_sub_category') }}" class="btn btn-warning">Back</a>
+                      <button type="submit" name="submit" class="btn btn-success">Submit</button>
                   </div>
                 </div>
             </form>
@@ -85,7 +85,7 @@
 $(document).ready(function(){
 
     $("#third_level_sub_cate_name").keyup(function(){
-        $("#slug").val($("#third_level_sub_cate_name").val().toLowerCase());
+        $("#slug").val($("#third_level_sub_cate_name").val().toLowerCase().replace(/[^a-zA-Z0-9]+/g,'-'));
     });
 
     $('#top_cate_name').change(function(){

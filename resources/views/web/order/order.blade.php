@@ -13,7 +13,7 @@
         <div class="row">
           <div class="col-sm-2"></div>
           <div class="col-sm-9">
-            <article class="col-main" style="width: 100%;"> 
+            <article class="col-main" style="width: 100%;">
               <div class="container-fluid">
                   <div class="row">
                     <div class="col-md-1"></div>
@@ -26,12 +26,12 @@
                                   <div class="col-md-2 singleorderimg">
                                       <a href="#"><img src="web/images/products/img02.jpg" alt=""></a>
                                   </div>
-                                  <div class="col-md-10 singleordercontent"><a href="#">Royal velvet</a>
+                                  <div class="col-md-10 singleordercontent"><a href="#">{{ $order->orderDetails[0]->stock->product->product_name }}</a>
                                       <div class="cart-price" style="text-align: left;">
                                           <div class="quantity">
-                                            <p><small>₹3027</small> ₹2999 </p> <b>|</b> 
+                                            <p><small>₹3027</small> ₹2999 </p> <b>|</b>
                                             <label style="margin-bottom: 0;">Quantity:</label>&nbsp;&nbsp;2
-                                          </div>                                    
+                                         </div>
                                       </div>
                                       <div class="varient">
                                         <b class="sub-tag">Color : <span style="background: blue"></span></b>
@@ -39,9 +39,9 @@
                                       </div>
                                   </div>
                                   <div class="col-md-12" style=""><hr style="margin: 0"></div>
-                                  <div class="col-md-12 singleordercontent" style="padding: 10px 15px;"> 
+                                  <div class="col-md-12 singleordercontent" style="padding: 10px 15px;">
                                       <div class="varient">
-                                        <b class="sub-tag">Delivery Status : <strong>Delivered</strong> </b>                                      
+                                        <b class="sub-tag">Delivery Status : <strong>Delivered</strong> </b>
                                         <a href="#" class="editproduct oth" style="margin-left: 10px">Return</a>
                                       </div>
                                   </div>
@@ -52,7 +52,7 @@
                                 <div class="col-md-12">
                                     <span>No Orders Yet</span>
                                 </div>
-                              </div> 
+                              </div>
                           @endif
                             {{-- <div class="row">
                                 <div class="col-md-2 singleorderimg">
@@ -61,9 +61,9 @@
                                 <div class="col-md-10 singleordercontent"><a href="#">Royal velvet</a>
                                     <div class="cart-price" style="text-align: left;">
                                         <div class="quantity">
-                                          <p><small>₹1025</small> ₹1025 </p> <b>|</b> 
+                                          <p><small>₹1025</small> ₹1025 </p> <b>|</b>
                                           <label style="margin-bottom: 0;">Quantity:</label>&nbsp;&nbsp;2
-                                        </div>                                      
+                                        </div>
                                     </div>
                                     <div class="varient">
                                       <b class="sub-tag">Color : <span style="background: blue"></span></b>
@@ -71,9 +71,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12" style=""><hr style="margin: 0"></div>
-                                <div class="col-md-12 singleordercontent" style="padding: 10px 15px;"> 
+                                <div class="col-md-12 singleordercontent" style="padding: 10px 15px;">
                                     <div class="varient">
-                                      <b class="sub-tag">Delivery Status : <strong>Transit</strong> </b>                                      
+                                      <b class="sub-tag">Delivery Status : <strong>Transit</strong> </b>
                                       <a href="#" class="editproduct oth" style="margin-left: 10px">Cancel</a>
                                     </div>
                                 </div>
@@ -83,12 +83,12 @@
                   </div>
               </div>
             </article>
-            <!--  ///*///======    End article  ========= //*/// --> 
+            <!--  ///*///======    End article  ========= //*/// -->
           </div>
         </div>
       </div>
     </section>
-       
+
   @endsection
 
   @section('script')

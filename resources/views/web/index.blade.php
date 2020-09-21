@@ -94,7 +94,7 @@
             <div class="upsell-block">
               <div class="jtv-block-inner">
                 <div class="block-title">
-                  <h2>New {{ $apparel_record[0]->top_cate_name }}</h2>
+                  <h2>New Apparel</h2>
                 </div>
               </div>
               <div class="row">
@@ -158,15 +158,7 @@
               <div class="jtv-block-inner">
                 <div class="block-title">
                   <h2>
-                    @php
-                      if (!empty($f_cosmetics_record) && (count($f_cosmetics_record) > 0))
-                        $top_category_name = $f_cosmetics_record[0]->top_cate_name;
-                      
-                      if (!empty($s_cosmetics_record) && (count($s_cosmetics_record) > 0))
-                        $top_category_name = $f_cosmetics_record[0]->top_cate_name;
-                    @endphp
-
-                    {{ $top_category_name }}
+                    Cosmetics & Perfumes
                   </h2>
                 </div>
               </div>

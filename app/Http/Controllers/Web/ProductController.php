@@ -8,10 +8,12 @@ use DB;
 use Image;
 use File;
 use Response;
-
+use App\Models\Product;
+use App\Models\Categories\TopCategory;
+use App\Models\ProductStock;
 class ProductController extends Controller
 {
-    public function productList($slug, $top_category_id, $sub_category_id, $last_category_id, $sorted_by)
+    public function productList($slug, $top_category_id, $sub_category_id, $last_category_id)
     {
         if ($top_category_id != 0) {
 
@@ -21,33 +23,7 @@ class ProductController extends Controller
 
             $label = $label->top_cate_name;
 
-            $products = DB::table('product')
-                ->leftJoin('top_category', 'product.top_category_id', '=', 'top_category.id')
-                ->where('top_category.id', $top_category_id)
-                ->where('product.status', 1)
-                ->where('product.deleted_at', NULL)
-                ->select('product.*', 'top_category.top_cate_name');
-
-            if (($sorted_by == 0) || ($sorted_by == 1)) {
-
-                $products = $products
-                    ->orderBy('product.id', 'DESC');
-            }
-
-            if ($sorted_by == 2) {
-
-                $products = $products
-                    ->orderBy('product.price', 'ASC');
-            }
-
-            if ($sorted_by == 3) {
-
-                $products = $products
-                    ->orderBy('product.price', 'DESC');
-            }
-
-            $products = $products
-                ->paginate(18);
+            $products = Product::where('status', 1)->where('top_category_id', $top_category_id)->where('deleted_at', NULL)->paginate(18);
         }
 
         if ($sub_category_id != 0) {
@@ -58,35 +34,7 @@ class ProductController extends Controller
 
             $label = $label->sub_cate_name;
 
-            $products = DB::table('product')
-                ->leftJoin('top_category', 'product.top_category_id', '=', 'top_category.id')
-                ->leftJoin('sub_category', 'product.sub_category_id', '=', 'sub_category.id')
-                ->where('sub_category.id', $sub_category_id)
-                ->where('top_category.id', $top_category_id)
-                ->where('product.status', 1)
-                ->where('product.deleted_at', NULL)
-                ->select('product.*', 'top_category.top_cate_name', 'sub_category.sub_cate_name');
-
-            if (($sorted_by == 0) || ($sorted_by == 1)) {
-
-                $products = $products
-                    ->orderBy('product.id', 'DESC');
-            }
-
-            if ($sorted_by == 2) {
-
-                $products = $products
-                    ->orderBy('product.price', 'ASC');
-            }
-
-            if ($sorted_by == 3) {
-
-                $products = $products
-                    ->orderBy('product.price', 'DESC');
-            }
-
-            $products = $products
-                ->paginate(18);
+            $products = Product::where('sub_category_id', $sub_category_id)->where('top_category_id', $top_category_id)->where('status', 1)->where('deleted_at', NULL)->paginate(18);
         }
         
         if ($last_category_id != 0) {
@@ -97,57 +45,14 @@ class ProductController extends Controller
 
             $label = $label->third_level_sub_category_name;
 
-            $products = DB::table('product')
-                ->leftJoin('top_category', 'product.top_category_id', '=', 'top_category.id')
-                ->leftJoin('sub_category', 'product.sub_category_id', '=', 'sub_category.id')
-                ->leftJoin('third_level_sub_category', 'product.third_level_sub_category_id', '=', 'third_level_sub_category.id')
-                ->where('third_level_sub_category.id', $last_category_id)
-                ->where('sub_category.id', $sub_category_id)
-                ->where('top_category.id', $top_category_id)
-                ->where('product.status', 1)
-                ->where('product.deleted_at', NULL)
-                ->select('product.*', 'top_category.top_cate_name', 'sub_category.sub_cate_name', 'third_level_sub_category.third_level_sub_category_name');
-
-            if (($sorted_by == 0) || ($sorted_by == 1)) {
-
-                $products = $products
-                    ->orderBy('product.id', 'DESC');
-            }
-
-            if ($sorted_by == 2) {
-
-                $products = $products
-                    ->orderBy('product.price', 'ASC');
-            }
-
-            if ($sorted_by == 3) {
-
-                $products = $products
-                    ->orderBy('product.price', 'DESC');
-            }
-
-            $products = $products
-                ->paginate(18);
+            $products = Product::where('third_level_sub_category_id', $last_category_id)
+                ->where('sub_category_id', $sub_category_id)
+                ->where('top_category_id', $top_category_id)
+                ->where('status', 1)
+                ->where('deleted_at', NULL)->paginate(18);
         }
 
-        foreach ($products as $key => $value) {
-
-            if (empty($value->price)) {
-
-                $p_stock = DB::table('product_stock')
-                    ->where('product_id', $value->id)
-                    ->where('status', 1)
-                    ->orderBy('price', 'ASC')
-                    ->first();
-
-                $value->price = $p_stock->price;
-                $value->discount = $p_stock->discount;
-            }
-        }
-
-        $top_category = DB::table('top_category')
-            ->where('status', 1)
-            ->get();
+        $top_category =TopCategory::where('status', 1)->get();
 
         $categories = [];
         foreach ($top_category as $key => $item) {
@@ -179,20 +84,13 @@ class ProductController extends Controller
             ];
         }
 
-        // dd($products);
-
         return view('web.product.product-list', compact('products', 'categories', 'label'));
     }
 
     public function productDetail($slug, $product_id) 
     {
         /** Product Details **/
-        $product_detail = DB::table('product')
-            ->where('product.id', $product_id)
-            ->where('product.status', 1)
-            ->where('product.deleted_at', NULL)
-            ->first();
-
+        $product_detail = Product::with('productStock')->with('productAdditionalImages')->where('id',$product_id)->where('status', 1)->where('deleted_at', NULL)->first();
         if (empty($product_detail->price)) {
             
             $p_stock = DB::table('product_stock')
@@ -211,7 +109,6 @@ class ProductController extends Controller
             ->where('product_stock.stock', '>', 0)
             ->where('product_stock.status', 1)
             ->get();
-
         /** Product Color **/
         $product_color = DB::table('product_color_mapping')
             ->where('product_color_mapping.product_id', $product_id)
@@ -258,7 +155,6 @@ class ProductController extends Controller
                 ->select('product.*', 'top_category.top_cate_name', 'sub_category.sub_cate_name', 'third_level_sub_category.third_level_sub_category_name')
                 ->get();
         }
-
         return view('web.product.single-product', ['product_detail' => $product_detail, 'product_size_stock' => $product_size_stock, 'product_color' => $product_color, 'product_slider_images' => $product_slider_images, 'related_product' => $related_product]);
     }
 
@@ -326,22 +222,9 @@ class ProductController extends Controller
     public function productPriceCheck(Request $request)
     {   
         $price_and_discount = 0;
-
         if (!empty($request->input('stock_id'))) {
-            
-            $p_stock = DB::table('product_stock')
-                ->where('id', $request->input('stock_id'))
-                ->first();
-
-            $after_discount = 0;
-
-            if ($p_stock->discount > 0) {
-
-                $discount = ($p_stock->price * $p_stock->discount)/100;
-                $after_discount = $p_stock->price - $discount;
-            }
-
-            $price_and_discount = $p_stock->price.",".$after_discount;
+            $p_stock = ProductStock::find($request->input('stock_id'));
+            $price_and_discount = $p_stock->discount.",".$p_stock->price;
         }
 
         print $price_and_discount;

@@ -17,7 +17,7 @@
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
                   <div class="icon"><i class="fa fa-comments-o"></i></div>
-                  <div class="count">0</div>
+                  <div class="count">{{ $total_product }}</div>
                   <h3>Total</h3>
                   <p><b>Products</b></p>
                 </div>

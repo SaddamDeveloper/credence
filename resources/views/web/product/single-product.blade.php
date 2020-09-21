@@ -15,17 +15,22 @@
             <div class="col-main">
               <div class="product-view">
                 <div class="product-essential">
-                  
                     <div class="product-img-box col-lg-5 col-sm-6 col-xs-12">
                       <div class="new-label new-top-left"> New </div>
                       <div class="product-image">
-                        <div class="product-full"> <img id="product-zoom" src="{{ asset('assets/product_images/'.$product_detail->banner.'') }}" data-zoom-image="{{ asset('assets/product_images/'.$product_detail->banner.'') }}" alt="product-image"/> </div>
+                        <div class="product-full"> 
+							<img id="product-zoom" src="{{ asset('assets/product_images/'.$product_detail->banner.'') }}" data-zoom-image="{{ asset('assets/product_images/'.$product_detail->banner.'') }}" alt="product-image"/> 
+						</div>
                         <div class="more-views">
                           <div class="slider-items-products">
                             <div id="gallery_01" class="product-flexslider hidden-buttons product-img-thumb">
                               <div class="slider-items slider-width-col4 block-content">
-                                @foreach ($product_slider_images as $key => $item)
-                                <div class="more-views-items"> <a href="#" data-image="{{ asset('assets/product_images/'.$item->additional_image.'') }}" data-zoom-image="{{ asset('assets/product_images/'.$item->additional_image.'') }}"> <img id="product-zoom"  src="{{ asset('assets/product_images/'.$item->additional_image.'') }}" alt="product-image"/> </a></div>
+                                @foreach ($product_detail->productAdditionalImages as $key => $item)
+								<div class="more-views-items"> 
+									<a href="#" data-image="{{ asset('assets/product_images/'.$item->additional_image.'') }}" data-zoom-image="{{ asset('assets/product_images/'.$item->additional_image.'') }}"> 
+									<img id="product-zoom"  src="{{ asset('assets/product_images/'.$item->additional_image.'') }}" alt="product-image"/> 
+									</a>
+								</div>
                                 @endforeach
                               </div>
                             </div>
@@ -46,9 +51,12 @@
                         </div>
                       </div>
                       <div class="info-orther">
-                        {{-- <p>Item Code: #12345678</p> --}}
+                        <p>Item Code: #{{ $product_detail->sku_id }}</p>
                         <p>Availability: <span class="in-stock">
-                          @if ($product_detail->stock > 0)
+							@php
+
+              				@endphp
+                           @if(isset($product_detail->ProductStock->stock) && !empty($product_detail->ProductStock->stock))
                             In Stock
                           @else
                             Out of Stock
@@ -65,7 +73,7 @@
                         <form action="{{ route('web.add_cart') }}" method="POST" autocomplete="off" id="product">
                         @csrf
 
-                        @if (!empty($product_color) && (count($product_color) > 0))
+						@if (!empty($product_color) && (count($product_color) > 0))
                         <div class="attributes">
                           <div class="attribute-label">Color:</div>
                           <div class="attribute-list">
@@ -124,8 +132,8 @@
                                 <input type="number" class="input-text qty" title="Qty" value="1" maxlength="12" id="qty" min="1" name="qty">
                                 <button onClick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty )) result.value++;return false;" class="increase items-count" type="button"><i class="fa fa-plus">&nbsp;</i></button>
                               </div>
-                            </div>
-                            @if (($product_detail->stock > 0) || ((count($product_size_stock) > 0)))
+							</div>
+                            @if(isset($product_detail->ProductStock->stock) && !empty($product_detail->ProductStock->stock))
                                 <input type="hidden" value="{{ $product_detail->id }}" name="product_id">
                               <button class="button btn-cart" title="Add to Cart" type="submit">Add to Cart</button>
                             @else
@@ -191,13 +199,9 @@
                           <div class="item-price">
                             <div class="price-box"> <span class="regular-price"> 
                               <span class="price">
-                                @if (!empty($item->discount))
-                                  @php
-                                    $discount_amount = ($item->price * $item->discount) / 100;
-                                    $amount = ($item->price - $discount_amount);
-                                  @endphp
-                                  <span class="old-price"> ₹{{ $item->price }}</span>
-                                          <span class="special-price">₹{{ $amount }}</span>
+                                @if (!empty($item->price))
+									<span class="old-price"> ₹{{ number_format($item->discount, 2) }}</span>
+									<span class="special-price">₹{{ number_format($item->price, 2) }}</span>
                                 @else
                                   ₹{{ $item->price }}
                                 @endif
@@ -249,7 +253,6 @@
         $(this).addClass('selected').find('input').prop('checked', true);
 
         var product_size_id = $("input[name='product_size_id']:checked").val();
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -272,10 +275,10 @@
 
                     if (discount != 0) {
 
-                        $('.price-box').html('<p class=\"old-price\"><span class=\"price-label\">Special Price</span><span id=\"product-price-48\" class=\"price\">₹'+price+'</span></p>&nbsp;<p class=\"special-price\"><span class=\"price-label\">Regular Price:</span><span class=\"price\"> ₹'+discount+' </span> </p>');
+                        $('.price-box').html('<p class=\"old-price\"><span class=\"price-label\">Special Price</span><span id=\"product-price-48\" class=\"price\">₹'+parseFloat(price).toFixed(2)+'</span></p>&nbsp;<p class=\"special-price\"><span class=\"price-label\">Regular Price:</span><span class=\"price\"> ₹'+parseFloat(discount).toFixed(2)+' </span> </p>');
                     } else {
 
-                        $('.price-box').html('<p class=\"special-price\"> <span class=\"price-label\">Special Price</span> <span id=\"product-price-48\" class=\"price\"> ₹'+price+' </span> </p>');
+                        $('.price-box').html('<p class=\"special-price\"> <span class=\"price-label\">Special Price</span> <span id=\"product-price-48\" class=\"price\"> ₹'+parseFloat(price).toFixed(2)+' </span> </p>');
                     }
                 }
             }

@@ -36,6 +36,12 @@ class Product extends Model
 
         public function productStock()
         {
-            return $this->hasMany('App\Models\ProductStock', 'product_id', 'id');
+            return $this->hasOne('App\Models\ProductStock', 'product_id', 'id');
         }
+
+        public function brand()
+        {
+            return $this->hasOne('App\Models\Brand', 'product_id', 'id');
+        }
+        
 }

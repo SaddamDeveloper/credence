@@ -27,107 +27,125 @@ class CartController extends Controller
                 $pro = Product::findOrFail($product_id);
                 $size = ProductStock::find($product_stock_id);
                 $color = ProductColorMapping::find($product_color_id);
-                $add = Cart::add(['id' => $product_id,  'name' => $pro->product_name,  'qty' => $qty, 'price' => $pro->price, 'options' => ['size' => $size, 'color' => $color,  'sku_id' => $pro->sku_id, 'product_image' => $pro->banner, 'slug' => $pro->slug,  'discount' => $pro->discount]]);
-                Cart::store(Auth::guard('users')->user()->id);
-                Cart::restore(Auth::guard('users')->user()->id);
+                $cartQty = Cart::count($product_id);
+                
+                /** Checking Product Size **/
+                if (!empty($size)) {
+                    if ($size->stock < $qty) {
+                        return redirect()->back()->with('msg', 'Required quantity not available');
+                    }else if($size->stock < ($qty + $cartQty)){
+                        return redirect()->back()->with('msg', 'Cart has sufficient quantity');
+                    }
+                }
+                // // Cদlor Checkbox
+                // if(!empty($color)){
+                //     if ($request->has('product_color_id')){
+                //         $color = $request->input('product_color_id');
+                //     } 
+                //     else{
+                //         $color = 0;
+                //     }
+                // }
+                $add = Cart::add(['id' => $product_id,  'name' => $pro->product_name,  'qty' => $qty, 'price' => $size->price, 'options' => ['size' => $size, 'color' => $color,  'sku_id' => $pro->sku_id, 'product_image' => $pro->banner, 'slug' => $pro->slug,  'discount' => $size->discount]]);
+
                 // Cart::restore(Auth::guard('users')->user()->name);
                 // $data = Cart::restore(Auth::guard('users')->user()->id);
             // }else{
             //     dd(1);
             //     // Update
             // }
-        // if ($check_cart_product < 1 ) {
-            //     $product_id = $request->input('product_id');
-            //     $product_stock_id = $request->input('product_size_id');
-            //     $product_color_id = $request->input('product_color_id');
-            //     $qty = $request->input('qty');
-            //     $pro = Product::findOrFail($product_id);
-            //     // $size = ProductStock::find($product_stock_id);
-            //     // $color = ProductColorMapping::find($product_color_id);
-            //     // $add = Cart::add(['id' => $product_id,  'name' => $pro->product_name,  'qty' => $qty, 'price' => $pro->price, 'options' => ['size' => $size, 'color' => $color,  'sku_id' => $pro->sku_id, 'product_image' => $pro->banner, 'slug' => $pro->slug,  'discount' => $pro->discount]]);
-            //     // $data = Cart::content();
-            //     /** Checking Product Size **/
-            //     if ($request->has('product_size_id')) {
-            //         $stock = ProductStock::findOrFail($product_stock_id);
-            //         if ($stock->stock >= $request->input('qty')){
-            //                 $size =  ProductStock::find($product_stock_id);
-            //         }else{
-            //             return redirect()->back()->with('msg', 'Required quantity not available');
-            //         }
-            //     } else {
-            //         $stock = ProductStock::findOrFail($product_stock_id);
-            //         if ($stock->stock >= $request->input('qty')) 
-            //             $size = 0;
-            //         else
-            //             return redirect()->back()->with('msg', 'Required quantity not available');    
-            //     }
-            //     /** Checking Product Color **/
-            //     if ($request->has('product_color_id')) {
-            //         $color = ProductColorMapping::find($product_color_id);
-            //     }else{
-            //         $color = 0;
-            //     }
-            //     Cart::store(Auth::guard('users')->user()->id);
-                
-            // } else {
-            //     $product_id = $request->input('product_id');
-            //     $product_stock_id = $request->input('product_size_id');
-            //     $product_color_id = $request->input('product_color_id');
-            //     $qty = $request->input('qty');
-            //     $pro = Product::findOrFail($product_id);
-                
-            //     // $cart_product = DB::table('cart')
-            //     //     ->where('user_id', Auth::guard('users')->user()->id)
-            //     //     ->where('product_id', $request->input('product_id'))
-            //     //     ->first();
-            //     $cart_data = DB::table('cart')->where('identifier', Auth()->user()->id)->first();
-            //     $cart = unserialize($cart_data->content);
+            // if ($check_cart_product < 1 ) {
+                //     $product_id = $request->input('product_id');
+                //     $product_stock_id = $request->input('product_size_id');
+                //     $product_color_id = $request->input('product_color_id');
+                //     $qty = $request->input('qty');
+                //     $pro = Product::findOrFail($product_id);
+                //     // $size = ProductStock::find($product_stock_id);
+                //     // $color = ProductColorMapping::find($product_color_id);
+                //     // $add = Cart::add(['id' => $product_id,  'name' => $pro->product_name,  'qty' => $qty, 'price' => $pro->price, 'options' => ['size' => $size, 'color' => $color,  'sku_id' => $pro->sku_id, 'product_image' => $pro->banner, 'slug' => $pro->slug,  'discount' => $pro->discount]]);
+                //     // $data = Cart::content();
+                //     /** Checking Product Size **/
+                //     if ($request->has('product_size_id')) {
+                //         $stock = ProductStock::findOrFail($product_stock_id);
+                //         if ($stock->stock >= $request->input('qty')){
+                //                 $size =  ProductStock::find($product_stock_id);
+                //         }else{
+                //             return redirect()->back()->with('msg', 'Required quantity not available');
+                //         }
+                //     } else {
+                //         $stock = ProductStock::findOrFail($product_stock_id);
+                //         if ($stock->stock >= $request->input('qty')) 
+                //             $size = 0;
+                //         else
+                //             return redirect()->back()->with('msg', 'Required quantity not available');    
+                //     }
+                //     /** Checking Product Color **/
+                //     if ($request->has('product_color_id')) {
+                //         $color = ProductColorMapping::find($product_color_id);
+                //     }else{
+                //         $color = 0;
+                //     }
+                //     Cart::store(Auth::guard('users')->user()->id);
+                    
+                // } else {
+                //     $product_id = $request->input('product_id');
+                //     $product_stock_id = $request->input('product_size_id');
+                //     $product_color_id = $request->input('product_color_id');
+                //     $qty = $request->input('qty');
+                //     $pro = Product::findOrFail($product_id);
+                    
+                //     // $cart_product = DB::table('cart')
+                //     //     ->where('user_id', Auth::guard('users')->user()->id)
+                //     //     ->where('product_id', $request->input('product_id'))
+                //     //     ->first();
+                //     $cart_data = DB::table('cart')->where('identifier', Auth()->user()->id)->first();
+                //     $cart = unserialize($cart_data->content);
 
-            //       /** Checking Product Size **/
-            //       if ($request->has('product_size_id')) {
-            //         $stock = ProductStock::findOrFail($product_stock_id);
-            //         if ($stock->stock >= $request->input('qty')){
-            //                 $size =  ProductStock::find($product_stock_id);
-            //         }else{
-            //             return redirect()->back()->with('msg', 'Required quantity not available');
-            //         }
-            //     } else {
-            //         $stock = ProductStock::findOrFail($product_stock_id);
-            //         if ($stock->stock >= $request->input('qty')) 
-            //             $size = 0;
-            //         else
-            //             return redirect()->back()->with('msg', 'Required quantity not available');    
-            //     }
-            //     /** Checking Product Color **/
-            //     if ($request->has('product_color_id')) {
-            //         $color = ProductColorMapping::find($product_color_id);
-            //     }else{
-            //         $color = 0;
-            //     }
+                //       /** Checking Product Size **/
+                //       if ($request->has('product_size_id')) {
+                //         $stock = ProductStock::findOrFail($product_stock_id);
+                //         if ($stock->stock >= $request->input('qty')){
+                //                 $size =  ProductStock::find($product_stock_id);
+                //         }else{
+                //             return redirect()->back()->with('msg', 'Required quantity not available');
+                //         }
+                //     } else {
+                //         $stock = ProductStock::findOrFail($product_stock_id);
+                //         if ($stock->stock >= $request->input('qty')) 
+                //             $size = 0;
+                //         else
+                //             return redirect()->back()->with('msg', 'Required quantity not available');    
+                //     }
+                //     /** Checking Product Color **/
+                //     if ($request->has('product_color_id')) {
+                //         $color = ProductColorMapping::find($product_color_id);
+                //     }else{
+                //         $color = 0;
+                //     }
 
 
-            //     // Cart Update
-            //     // foreach ($cart as $key => $value) {
-            //     //     DB::table('cart')
-            //     //     ->where('identifier', Auth::guard('users')->user()->id)
-            //     //     ->update([
-            //     //         'size' => $value->options->size->size,
-            //     //         'color' => $value->options->color->color
-            //     //     ]);
-            //     // }
-            //     // DB::table('cart')
-            //     //     ->where('user_id', Auth::guard('users')->user()->id)
-            //     //     ->where('product_id', $request->input('product_id'))
-            //     //     ->increment('quantity', (int)$request->input('qty'));
+                //     // Cart Update
+                //     // foreach ($cart as $key => $value) {
+                //     //     DB::table('cart')
+                //     //     ->where('identifier', Auth::guard('users')->user()->id)
+                //     //     ->update([
+                //     //         'size' => $value->options->size->size,
+                //     //         'color' => $value->options->color->color
+                //     //     ]);
+                //     // }
+                //     // DB::table('cart')
+                //     //     ->where('user_id', Auth::guard('users')->user()->id)
+                //     //     ->where('product_id', $request->input('product_id'))
+                //     //     ->increment('quantity', (int)$request->input('qty'));
 
-            //     // DB::table('cart')
-            //         // ->where('user_id', Auth::guard('users')->user()->id)
-            //         // ->where('product_id', $request->input('product_id'))
-            //         // ->update([
-            //         //     'size_id' => $size,
-            //         //     'color_id' => $color
-            //         // ]);
-        // }
+                //     // DB::table('cart')
+                //         // ->where('user_id', Auth::guard('users')->user()->id)
+                //         // ->where('product_id', $request->input('product_id'))
+                //         // ->update([
+                //         //     'size_id' => $size,
+                //         //     'color_id' => $color
+                //         // ]);
+            // }
         }
         else
         {
@@ -139,7 +157,26 @@ class CartController extends Controller
             $pro = Product::findOrFail($product_id);
             $size = ProductStock::find($product_stock_id);
             $color = ProductColorMapping::find($product_color_id);
-            $add = Cart::add(['id' => $product_id,  'name' => $pro->product_name,  'qty' => $qty, 'price' => $pro->price, 'options' => ['size' => $size, 'color' => $color,  'sku_id' => $pro->sku_id, 'product_image' => $pro->banner, 'slug' => $pro->slug,  'discount' => $pro->discount]]);
+            $cartQty = Cart::count($product_id);
+                /** Checking Product Size **/
+                if (!empty($size)) {
+                    if ($size->stock < $qty) {
+                        return redirect()->back()->with('msg', 'Required quantity not available');
+                    }else if($size->stock < ($qty + $cartQty)){
+                        return redirect()->back()->with('msg', 'Cart has sufficient quantity');
+                    }
+                }
+                // // COlor Checkbox
+                // if(!empty($color)){
+                //     if ($request->has('product_color_id')){
+                //         $color = $request->input('product_color_id');
+                //     } 
+                //     else{
+                //         $color = 0;
+                //     }
+                        
+                // }
+                $add = Cart::add(['id' => $product_id,  'name' => $pro->product_name,  'qty' => $qty, 'price' => $size->price, 'options' => ['size' => $size, 'color' => $color,  'sku_id' => $pro->sku_id, 'product_image' => $pro->banner, 'slug' => $pro->slug,  'discount' => $size->discount]]);
         }
         return redirect()->route('web.view_cart');
     }

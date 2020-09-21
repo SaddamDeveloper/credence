@@ -11,10 +11,10 @@ class Order extends Model
 
     public function orderDetails()
     {
-        return $this->hasMany('App\OrderDetails', 'order_id', 'id');
+        return $this->hasMany('App\Models\OrderDetails', 'order_id', 'id');
     }
     public function product()
     {
-        return $this->belongsTo('App\Product', 'foreign_key', 'other_key');
+        return $this->belongsTo('App\Models\Product', 'sku_id', 'id');
     }
 }

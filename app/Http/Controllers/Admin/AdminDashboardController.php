@@ -8,6 +8,7 @@ use DB;
 use App\Models\Admin\Admin;
 use Hash;
 use Auth;
+use App\Models\Product;
 class AdminDashboardController extends Controller
 {
     public function index(){
@@ -25,7 +26,7 @@ class AdminDashboardController extends Controller
     		->orderBy('id', 'DESC')
     		->limit(6)
     		->get();
-
+		$total_product = Product::count();
     	$latest_ten_order = DB::table('order')
                             ->leftJoin('users', 'order.user_id', '=', 'users.id')
                             ->select('order.*', 'users.name')
@@ -34,7 +35,7 @@ class AdminDashboardController extends Controller
                             ->orderBy('order.id', 'DESC')
                             ->get();
 
-    	return view('admin.dashboard', ['total_user' => $total_user, 'total_brand' => $total_brand, 'total_order' => $total_order, 'latest_ten_user' => $latest_ten_user, 'latest_ten_order' => $latest_ten_order]);
+    	return view('admin.dashboard', ['total_user' => $total_user, 'total_brand' => $total_brand, 'total_order' => $total_order, 'latest_ten_user' => $latest_ten_user, 'latest_ten_order' => $latest_ten_order, 'total_product' => $total_product]);
 	}
 	public function profile()
 	{

@@ -9,7 +9,7 @@ use Image;
 use File;
 use Str;
 use Carbon\Carbon;
-
+use App\Models\Categories\TopCategory;
 class SubCategoryController extends Controller
 {
     public function showSubCategoryForm () 
@@ -34,19 +34,39 @@ class SubCategoryController extends Controller
             ->where('sub_cate_name', ucwords(strtolower($request->input('sub_cate_name'))))
             ->where('top_category_id', $request->input('top_cate_name'))
             ->count();
+        
 
         if ($count > 0) 
             $msg = 'Sub-Category already added';
         else {
-            DB::table('sub_category')
+            $top_category = TopCategory::find($request->input('top_cate_name'));
+            if($top_category->hasSubcategory == 2){
+                $insertSubCategory = DB::table('sub_category')
                 ->insert([ 
                     'top_category_id' => $request->input('top_cate_name'), 
                     'sub_cate_name' => ucwords(strtolower($request->input('sub_cate_name'))), 
                     'slug' => strtolower(Str::slug($request->input('slug'), '-')), 
                     'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
                 ]);
+                $msg = 'Sub-Category has been added successfully';
+            }else{
+                $insertSubCategory = DB::table('sub_category')
+                ->insert([ 
+                    'top_category_id' => $request->input('top_cate_name'), 
+                    'sub_cate_name' => ucwords(strtolower($request->input('sub_cate_name'))), 
+                    'slug' => strtolower(Str::slug($request->input('slug'), '-')), 
+                    'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
+                ]);
+                
+                if($insertSubCategory){
+                    // Check Associate Top Category
+                    $top_category->hasSubcategory = "2";
+                    $top_category->save();
+                    $msg = 'Sub-Category has been added successfully';
+                }
+            }
 
-            $msg = 'Sub-Category has been added successfully';
+
         }
 
         return redirect()->back()->with('msg', $msg);
@@ -65,6 +85,8 @@ class SubCategoryController extends Controller
 
     public function updateSubCategoryStatus($sub_category_id, $status)
     {
+        
+        // $top_category = TopCategory::where('')
         /** Updating sub_category status **/
         DB::table('sub_category')
             ->where('id', $sub_category_id)

@@ -166,7 +166,7 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 
         /** New Product **/
         Route::get('new-product', 'ProductController@showProductForm')->name('admin.new_product');
-        Route::put('add-product', 'ProductController@addProduct')->name('admin.add_product');
+        Route::post('add-product', 'ProductController@addProduct')->name('admin.add_product');
 
         /** Products List **/
         Route::get('prouduct-list', 'ProductController@productList')->name('admin.product_list');

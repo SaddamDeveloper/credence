@@ -26,7 +26,7 @@
                                 <option value="" selected disabled>Choose Top-Category</option>
                                 @if(count($top_categories) > 0)
                                     @foreach($top_categories as $key => $value)
-                                        <option value="{{ $value->id }}">{{ $value->top_cate_name }}</option>
+                                        <option value="{{ $value->id }}" {{old('top_cate_name') == $value->id ?'selected':''}}>{{ $value->top_cate_name }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -55,9 +55,9 @@
 
               <div class="ln_solid"></div>
                 <div class="form-group">
-                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <button type="submit" name="submit" class="btn btn-success">Add</button>
+                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 pull-right">
                     <a href="{{ route('admin.all_sub_category') }}" class="btn btn-warning">Back</a>
+                    <button type="submit" name="submit" class="btn btn-success">Submit</button>
                   </div>
                 </div>
             </form>
@@ -75,7 +75,7 @@
 $(document).ready(function(){
 
     $("#sub_cate_name").keyup(function(){
-        $("#slug").val($("#sub_cate_name").val().toLowerCase());
+        $("#slug").val($("#sub_cate_name").val().toLowerCase().replace(/[^a-zA-Z0-9]+/g,'-'));
     });
 });
 </script>

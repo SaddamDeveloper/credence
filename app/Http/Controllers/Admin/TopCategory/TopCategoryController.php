@@ -37,7 +37,7 @@ class TopCategoryController extends Controller
             DB::table('top_category')
                 ->insert([ 
                     'top_cate_name' =>  ucwords(strtolower($request->input('top_cate_name'))),
-                    'slug' => strtolower(Str::slug($request->input('slug'), '-')),
+                    'slug' => strtolower(Str::slug($request->input('top_cate_name'), '-')),
                     'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
                 ]);
 

@@ -158,36 +158,40 @@
                   </div>
                 </div>
               </div>
-
-              <div class="block product-price-range">
-                <div class="block-content">
-                  <div>                    
-                    <p class="block-subtitle">Brand</p>
-                    <ul class="check-box-list">
-                      <li>
-                        <input type="checkbox" id="p1" name="cc">
-                        <label for="p1"> <span class="button"></span>Brand 1<span class="count">(5)</span> </label>
-                      </li>
-                      <li>
-                        <input type="checkbox" id="p2" name="cc">
-                        <label for="p2"> <span class="button"></span>Brand 3<span class="count">(10)</span> </label>
-                      </li>
-                      <li>
-                        <input type="checkbox" id="p3" name="cc">
-                        <label for="p3"> <span class="button"></span>Brand 2<span class="count">(12)</span> </label>
-                      </li>
-                      <li>
-                        <input type="checkbox" id="p4" name="cc">
-                        <label for="p4"> <span class="button"></span>Brand 3<span class="count">(10)</span> </label>
-                      </li>
-                      <li>
-                        <input type="checkbox" id="p5" name="cc">
-                        <label for="p5"> <span class="button"></span>Brand 2<span class="count">(12)</span> </label>
-                      </li>
-                    </ul>                    
+              {{-- Brand --}}
+              @if(isset($product) && !empty($product))
+                <div class="block product-price-range">
+                  <div class="block-content">
+                    <div>                    
+                      <p class="block-subtitle">Brand</p>
+                      <ul class="check-box-list">
+                        @foreach ($product as $key => $item)
+                          <li>
+                            <input type="checkbox" id="p1" name="cc">
+                            <label for="p1"> <span class="button"></span>{{ $item->brand_id }}<span class="count">(5)</span> </label>
+                          </li>
+                        @endforeach
+                        {{-- <li>
+                          <input type="checkbox" id="p2" name="cc">
+                          <label for="p2"> <span class="button"></span>Brand 3<span class="count">(10)</span> </label>
+                        </li>
+                        <li>
+                          <input type="checkbox" id="p3" name="cc">
+                          <label for="p3"> <span class="button"></span>Brand 2<span class="count">(12)</span> </label>
+                        </li>
+                        <li>
+                          <input type="checkbox" id="p4" name="cc">
+                          <label for="p4"> <span class="button"></span>Brand 3<span class="count">(10)</span> </label>
+                        </li>
+                        <li>
+                          <input type="checkbox" id="p5" name="cc">
+                          <label for="p5"> <span class="button"></span>Brand 2<span class="count">(12)</span> </label>
+                        </li> --}}
+                      </ul>                    
+                    </div>
                   </div>
                 </div>
-              </div>
+              @endif
             </aside>
           </div>
         </div>
