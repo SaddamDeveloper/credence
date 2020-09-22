@@ -185,6 +185,7 @@ class ProductController extends Controller
         $product->desc = $request->desc;
         $product->price = $lowest_price;
         $product->discount = $mrp_price;
+        
         if($product->save()){
         /** Product Stock and Size **/
             if($request->has('size')){

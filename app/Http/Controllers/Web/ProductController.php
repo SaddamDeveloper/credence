@@ -13,7 +13,7 @@ use App\Models\Categories\TopCategory;
 use App\Models\ProductStock;
 class ProductController extends Controller
 {
-    public function productList($slug, $top_category_id, $sub_category_id, $last_category_id)
+    public function productList($slug, $top_category_id, $sub_category_id, $last_category_id, $sorted_by)
     {
         if ($top_category_id != 0) {
 
@@ -23,7 +23,31 @@ class ProductController extends Controller
 
             $label = $label->top_cate_name;
 
-            $products = Product::where('status', 1)->where('top_category_id', $top_category_id)->where('deleted_at', NULL)->paginate(18);
+            $products = Product::where('status', 1)
+                ->where('top_category_id', $top_category_id)
+                ->where('deleted_at', NULL);
+
+                if (($sorted_by == 0) || ($sorted_by == 1)) {
+
+                    $products = $products
+                        ->orderBy('id', 'DESC');
+                }
+    
+                if ($sorted_by == 2) {
+    
+                    $products = $products
+                        ->orderBy('price', 'ASC');
+                }
+    
+                if ($sorted_by == 3) {
+    
+                    $products = $products
+                        ->orderBy('price', 'DESC');
+                }
+
+                $products = $products
+                ->paginate(18);
+    
         }
 
         if ($sub_category_id != 0) {
@@ -34,7 +58,32 @@ class ProductController extends Controller
 
             $label = $label->sub_cate_name;
 
-            $products = Product::where('sub_category_id', $sub_category_id)->where('top_category_id', $top_category_id)->where('status', 1)->where('deleted_at', NULL)->paginate(18);
+            $products = Product::where('sub_category_id', $sub_category_id)
+                ->where('top_category_id', $top_category_id)
+                ->where('status', 1)
+                ->where('deleted_at', NULL);
+                
+                if (($sorted_by == 0) || ($sorted_by == 1)) {
+
+                    $products = $products
+                        ->orderBy('id', 'DESC');
+                }
+    
+                if ($sorted_by == 2) {
+    
+                    $products = $products
+                        ->orderBy('price', 'ASC');
+                }
+    
+                if ($sorted_by == 3) {
+    
+                    $products = $products
+                        ->orderBy('price', 'DESC');
+                }
+    
+                $products = $products
+                    ->paginate(18);
+                
         }
         
         if ($last_category_id != 0) {
@@ -49,7 +98,28 @@ class ProductController extends Controller
                 ->where('sub_category_id', $sub_category_id)
                 ->where('top_category_id', $top_category_id)
                 ->where('status', 1)
-                ->where('deleted_at', NULL)->paginate(18);
+                ->where('deleted_at', NULL);
+                
+                if (($sorted_by == 0) || ($sorted_by == 1)) {
+
+                    $products = $products
+                        ->orderBy('id', 'DESC');
+                }
+    
+                if ($sorted_by == 2) {
+    
+                    $products = $products
+                        ->orderBy('price', 'ASC');
+                }
+    
+                if ($sorted_by == 3) {
+    
+                    $products = $products
+                        ->orderBy('price', 'DESC');
+                }
+    
+                $products = $products
+                    ->paginate(18);
         }
 
         $top_category =TopCategory::where('status', 1)->get();
@@ -80,7 +150,7 @@ class ProductController extends Controller
             $categories[] = [
                 'top_category_id' => $item->id,
                 'top_cate_name' => $item->top_cate_name,
-                'sub_categories' => $sub_categories
+                'sub_categories' => $sub_categories,
             ];
         }
 
@@ -228,5 +298,93 @@ class ProductController extends Controller
         }
 
         print $price_and_discount;
+    }
+
+    public function priceFilter(Request $request)
+    {
+        $top_category_id = $request->input('top_category_id');
+        $sub_category_id = $request->input('sub_category_id');
+        $last_category_id = $request->input('last_category_id');
+        $min = $request->input('min');
+        $max = $request->input('max');
+        
+        if ($top_category_id != 0) {
+
+            $label = DB::table('top_category')
+                ->where('id', $top_category_id)
+                ->first();
+
+            $label = $label->top_cate_name;
+            $products = Product::whereBetween('price', [$min, $max])
+                ->where('status', 1)
+                ->where('top_category_id', $top_category_id)
+                ->where('deleted_at', NULL)
+                ->paginate(18);
+        }
+        if ($sub_category_id != 0) {
+
+            $label = DB::table('sub_category')
+                ->where('id', $sub_category_id)
+                ->first();
+
+            $label = $label->sub_cate_name;
+
+            $products = Product::whereBetween('price', [$min, $max])->where('sub_category_id', $sub_category_id)
+                ->where('top_category_id', $top_category_id)
+                ->where('status', 1)
+                ->where('deleted_at', NULL)
+                ->paginate(18);
+        }
+        
+        if ($last_category_id != 0) {
+
+            $label = DB::table('third_level_sub_category')
+                ->where('id', $last_category_id)
+                ->first();
+
+            $label = $label->third_level_sub_category_name;
+
+            $products = Product::whereBetween('price', [$min, $max])
+                ->where('third_level_sub_category_id', $last_category_id)
+                ->where('sub_category_id', $sub_category_id)
+                ->where('top_category_id', $top_category_id)
+                ->where('status', 1)
+                ->where('deleted_at', NULL)
+                ->paginate(18);
+        }
+        
+        $top_category =TopCategory::where('status', 1)->get();
+
+        $categories = [];
+        foreach ($top_category as $key => $item) {
+                
+            $sub_categories = DB::table('sub_category')
+                ->where('top_category_id', $item->id)
+                ->where('status', 1)
+                ->orderBy('id', 'ASC')
+                ->get();
+
+            if(!empty($sub_categories) && count($sub_categories) > 0){
+
+                foreach($sub_categories as $keys => $items){
+
+                    $last_categories = DB::table('third_level_sub_category')
+                        ->where('sub_category_id', $items->id)
+                        ->where('status', 1)
+                        ->orderBy('id', 'ASC')
+                        ->get();
+
+                    $items->last_category = $last_categories;
+                }
+            }
+
+            $categories[] = [
+                'top_category_id' => $item->id,
+                'top_cate_name' => $item->top_cate_name,
+                'sub_categories' => $sub_categories,
+            ];
+        }
+        
+        return view('web.include.products', compact('products', 'categories', 'label'));
     }
 }

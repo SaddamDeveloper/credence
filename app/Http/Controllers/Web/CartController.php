@@ -47,8 +47,8 @@ class CartController extends Controller
                 //     }
                 // }
                 $add = Cart::add(['id' => $product_id,  'name' => $pro->product_name,  'qty' => $qty, 'price' => $size->price, 'options' => ['size' => $size, 'color' => $color,  'sku_id' => $pro->sku_id, 'product_image' => $pro->banner, 'slug' => $pro->slug,  'discount' => $size->discount]]);
+                Cart::store(Auth::guard('users')->user()->id);
 
-                // Cart::restore(Auth::guard('users')->user()->name);
                 // $data = Cart::restore(Auth::guard('users')->user()->id);
             // }else{
             //     dd(1);

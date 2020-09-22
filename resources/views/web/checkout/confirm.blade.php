@@ -65,10 +65,10 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-12" style="display:flex;justify-content: center;margin-top: 30px">
-                      <a href="{{route('web.index')}}" class="button button--aylen btn">Contonue Shopping</a>
-                    </div>
                   </div>
+                    <div class="col-md-12" style="display:flex;justify-content: center;margin-top: 30px">
+                      <a href="{{route('web.index')}}" class="button button--aylen btn">Continue Shopping</a>
+                    </div>
               </div>
             </article>
             <!--  ///*///======    End article  ========= //*/// --> 
