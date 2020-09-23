@@ -19,4 +19,15 @@ class SubCategory extends Model
     {
         return $this->belongsTo('App\Models\Product', 'sub_category_id', 'id');
     }
+
+    public function thirdLevelCategories()
+    {
+        return $this->hasMany('App\Models\Categories\ThirdLevelCategory', 'sub_category_id', 'id');
+    }
+
+    public function topCategory()
+    {
+        return $this->belongsTo('App\Models\Categories\TopCategory', 'top_category_id', 'id');
+    }
+    
 }

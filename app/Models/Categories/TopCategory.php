@@ -18,4 +18,9 @@ class TopCategory extends Model
     {
         return $this->belongsTo('App\Models\Product', 'top_category_id', 'id');
     }
+
+    public function subCategory()
+    {
+        return $this->hasMany('App\Models\Categories\SubCategory', 'top_category_id', 'id');
+    }
 }

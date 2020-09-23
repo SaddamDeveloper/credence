@@ -33,34 +33,8 @@ class AppServiceProvider extends ServiceProvider
         View::composer('web.include.header', function ($view) {
 
             /******  Categories *****/
-            $top_category = TopCategory::where('status', 1)->get();
-            $categories = [];
-            foreach ($top_category as $key => $item) {
-                $sub_categories = DB::table('sub_category')
-                    ->where('top_category_id', $item->id)
-                    ->where('status', 1)
-                    ->orderBy('id', 'ASC')
-                    ->get();
-                
-                if(!empty($sub_categories) && count($sub_categories) > 0){
-
-                    foreach($sub_categories as $keys => $items){
-
-                        $last_categories = DB::table('third_level_sub_category')
-                            ->where('sub_category_id', $items->id)
-                            ->where('status', 1)
-                            ->orderBy('id', 'ASC')
-                            ->get();
-
-                        $items->last_category = $last_categories;
-                    }
-                }
-                $categories[] = [
-                    'top_category_id' => $item->id,
-                    'top_cate_name' => $item->top_cate_name,
-                    'sub_categories' => $sub_categories
-                ];
-            }
+            $categories = TopCategory::where('status', 1)->get();
+    
             /****** Wish List ********/
             $wish_list_data = [];
             if( Auth::guard('users')->user() && !empty(Auth::guard('users')->user()->id))

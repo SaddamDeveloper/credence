@@ -37,7 +37,7 @@ class CartController extends Controller
                         return redirect()->back()->with('msg', 'Cart has sufficient quantity');
                     }
                 }
-                // // Cদlor Checkbox
+                // // or Checkbox
                 // if(!empty($color)){
                 //     if ($request->has('product_color_id')){
                 //         $color = $request->input('product_color_id');
@@ -176,7 +176,7 @@ class CartController extends Controller
                 //     }
                         
                 // }
-                $add = Cart::add(['id' => $product_id,  'name' => $pro->product_name,  'qty' => $qty, 'price' => $size->price, 'options' => ['size' => $size, 'color' => $color,  'sku_id' => $pro->sku_id, 'product_image' => $pro->banner, 'slug' => $pro->slug,  'discount' => $size->discount]]);
+                $add = Cart::add(['id' => $product_id,  'name' => $pro->product_name,  'qty' => $qty, 'price' => $pro->price, 'options' => ['size' => $size, 'color' => $color,  'sku_id' => $pro->sku_id, 'product_image' => $pro->banner, 'slug' => $pro->slug,  'discount' => $size->discount]]);
         }
         return redirect()->route('web.view_cart');
     }

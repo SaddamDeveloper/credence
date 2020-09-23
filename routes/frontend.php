@@ -11,7 +11,7 @@ Route::group(['namespace'=>'Web'],function(){
 	/** Product Detail **/ 
 	Route::get('product-detail/{slug}/{product_id}', 'ProductController@productDetail')->name('web.product_detail');
 	/** Product List: No id means 0 **/ 
-	Route::get('product-list/{slug}/{top_category_id}/{sub_category_id}/{last_category_id}/{sorted_by}', 'ProductController@productList')->name('web.product_list');
+	Route::get('product-list/{slug}/{type}/{category_id}', 'ProductController@productList')->name('web.product_list');
 	/** AJAX Operations **/
 	Route::get('product-search/{keyword}', 'ProductController@productSearch');
 	Route::post('product-price-check', 'ProductController@productPriceCheck');

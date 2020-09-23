@@ -39,9 +39,21 @@ class Product extends Model
             return $this->hasOne('App\Models\ProductStock', 'product_id', 'id');
         }
 
+        public function productSize()
+        {
+            return $this->hasMany('App\Models\ProductStock', 'product_id', 'id');
+        }
+
         public function brand()
         {
-            return $this->hasOne('App\Models\Brand', 'product_id', 'id');
+            return $this->belongsTo('App\Models\Brand');
         }
-        
+
+        public function minSize()
+        {
+            return $this->hasMany('App\Models\ProductStock','product_id','id')
+            ->where('product_stock.price', $this->productSize->min('price'))
+            ->where('product_stock.status', 1)
+            ->limit(1);
+        }
 }

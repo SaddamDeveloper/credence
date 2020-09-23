@@ -417,33 +417,84 @@ class ProductController extends Controller
         return view('admin.product.additional_image.additional_image' , ['additional_image_record' => $additional_image_record, 'product_record' => $product_record]);
     }
 
-    public function updateProductAdditionalImage(Request $request, $additional_image_id)
+    public function updateProductAdditionalImage(Request $request)
     {
         $request->validate([
-            'additional_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'additional_image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
-
+        $id = $request->input('id');
         $additional_image_record = DB::table('product_additional_images')
-            ->where('id', $additional_image_id)
+            ->where('id', $id)
             ->first();
-
         if ($request->hasFile('additional_image')) {
-            $additional_image = $request->file('additional_image');
-            $file   = time().'.'.$additional_image->getClientOriginalExtension();
-         
-            $destinationPath = public_path('/assets/product_images');
-            $img = Image::make($additional_image->getRealPath());
-            $img->save($destinationPath.'/'.$file);
+            for ($i=0; $i < count($request->file('additional_image')) ; $i++) { 
+                $original_file = $request->file('additional_image')[$i];
+                $file   = time().$i.'.'.$original_file->getClientOriginalExtension();
+                    
+                // Original Image
+                    $destinationPath = public_path('/assets/product_images');
+                    $img = Image::make($original_file->getRealPath());
+                    $img->save($destinationPath.'/'.$file);
+                    // Thumb Image
+                    $destinationPath = public_path('/assets/product_images/thumb');
+                    $img = Image::make($original_file->getRealPath());
+                    $img->resize(600, 600, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($destinationPath.'/'.$file);
+                    $product_image = new ProductAdditionalImage;
+                    $product_image->product_id = $additional_image_record->product_id;
+                    $product_image->additional_image = $file;
+                    $product_image->save();
 
-            File::delete(public_path('assets/product_images/'.$additional_image_record->additional_image));
-            DB::table('product_additional_images')
-                ->where('id', $additional_image_id)
-                ->update([ 
-                    'additional_image' => $file, 
-                ]);
+            }
+         
+            // $destinationPath = public_path('/assets/product_images');
+            // $img = Image::make($additional_image->getRealPath());
+            // $img->save($destinationPath.'/'.$file);
+
+            // File::delete(public_path('assets/product_images/'.$additional_image_record->additional_image));
+            // DB::table('product_additional_images')
+            //     ->where('id', $additional_image_id)
+            //     ->update([ 
+            //         'additional_image' => $file, 
+            //     ]);
         }
 
         return redirect()->back();
+    }
+
+    public function setAsThumb($id, $additional_image)
+    {
+        try {
+            $id = decrypt($id);
+        }catch(DecryptException $e) {
+            return redirect()->back();
+        }
+        $setAsThumb = Product::where('id', $id)->update(array('banner' => $additional_image));
+
+        if($setAsThumb){
+            return redirect()->back()->with('msg', "Updated Successfully");
+        }else{
+            return redirect()->back()->with('error', "Something went wrong!");
+        }
+    }
+
+    public function deleteThumb($id, $pId)
+    {
+        try {
+            $id = decrypt($id);
+        }catch(DecryptException $e) {
+            return redirect()->back();
+        }
+        $productAdditionalImages = ProductAdditionalImage::find($pId);
+        $deleteThumb = ProductAdditionalImage::where('id', $pId)->where('product_id', $id)->delete();
+        if($deleteThumb){
+            File::delete(public_path('assets/product_images/'.$productAdditionalImages->additional_image));
+            File::delete(public_path('assets/product_images/thumb/'.$productAdditionalImages->additional_image));
+            return redirect()->back()->with('msg', "Deleted Successfully");
+        }else{
+            return redirect()->back()->with('error', "Something went wrong!");
+        }
     }
 
     public function viewProduct($product_id)

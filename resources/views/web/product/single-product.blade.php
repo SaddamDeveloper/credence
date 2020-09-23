@@ -95,7 +95,6 @@
                           </div>
                         </div>  
                         @endif
-
                         @if (!empty($product_size_stock) && (count($product_size_stock) > 0))
                         <div class="attributes">
                           <div class="attribute-label">Size:</div>
@@ -110,7 +109,7 @@
                                 @else 
                                 <li class="col-sel size-sel">
                                   <span>{{ $item->size }}</span>
-                                  <input type="radio" name="product_size_id" value="{{ $item->id }}" checked="" hidden="">
+                                  <input type="radio" name="product_size_id" value="{{ $item->id }}" hidden="">
                                 </li>
                                 @endif
                               @endforeach

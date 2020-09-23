@@ -28,27 +28,35 @@
       <li><a href="{{ route('web.index') }}">Home</a></li>
     @if(!empty($header_data['categories']) && (count($header_data['categories']) > 0))
         @foreach($header_data['categories'] as $key => $item)  
-			@if(!empty($item['sub_categories']) && (count($item['sub_categories']) > 0))
-			<li><a>{{ $item['top_cate_name'] }}</a>
-				<ul>
-					@foreach($item['sub_categories'] as $keys => $items) 
-					@if (!empty($items->last_category) && (count($items->last_category) > 0))
-				<li><a><span>{{ $items->sub_cate_name }}</span></a>
-					<ul>
-						@foreach($items->last_category as $keyss => $itemss) 
-					<li> <a href="{{ route('web.product_list', ['slug' => $itemss->slug, 'top_category_id' => $item['top_category_id'], 'sub_category_id' => $items->id, 'last_category_id' => $itemss->id, 'sorted_by' => 0]) }}"> <span>{{ $itemss->third_level_sub_category_name }}</span> </a> </li>
-					@endforeach
-					</ul>
-				</li>
-				@else
-				<li> <a href="{{ route('web.product_list', ['slug' => $items->slug, 'top_category_id' => $item['top_category_id'], 'sub_category_id' => $items->id, 'last_category_id' => 0, 'sorted_by' => 0]) }}"> <span>{{ $items->sub_cate_name }}</span> </a> </li>
-				@endif
-				@endforeach
-				</ul>
-			</li>
-			@else
-				<li><a href="{{ route('web.product_list', ['slug' => $item['top_cate_name'], 'top_category_id' => $item['top_category_id'], 'sub_category_id' => 0, 'last_category_id' => 0, 'sorted_by' => 0]) }}">{{ $item['top_cate_name'] }}</a> </li>
-			@endif
+            @php
+                $sub_category =  $item->SubCategory;
+                
+            @endphp
+            @if(!empty($sub_category) && (count($sub_category) > 0))
+                <li><a>   {{ $item['top_cate_name'] }}</a>
+                    <ul>
+                    @foreach($sub_category as $keys => $items) 
+             
+                    @php
+                        $last_category =  $item->thirdLevelCategories;
+                    @endphp
+                        @if (!empty($last_category) && (count($last_category) > 0))
+                            <li><a><span>{{ $items->sub_cate_name }}</span></a>
+                                <ul>
+                                    @foreach($last_category as $keyss => $itemss) 
+                                        <li> <a href="{{ route('web.product_list', ['slug' => $itemss->slug, 'top_category_id' => $item['top_category_id'], 'sub_category_id' => $items->id, 'last_category_id' =>2, 'sorted_by' => 0]) }}"> <span>{{ $itemss->third_level_sub_category_name }}</span> </a> </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                            @else
+                            <li> <a href="{{ route('web.product_list', ['slug' => $items->slug, 'top_category_id' => $item['top_category_id'], 'sub_category_id' => $items->id, 'last_category_id' => 0, 'sorted_by' => 0]) }}"> <span>{{ $items->sub_cate_name }}</span> </a> </li>
+                        @endif
+                    @endforeach
+                    </ul>
+                </li>
+            @else
+                <li><a href="{{ route('web.product_list', ['slug' => $item['top_cate_name'], 'top_category_id' => $item['top_category_id'], 'sub_category_id' => 0, 'last_category_id' => 0, 'sorted_by' => 0]) }}">{{ $item['top_cate_name'] }}</a> </li>
+            @endif
       	@endforeach
     @endif
     </ul>
@@ -126,33 +134,33 @@
                 </div>
                   <div>
                     <div class="jtv-top-cart-content"> 
-                      @if(Cart::content()->count() > 0)
-                        <ul class="mini-products-list" id="cart-sidebar">
-                          @foreach(Cart::content() as $item)
-                          <li class="item first">
-                            <div class="item-inner"> <a class="product-image" title="{{ $item->name }}" href="{{ route('web.product_detail', ['slug' => $item->slug, 'product_id' => encrypt($item->id)]) }}" target="_blank"><img alt="{{ $item->name }}" src="{{ asset('assets/product_images/'.$item->options->product_image.'') }}"> </a>
-                              <div class="product-details">
-                                <div class="access"><a class="jtv-btn-remove" title="Remove This Item" href="{{ route('web.remove_cart_item', ['product_id' => $item->rowId]) }}">Remove</a> </div>
-                                <p class="product-name"><a href="{{ route('web.product_detail', ['slug' => $item->slug, 'product_id' => $item->id]) }}" target="_blank">{{ $item->name }}</a> </p>
-                                <strong>{{ $item->qty }}</strong> x <span class="price">
-                                </span>
-                             </div>
+                        @if(Cart::content()->count() > 0)
+                            <ul class="mini-products-list" id="cart-sidebar">
+                                @foreach(Cart::content() as $item)
+                                    <li class="item first">
+                                        <div class="item-inner"> <a class="product-image" title="{{ $item->name }}" href="{{ route('web.product_detail', ['slug' => $item->slug, 'product_id' => encrypt($item->id)]) }}" target="_blank"><img alt="{{ $item->name }}" src="{{ asset('assets/product_images/'.$item->options->product_image.'') }}"> </a>
+                                        <div class="product-details">
+                                            <div class="access"><a class="jtv-btn-remove" title="Remove This Item" href="{{ route('web.remove_cart_item', ['product_id' => $item->rowId]) }}">Remove</a> </div>
+                                            <p class="product-name"><a href="{{ route('web.product_detail', ['slug' => $item->slug, 'product_id' => $item->id]) }}" target="_blank">{{ $item->name }}</a> </p>
+                                            <strong>{{ $item->qty }}</strong> x <span class="price">
+                                            </span>
+                                        </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                            <div class="actions">
+                                <button class="btn-checkout" title="Checkout" type="button" onClick="#"><span>Checkout</span> </button>
+                                <a href="{{ route('web.view_cart') }}" class="view-cart"><span>View Cart</span></a>
                             </div>
-                          </li>
-                          @endforeach
-                        </ul>
-                      <div class="actions">
-                        <button class="btn-checkout" title="Checkout" type="button" onClick="#"><span>Checkout</span> </button>
-                        <a href="{{ route('web.view_cart') }}" class="view-cart"><span>View Cart</span></a>
-                      </div>
                         @else
-                        <center>
-                            <div class="emptycrt">
-                              <img src="{{ asset('web/images/no-product.jpg') }}" alt="">
-                                <p style="margin: 10px 0 0">Cart is Empty</p>
-                            </div>
-                        </center>
-                    @endif
+                            <center>
+                                <div class="emptycrt">
+                                <img src="{{ asset('web/images/no-product.jpg') }}" alt="">
+                                    <p style="margin: 10px 0 0">Cart is Empty</p>
+                                </div>
+                            </center>
+                        @endif
                     </div>
                   </div>
                 </div>
@@ -175,32 +183,37 @@
           <ul id="nav" class="hidden-xs">
             <li class="drop-menu"><a href="{{route('web.index')}}" class="level-top active"><span>Home</span></a></li>    
             @if(!empty($header_data['categories']) && (count($header_data['categories']) > 0))
-              @foreach($header_data['categories'] as $key => $item)        
+              @foreach($header_data['categories'] as $item)        
               <li class="mega-menu"> 
-
-                @if(!empty($item['sub_categories']) && (count($item['sub_categories']) > 0))
-                  <a class="level-top"><span>{{ $item['top_cate_name'] }}</span></a>
+                @php
+                    $sub_category = $item->subCategory;
+                @endphp
+                @if(!empty($sub_category) && (count($sub_category) > 0))
+                  <a class="level-top"><span>{{ $item->top_cate_name }}</span></a>
                 @else
-                  <a class="level-top" href="{{ route('web.product_list', ['slug' => $item['top_cate_name'], 'top_category_id' => $item['top_category_id'], 'sub_category_id' => 0, 'last_category_id' => 0, 'sorted_by' => 0]) }}"><span>{{ $item['top_cate_name'] }}</span></a>
+                  <a class="level-top" href="{{ route('web.product_list', ['slug' => $item->slug,'type' => 1, 'category_id' => $item->third_level_sub_category_id]) }}"><span>{{ $item->top_cate_name }}</span></a>
                 @endif
-
-                @if(!empty($item['sub_categories']) && (count($item['sub_categories']) > 0))
+                
+                @if(!empty($sub_category) && (count($sub_category) > 0))
                 <div class="jtv-menu-block-wrapper">
                   <div class="jtv-menu-block-wrapper2">
                     <div class="nav-block jtv-nav-block-center">
                       <ul class="level0">
-                        @foreach($item['sub_categories'] as $keys => $items) 
+                        @foreach($sub_category as $items) 
+                        @php
+                            $third_category = $items->thirdLevelCategories;
+                        @endphp
 
-                          @if (!empty($items->last_category) && (count($items->last_category) > 0))
+                          @if (!empty($third_category) && (count($third_category) > 0))
                             <li class="parent item"> <a><span>{{ $items->sub_cate_name }}</span></a>
                           @else
-                            <li class="parent item"> <a href="{{ route('web.product_list', ['slug' => $items->sub_cate_name, 'top_category_id' => $item['top_category_id'], 'sub_category_id' => $items->id, 'last_category_id' => 0, 'sorted_by' => 0]) }}"><span>{{ $items->sub_cate_name }}</span></a>
+                            <li class="parent item"> <a href="{{ route('web.product_list', ['slug' => $items->slug, 'type' => 2,'category_id' => $items->id]) }}"><span>{{ $items->sub_cate_name }}</span></a>
                           @endif
 
-                          @if(!empty($items->last_category) && (count($items->last_category) > 0))
+                          @if(!empty($third_category) && (count($third_category) > 0))
                           <ul class="level1">
-                            @foreach($items->last_category as $keyss => $itemss) 
-                              <li> <a href="{{ route('web.product_list', ['slug' => $itemss->slug, 'top_category_id' => $item['top_category_id'], 'sub_category_id' => $items->id, 'last_category_id' => $itemss->id, 'sorted_by' => 0]) }}"><span>{{ $itemss->third_level_sub_category_name }}</span></a> </li>
+                            @foreach($third_category as $keyss => $itemss) 
+                              <li> <a href="{{ route('web.product_list', ['slug' => $itemss->slug, 'type' => 3, 'category_id' => $itemss->id]) }}"><span>{{ $itemss->third_level_sub_category_name }}</span></a> </li>
                             @endforeach
                           </ul>
                           @endif

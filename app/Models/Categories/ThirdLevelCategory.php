@@ -19,4 +19,14 @@ class ThirdLevelCategory extends Model
     {
         return $this->belongsTo('App\Models\Product', 'third_level_sub_category_id', 'id');
     }
+
+    public function topCategory()
+    {
+        return $this->belongsTo('App\Models\Categories\TopCategory', 'top_category_id', 'id');
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo('App\Models\Categories\SubCategory', 'sub_category_id', 'id');
+    }
 }

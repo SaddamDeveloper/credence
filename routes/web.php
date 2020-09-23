@@ -177,7 +177,11 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 
         /** Product Additional Image **/
         Route::get('additional-prouduct-image-list/{product_id}', 'ProductController@showProductImageList')->name('admin.additional_product_image_list');
-        Route::put('update-prouduct-additional-image/{additional_image_id}', 'ProductController@updateProductAdditionalImage')->name('admin.update_product_additional_image');
+        Route::post('update-prouduct-additional-image/', 'ProductController@updateProductAdditionalImage')->name('admin.update_product_additional_image');
+        
+        Route::get('set/as/thumb/{id}/{banner}', 'ProductController@setAsThumb')->name('admin.set_as_thumb');
+        Route::get('delete/thumb/{id}/{pId}', 'ProductController@deleteThumb')->name('admin.delete_thumb');
+
 
         /** Product View **/
         Route::get('view-product/{product_id}', 'ProductController@viewProduct')->name('admin.view_product');

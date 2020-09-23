@@ -30,7 +30,7 @@ class UsersLoginController extends Controller
         if ((Auth::guard('users')->attempt(['contact_no' => $request->username, 'password' => $request->password])) || (Auth::guard('users')->attempt(['email' => $request->username, 'password' => $request->password]))) {
             // /** If Cart is Present **/
             // Cart::store(Auth::guard('users')->user()->id);
-            Cart::restore(Auth::guard('users')->user()->id);
+            Cart::store(Auth::guard('users')->user()->id);
             // if (Cart::count() > 0 && !empty(Cart::content())) {
             //     // foreach ($cart as $product_id => $item) {
 
