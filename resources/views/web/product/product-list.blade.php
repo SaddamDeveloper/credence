@@ -20,6 +20,8 @@
                     <h2 class="page-heading"> 
                       <span class="page-heading-title">
                         {{ $label }}
+                        <input type="hidden" name="category_id" id="category_id" value="{{ $category_id }}">
+                        <input type="hidden" name="type" id="type" value="{{ $type }}">
                       </span> 
                     </h2>
                   </div>
@@ -48,7 +50,6 @@
                     <p class="block-subtitle">Shopping Options</p> 
                     <ul class="cd-accordion-menu animated">
                       @if(!empty($categories) && (count($categories) > 0))
-
                         @foreach($categories as $key => $item) 
                           @if(!empty($item['sub_categories']) && (count($item['sub_categories']) > 0))
                         <!-- For 3 Level Catagory -->
@@ -154,32 +155,65 @@
         grid: false
     });
     $(function(){
-      $("#my_range").on('change', function(){
-        var data = (this).value;
+      $('#my_range').on('change', function() {
+          var data = this.value;
+          filter_data(data);
+      });
+      $('#sort').on('change', function() {
+          var data = this.value;
+          filter_data(data);
+      });
+      $('#brand').on('change', function() {
+          var data = this.value;
+          filter_data(data);
+      });
+      function filter_data(data){
         var dataSplit = data.split(";");
         var min = dataSplit[0];
         var max = dataSplit[1];
-        var top_category_id = $("#top_category_id").val();
-        var sub_category_id = $("#sub_category_id").val();
-        var last_category_id = $("#last_category_id").val();
+        var selected = 
+        var category_id = $("#category_id").val();
+        var type = $("#type").val();
         $.ajaxSetup({
-	                headers: {
-	                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	                }
-              });
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
         $.ajax({
               url: "{{route('price_filter')}}",
               method: "POST",
-              data: {top_category_id:top_category_id, sub_category_id:sub_category_id, last_category_id:last_category_id, min:min, max:max},
+              data: {category_id:category_id, selected:selected, type:type, min:min, max:max},
               success: function(data){
-                console.log(data);
                 $("#pr").html(data);
               }
+        });
+    }
+    function get_filter(id) {
+          var filter = [];
+          $('.' + id + ':checked').each(function() {
+              filter.push($(this).val());
           });
-      });
-      $("#sort").on('change', function(){
-        
-      });
+          return filter;
+      }
+      // $("#sort").on('change', function(){
+      //   var selected = this.value;
+      //   var type = $("#type").val();
+      //   var category_id = $("#category_id").val();
+      //   $.ajaxSetup({
+      //     headers: {
+      //       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      //     }
+      //   });
+      //   $.ajax({
+      //       url: "{{route('price_filter')}}",
+      //       method: "POST",
+      //       data: {type:type, category_id:category_id, selected:selected},
+      //       success: function(data){
+      //         $("#pr").html(data);
+      //       }
+      //     });
+      // });
     });
+
   </script>
   @endsection

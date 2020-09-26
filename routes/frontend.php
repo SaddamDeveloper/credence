@@ -18,6 +18,9 @@ Route::group(['namespace'=>'Web'],function(){
 	// Price Filter
 	Route::post('/price/filter/', 'ProductController@priceFilter')->name('price_filter');
 
+	// Sorting
+	Route::post('/sorting/', 'ProductController@sorting')->name('sorting');
+
 	/** Add Product to Cart **/
 	Route::post('add-cart', 'CartController@addCart')->name('web.add_cart');
 	// Route::get('add-cart/{id}/{color}/{size}', 'CartController@addCart')->name('web.add_cart');
