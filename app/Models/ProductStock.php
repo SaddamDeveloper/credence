@@ -24,4 +24,8 @@ class ProductStock extends Model
     {
         return $this->belongsTo('App\Models\ProductColorMapping', 'product_id', 'id');
     }
+    public function image()
+    {
+        return $this->belongsTo('App\Models\ProductAdditionalImage', 'product_id', 'id');
+    }
 }

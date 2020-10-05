@@ -29,33 +29,33 @@ class UsersLoginController extends Controller
 
         if ((Auth::guard('users')->attempt(['contact_no' => $request->username, 'password' => $request->password])) || (Auth::guard('users')->attempt(['email' => $request->username, 'password' => $request->password]))) {
             // /** If Cart is Present **/
-            // Cart::store(Auth::guard('users')->user()->id);
             Cart::store(Auth::guard('users')->user()->id);
+            Cart::restore(Auth::guard('users')->user()->id);
             // if (Cart::count() > 0 && !empty(Cart::content())) {
-            //     // foreach ($cart as $product_id => $item) {
+            //     foreach ($cart as $product_id => $item) {
 
-            //         //     $product = explode(',', $item);
-            //         //     $quantity = $product[0];
-            //         //     $size_id1 = $product[1];
-            //         //     $color_id1 = $product[2];
+            //             $product = explode(',', $item);
+            //             $quantity = $product[0];
+            //             $size_id1 = $product[1];
+            //             $color_id1 = $product[2];
 
-            //         //     $check_cart_product = DB::table('cart')
-            //         //         ->where('user_id', Auth::guard('users')->user()->id)
-            //         //         ->where('product_id', $product_id)
-            //         //         ->count();
+            //             $check_cart_product = DB::table('cart')
+            //                 ->where('user_id', Auth::guard('users')->user()->id)
+            //                 ->where('product_id', $product_id)
+            //                 ->count();
 
-            //         //     if ($check_cart_product < 1 ) {
-            //         //         DB::table('cart')
-            //         //             ->insert([
-            //         //                 'user_id' => Auth::guard('users')->user()->id,
-            //         //                 'product_id' =>  $product_id,
-            //         //                 'size_id' =>  $size_id1,
-            //         //                 'color_id' =>  $color_id1,
-            //         //                 'quantity' => (int)$quantity,
-            //         //                 'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
-            //         //             ]);
-            //         //     }
-            //         // }
+            //             if ($check_cart_product < 1 ) {
+            //                 DB::table('cart')
+            //                     ->insert([
+            //                         'user_id' => Auth::guard('users')->user()->id,
+            //                         'product_id' =>  $product_id,
+            //                         'size_id' =>  $size_id1,
+            //                         'color_id' =>  $color_id1,
+            //                         'quantity' => (int)$quantity,
+            //                         'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
+            //                     ]);
+            //             }
+            //         }
             // }
             
             return redirect()->intended('/');

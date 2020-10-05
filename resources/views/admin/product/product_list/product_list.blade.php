@@ -23,15 +23,15 @@
                     <table id="all_product_table" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       <thead>
                         <tr>
-							<th>Sl No</th>
-							<th>Image</th>
+                            <th>Sl No</th>
+                            <th>Image</th>
                             <th>Product Name</th>
-							<th>Slug</th>
-							<th>Top-Category</th>
-							<th>Sub-Category</th>
+                            <th>Slug</th>
+                            <th>Top-Category</th>
+                            <th>Sub-Category</th>
                             <th>3rd Sub-Category</th>
                             <th>Brand</th>
-							<th>Status</th>
+                            <th>Status</th>
                             <th>Product Images</th>
                             <th>Action</th>
                         </tr>

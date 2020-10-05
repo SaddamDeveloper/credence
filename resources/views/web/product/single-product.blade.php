@@ -43,24 +43,27 @@
                       <div class="product-name">
                         <h1>{{ $product_detail->product_name }}</h1>
                       </div>
+                        @php
+                            $min_size = $product_detail->minSize;
+                            $min_size = $min_size[0];
+                            // dd($min_size);
+                        @endphp
                       <div class="price-block">
                         <div class="price-box">
-                            <p class="old-price"> <span class="price-label">Special Price</span> <span id="product-price-48" class="price"> ₹{{ number_format($product_detail->discount, 2) }} </span> </p>&nbsp;
+                            <p class="old-price"> <span class="price-label">Special Price</span> <span id="product-price-48" class="price"> ₹{{ number_format($min_size->discount, 2) }} </span> </p>&nbsp;
 
-                            <p class="special-price"> <span class="price-label">Regular Price:</span> <span class="price"> ₹{{ number_format($product_detail->price, 2) }} </span> </p>
+                            <p class="special-price"> <span class="price-label">Regular Price:</span> <span class="price"> ₹{{ number_format($min_size->price, 2) }} </span> </p>
                         </div>
                       </div>
                       <div class="info-orther">
                         <p>Item Code: #{{ $product_detail->sku_id }}</p>
+                      
                         <p>Availability: <span class="in-stock">
-							@php
-
-              				@endphp
-                           @if(isset($product_detail->ProductStock->stock) && !empty($product_detail->ProductStock->stock))
-                            In Stock
-                          @else
-                            Out of Stock
-                          @endif
+                           @if(isset($min_size->stock) && ($min_size->stock > 0))
+                                In Stock
+                            @else
+                                Out of Stock
+                            @endif
                         </span></p>
                       </div>
                       {{-- <div class="short-description">
@@ -73,13 +76,13 @@
                         <form action="{{ route('web.add_cart') }}" method="POST" autocomplete="off" id="product">
                         @csrf
 
-						@if (!empty($product_color) && (count($product_color) > 0))
+						@if (!empty($product_detail->productColorMapping) && (count($product_detail->productColorMapping) > 0))
                         <div class="attributes">
                           <div class="attribute-label">Color:</div>
                           <div class="attribute-list">
                             <ul class="list-color" id="list-color">
-                              @foreach ($product_color as $key => $item)
-                                @if ($key == 0)
+                              @foreach ($product_detail->productColorMapping as $key => $item)
+                                @if($key == 0)
                                 <li class="col-sel color-sel">
                                   <span style="background:{{ $item->color_code }};"></span>
                                   <input type="radio" name="product_color_id" value="{{ $item->id }}" checked="" hidden="">
@@ -95,12 +98,12 @@
                           </div>
                         </div>  
                         @endif
-                        @if (!empty($product_size_stock) && (count($product_size_stock) > 0))
+                        @if (!empty($product_detail->productStock) && (count($product_detail->productStock) > 0))
                         <div class="attributes">
                           <div class="attribute-label">Size:</div>
                           <div class="attribute-list">
                             <ul class="list-size" id="list-size">
-                              @foreach ($product_size_stock as $key => $item)
+                              @foreach ($product_detail->productStock as $key => $item)
                                 @if ($key == 0)
                                 <li class="col-sel size-sel">
                                   <span>{{ $item->size }}</span>
@@ -117,11 +120,9 @@
                           </div>
                         </div>
                         @endif
-
                         @if (session()->has('msg'))
                             <span style="color: red;">{{session()->get('msg')}}</span>
                         @endif
-
                         <div class="add-to-box">
                           <div class="add-to-cart" >
                             <div class="pull-left">
@@ -131,7 +132,7 @@
                                 <input type="number" class="input-text qty" title="Qty" value="1" maxlength="12" id="qty" min="1" name="qty">
                                 <button onClick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty )) result.value++;return false;" class="increase items-count" type="button"><i class="fa fa-plus">&nbsp;</i></button>
                               </div>
-							</div>
+                            </div>
                             @if(isset($product_detail->ProductStock->stock) && !empty($product_detail->ProductStock->stock))
                                 <input type="hidden" value="{{ $product_detail->id }}" name="product_id">
                               <button class="button btn-cart" title="Add to Cart" type="submit">Add to Cart</button>

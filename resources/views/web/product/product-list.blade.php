@@ -117,7 +117,7 @@
                         <ul class="check-box-list">
                             @foreach ($brand as $item)
                               <li>
-                                  <input type="checkbox" id="p1" name="cc">
+                                  <input type="checkbox" id="brand" name="brand" value="{{ $item->brand_name }}">
                                   <label for="p1"> 
                                     <span class="button"></span>{{ $item->brand_name }}
                                     <span class="count">
@@ -143,77 +143,81 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    
     <!--Plugin JavaScript file-->
     <script src="{{asset('web/js/ion.rangeSlider.js')}}"></script>
-
+    @if(isset($price_range) && !empty($price_range) && !empty($price_range['min']) && !empty($price_range['max']))
+    <script type="text/javascript">
+        $(".js-range-slider").ionRangeSlider({
+        min: '{{ $price_range['min'] }}',
+        max: '{{ $price_range['max'] }}',
+        type: 'double',
+        prefix: "Rs ",
+        prettify: false,
+        hasGrid: false,
+        onFinish: function (data) {
+            var prices = data.from+";"+data.to;
+            filterProduct(prices);
+        },
+        });
+    </script>
+    @else
+    <script type="text/javascript">
+        $(".js-range-slider").ionRangeSlider({
+        min: 0,
+        max: 1000,
+        type: 'double',
+        prefix: "Rs ",
+        prettify: false,
+        hasGrid: false,
+        onFinish: function (data) {
+            var prices = data.from+";"+data.to;
+            filterProduct(prices);
+        },
+    });
+    </script>
+    @endif
     <!-- Custom Range Price slide JavaScript file-->
     <script type="text/javascript">
-      $(".js-range-slider").ionRangeSlider({
-        type: "double",
-        min: 400,
-        max: 2000,
-        from: 500,
-        to: 1000,
-        grid: false
-    });
+        function filterProduct(data){
+            var price_range = data;
+            var category_id = $("#category_id").val();
+            var type = $("#type").val();
+            var sort = $("#sort").val();
+            var brand = new Array();
+            $("input:checkbox[name=brand]:checked").each(function(){
+                brand.push($(this).val());
+            });
+
+            $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+            });
+            $.ajax({
+                url: "{{route('price_filter')}}",
+                method: "POST",
+                data: {category_id:category_id, type:type, sort:sort, brand:brand, price_range:price_range},
+                success: function(data){
+                    $("#pr").html(data);
+                }
+            });
+        }
     $(function(){
-      $('#my_range').on('change', function() {
-          var data = this.value;
-          filter_data(data);
-      });
       $('#sort').on('change', function() {
-          var data = this.value;
-          filter_data(data);
+        filterProduct();
       });
-      $('#brand').on('change', function() {
-          var data = this.value;
-          filter_data(data);
-      });
-      function filter_data(data){
-        var dataSplit = data.split(";");
-        var min = dataSplit[0];
-        var max = dataSplit[1];
-        var selected = 
-        var category_id = $("#category_id").val();
-        var type = $("#type").val();
-        $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-        });
-        $.ajax({
-              url: "{{route('price_filter')}}",
-              method: "POST",
-              data: {category_id:category_id, selected:selected, type:type, min:min, max:max},
-              success: function(data){
-                $("#pr").html(data);
-              }
-        });
-    }
-    function get_filter(id) {
-          var filter = [];
-          $('.' + id + ':checked').each(function() {
-              filter.push($(this).val());
-          });
-          return filter;
-      }
-      // $("#sort").on('change', function(){
-      //   var selected = this.value;
-      //   var type = $("#type").val();
-      //   var category_id = $("#category_id").val();
-      //   $.ajaxSetup({
-      //     headers: {
-      //       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      //     }
-      //   });
-      //   $.ajax({
-      //       url: "{{route('price_filter')}}",
-      //       method: "POST",
-      //       data: {type:type, category_id:category_id, selected:selected},
-      //       success: function(data){
-      //         $("#pr").html(data);
-      //       }
-      //     });
-      // });
+    //   $('#brand').on('click', function(){
+    //     filterProduct();
+    //   });
     });
+
+      
+    // function get_filter(id_name) {
+    //   var filter = [];
+    //   $('#' + id_name + ':checked').each(function() {
+    //       filter.push($(this).val());
+    //   });
+    //   return filter;
+    // }
+    // });
 
   </script>
   @endsection

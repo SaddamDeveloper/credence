@@ -36,8 +36,9 @@ class ProductController extends Controller
             $brand = Brand::where('sub_category_id',$cate_name->top_category_id)->where('status',1)->get();
             $products->where('third_level_sub_category_id',$category_id);
         }
+        $min_price = $products->min('price');
+        $max_price = $products->max('price');
         $products = $products->orderBy('id','desc')->paginate(18);
-
         $top_category = DB::table('top_category')
         ->where('status', 1)
         ->get();
@@ -73,78 +74,55 @@ class ProductController extends Controller
         
         
         }
-        return view('web.product.product-list', compact('products', 'label', 'categories','brand', 'category_id', 'type'));
+        $price_range = [
+            'min' => $min_price,
+            'max' => $max_price
+        ];
+        return view('web.product.product-list', compact('products', 'label', 'categories','brand', 'category_id', 'type', 'price_range'));
     }
 
     public function productDetail($slug, $product_id) 
     {
         /** Product Details **/
-        $product_detail = Product::with('productStock')->with('productAdditionalImages')->where('id',$product_id)->where('status', 1)->where('deleted_at', NULL)->first();
-        if (empty($product_detail->price)) {
-            
-            $p_stock = DB::table('product_stock')
-                ->where('product_id', $product_detail->id)
-                ->where('status', 1)
-                ->orderBy('price', 'ASC')
-                ->first();
+        $product_detail = Product::where('id',$product_id)->where('status', 1)->where('deleted_at', NULL)->first();
+        // if (empty($product_detail->price)) {
+        //         $p_stock = DB::table('product_stock')
+        //         ->where('product_id', $product_detail->id)
+        //         ->where('status', 1)
+        //         ->orderBy('price', 'ASC')
+        //         ->first();
 
-            $product_detail->price = $p_stock->price;
-            $product_detail->discount = $p_stock->discount;
-        }
+        //     $product_detail->price = $p_stock->price;
+        //     $product_detail->discount = $p_stock->discount;
+        // }
 
         /** Product Size Stock **/
-        $product_size_stock = DB::table('product_stock')
-            ->where('product_stock.product_id', $product_id)
-            ->where('product_stock.stock', '>', 0)
-            ->where('product_stock.status', 1)
-            ->get();
+        // $product_size_stock = DB::table('product_stock')
+        //     ->where('product_stock.product_id', $product_id)
+        //     ->where('product_stock.stock', '>', 0)
+        //     ->where('product_stock.status', 1)
+        //     ->get();
         /** Product Color **/
-        $product_color = DB::table('product_color_mapping')
-            ->where('product_color_mapping.product_id', $product_id)
-            ->where('product_color_mapping.status', 1)
-            ->get();
+        // $product_color = DB::table('product_color_mapping')
+        //     ->where('product_color_mapping.product_id', $product_id)
+        //     ->where('product_color_mapping.status', 1)
+        //     ->get();
 
         /** Product Slider Images **/
-        $product_slider_images = DB::table('product_additional_images')
-            ->where('product_id', $product_id)
-            ->get();
-
-        if(!empty($product_detail->top_category_id)){
-            $related_product = DB::table('product')
-                ->leftJoin('top_category', 'product.top_category_id', '=', 'top_category.id')
-                ->where('product.id', '!=', $product_id)
-                ->where('product.status', 1)
-                ->where('product.deleted_at', NULL)
-                ->where('product.top_category_id', $product_detail->top_category_id)
-                ->select('product.*', 'top_category.top_cate_name')
-                ->get();
+        // $product_slider_images = DB::table('product_additional_images')
+        //     ->where('product_id', $product_id)
+        //     ->get();
+        $related_product = Product::where('status',1)->where('id','!=',$product_id)->where('deleted_at', NULL);
+        if(!empty($product_detail->third_level_sub_category_id)){           
+            $related_product->where('third_level_sub_category_id',$product_detail->third_level_sub_category_id);
+        }elseif(!empty($product_detail->sub_category_id)){
+            $related_product->where('sub_category_id',$product_detail->sub_category_id);            
+        }elseif(!empty($product_detail->top_category_id)){
+            $related_product->where('top_category_id',$product_detail->top_category_id);
         }
-
-        if(!empty($product_detail->sub_category_id)){
-            $related_product = DB::table('product')
-                ->leftJoin('top_category', 'product.top_category_id', '=', 'top_category.id')
-                ->leftJoin('sub_category', 'product.sub_category_id', '=', 'sub_category.id')
-                ->where('product.id', '!=', $product_id)
-                ->where('product.status', 1)
-                ->where('product.deleted_at', NULL)
-                ->where('product.sub_category_id', $product_detail->sub_category_id)
-                ->select('product.*', 'top_category.top_cate_name', 'sub_category.sub_cate_name')
-                ->get();
-        }
-
-        if(!empty($product_detail->third_level_sub_category_id)){
-            $related_product = DB::table('product')
-                ->leftJoin('top_category', 'product.top_category_id', '=', 'top_category.id')
-                ->leftJoin('sub_category', 'product.sub_category_id', '=', 'sub_category.id')
-                ->leftJoin('third_level_sub_category', 'product.third_level_sub_category_id', '=', 'third_level_sub_category.id')
-                ->where('product.id', '!=', $product_id)
-                ->where('product.status', 1)
-                ->where('product.deleted_at', NULL)
-                ->where('product.third_level_sub_category_id', $product_detail->third_level_sub_category_id)
-                ->select('product.*', 'top_category.top_cate_name', 'sub_category.sub_cate_name', 'third_level_sub_category.third_level_sub_category_name')
-                ->get();
-        }
-        return view('web.product.single-product', ['product_detail' => $product_detail, 'product_size_stock' => $product_size_stock, 'product_color' => $product_color, 'product_slider_images' => $product_slider_images, 'related_product' => $related_product]);
+        $related_product = $related_product->inRandomOrder()->get();
+       
+        return view('web.product.single-product',compact('product_detail','related_product'));
     }
 
     public function productSearch ($keyword)
@@ -223,32 +201,25 @@ class ProductController extends Controller
     {
         $category_id = $request->input('category_id');
         $type = $request->input('type');
-        $min = $request->input('min');
-        $max = $request->input('max');
-        $sorted_by = $request->input('selected');
-        if($sorted_by){
-            dd(1);
-            $products = Product::where('status', 1)->where('deleted_at', NULL);
+        $sorted_by = $request->input('sort');
+        $sorted_by == NULL ? 1 : $sorted_by;
+        $price_range = $request->input('price_range');
+        if(!empty($price_range)){
+            $price_range = explode(';',$price_range);
+            $min = $price_range[0];
+            $max = $price_range[1];
         }
-        // if(!empty($min) && !empty($max)){
-        //     $products = Product::whereBetween('price', [$min, $max])->where('status', 1)->where('deleted_at', NULL);
-        // }
-            if($type == 1){
-                $cate_name = TopCategory::find($category_id);
-                $label = $cate_name->top_cate_name;
-                $brand = Brand::where('top_category_id',$category_id)->where('status',1)->get();
-                $products->where('top_category_id',$category_id);
-               
-            }elseif($type == 2){
-                $cate_name = SubCategory::with('topCategory')->find($category_id);
-                $label = $cate_name->TopCategory->top_cate_name;
-                $brand = Brand::where('sub_category_id',$category_id)->where('status',1)->get();
-                $products->where('sub_category_id',$category_id);
-            }else{
-                $cate_name = ThirdLevelCategory::with(['topCategory', 'subCategory'])->find($category_id);
-                $label = $cate_name->TopCategory->top_cate_name;
-                $brand = Brand::where('sub_category_id',$cate_name->top_category_id)->where('status',1)->get();
-                $products->where('third_level_sub_category_id',$category_id);
+        $products = Product::where('status', 1)->where('deleted_at', NULL);
+        if(isset($min, $max) && !empty($min) && !empty($max)){
+            $products = Product::whereBetween('price', [$min, $max]);
+        }
+
+        if($type == 1){
+            $cate_name = TopCategory::find($category_id);
+            $label = $cate_name->top_cate_name;
+            $brand = Brand::where('top_category_id',$category_id)->where('status',1)->get();
+            $products->where('top_category_id',$category_id);
+            if(isset($sorted_by) && !empty($sorted_by)){
                 if($sorted_by == 1){
                     $products->orderBy('product.id', 'DESC');
                 }
@@ -257,8 +228,37 @@ class ProductController extends Controller
                 }
                 if ($sorted_by == 3) {
                     $products->orderBy('product.price', 'DESC');
-                }  
+                }
             }
+        }elseif($type == 2){
+            $cate_name = SubCategory::with('topCategory')->find($category_id);
+            $label = $cate_name->TopCategory->top_cate_name;
+            $brand = Brand::where('sub_category_id',$category_id)->where('status',1)->get();
+            $products->where('sub_category_id',$category_id);
+            if($sorted_by == 1){
+                $products->orderBy('product.id', 'DESC');
+            }
+            if ($sorted_by == 2) {
+                $products->orderBy('product.price', 'ASC');
+            }
+            if ($sorted_by == 3) {
+                $products->orderBy('product.price', 'DESC');
+            }
+        }else{
+            $cate_name = ThirdLevelCategory::with(['topCategory', 'subCategory'])->find($category_id);
+            $label = $cate_name->TopCategory->top_cate_name;
+            $brand = Brand::where('sub_category_id',$cate_name->top_category_id)->where('status',1)->get();
+            $products->where('third_level_sub_category_id',$category_id);
+            if($sorted_by == 1){
+                $products->orderBy('product.id', 'DESC');
+            }
+            if ($sorted_by == 2) {
+                $products->orderBy('product.price', 'ASC');
+            }
+            if ($sorted_by == 3) {
+                $products->orderBy('product.price', 'DESC');
+            }  
+        }
         $products = $products->paginate(18);
 
         $top_category =TopCategory::where('status', 1)->get();

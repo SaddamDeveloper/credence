@@ -19,7 +19,7 @@ class CheckoutController extends Controller
     public function showCheckoutForm()
     {
         $all_address = Address::where('user_id', Auth::guard('users')->user()->id)->orderBY('id', "DESC")->get();
-
+        Cart::store(Auth::guard('users')->user()->id);
         // $cart = DB::table('cart')
         //     ->leftjoin('product_stock', 'cart.stock_id', '=', 'product_stock.id')
     	// 	->leftjoin('product','product_stock.product_id','=','product.id')

@@ -138,7 +138,7 @@
                             <ul class="mini-products-list" id="cart-sidebar">
                                 @foreach(Cart::content() as $item)
                                     <li class="item first">
-                                        <div class="item-inner"> <a class="product-image" title="{{ $item->name }}" href="{{ route('web.product_detail', ['slug' => $item->slug, 'product_id' => encrypt($item->id)]) }}" target="_blank"><img alt="{{ $item->name }}" src="{{ asset('assets/product_images/'.$item->options->product_image.'') }}"> </a>
+                                        <div class="item-inner"> <a class="product-image" title="{{ $item->name }}" href="{{ route('web.product_detail', ['slug' => $item->slug, 'product_id' => $item->id]) }}" target="_blank"><img alt="{{ $item->name }}" src="{{ asset('assets/product_images/'.$item->options->product_image.'') }}"> </a>
                                         <div class="product-details">
                                             <div class="access"><a class="jtv-btn-remove" title="Remove This Item" href="{{ route('web.remove_cart_item', ['product_id' => $item->rowId]) }}">Remove</a> </div>
                                             <p class="product-name"><a href="{{ route('web.product_detail', ['slug' => $item->slug, 'product_id' => $item->id]) }}" target="_blank">{{ $item->name }}</a> </p>

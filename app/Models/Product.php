@@ -36,7 +36,7 @@ class Product extends Model
 
         public function productStock()
         {
-            return $this->hasOne('App\Models\ProductStock', 'product_id', 'id');
+            return $this->hasMany('App\Models\ProductStock', 'product_id', 'id');
         }
 
         public function productSize()
@@ -55,5 +55,17 @@ class Product extends Model
             ->where('product_stock.price', $this->productSize->min('price'))
             ->where('product_stock.status', 1)
             ->limit(1);
+        }
+        
+        public function minPrice(){
+            return $this->hasMany('App\Models\ProductStock', 'product_id', 'id')
+            ->where('product_stock.price', $this->productSize->min('price'))
+            ->where('product_stock.status', 1);
+        }
+
+        public function maxPrice(){
+            return $this->hasMany('App\Models\ProductStock', 'product_id', 'id')
+            ->where('product_stock.price', $this->productSize->max('price'))
+            ->where('product_stock.status', 1);
         }
 }
