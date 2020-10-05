@@ -119,9 +119,7 @@
                               <li>
                                   <input type="checkbox" id="" name="{{ $item->brand_name }}" value="{{ $item->brand_name }}">
                                   <label for="p1"> 
-                                    <span class="button"></span>{{ $item->brand_name }}
-                                    <span class="count">
-                                    </span>  
+                                    {{ $item->brand_name }}
                                   </label>
                               </li>
                             @endforeach
