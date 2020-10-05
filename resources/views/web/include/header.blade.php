@@ -30,13 +30,11 @@
         @foreach($header_data['categories'] as $key => $item)  
             @php
                 $sub_category =  $item->SubCategory;
-                
             @endphp
             @if(!empty($sub_category) && (count($sub_category) > 0))
                 <li><a>   {{ $item['top_cate_name'] }}</a>
                     <ul>
                     @foreach($sub_category as $keys => $items) 
-             
                     @php
                         $last_category =  $item->thirdLevelCategories;
                     @endphp

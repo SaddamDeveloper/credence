@@ -16,7 +16,7 @@
               <div class="ordernav" style="padding-bottom: 0.8%;">
                   <ul>
                     <li style="border-color: #323d61"><div>Cart information</div></li>
-                    <li style="border-color: #323d61"><div>shipping information</div></li>
+                    <li style="border-color: #0036e7"><div>shipping information</div></li>
                     <li class="step"><div>Order confirmation</div></li>
                   </ul>
               </div>
@@ -30,24 +30,28 @@
                       <div class="col-md-7"> 
                         <label style="font-weight: 700">Order Detail</label>                       
                         <div class="row singleorder">
-                          <div class="row">
-                              <div class="col-md-2 singleorderimg">
-                                  <a href="#"><img src="web/images/products/img02.jpg" alt=""></a>
-                              </div>
-                              <div class="col-md-10 singleordercontent" style="padding-top: 10px;">
-                                <a href="#">Royal velvet</a>
-                                <div class="cart-price" style="text-align: left;">
-                                    <div class="quantity">
-                                      <p><small>₹1025</small> ₹1025 </p> <b>|</b> 
-                                      <label class="" style="margin-bottom: 0;">Quantity:</label>&nbsp;&nbsp;2
-                                    </div>                                      
-                                </div>
-                                <div class="varient">
-                                  <b class="sub-tag">Color : <span style="background: blue"></span></b>
-                                  <b class="sub-tag spl">Size : L </b>
-                                </div>
-                              </div>
-                          </div>
+                            @if (isset($orders) && !empty($orders))
+                                @foreach ($orders->orderDetails as $od)
+                                    <div class="row">
+                                        <div class="col-md-2 singleorderimg">
+                                            <a href="{{ route('web.product_detail', ['slug' => $od->stock->product->slug, 'product_id' => $od->stock->product->id]) }}"><img src="{{ asset('assets/product_images/'.$od->product_image.'') }}" alt=""></a>
+                                        </div>
+                                        <div class="col-md-10 singleordercontent" style="padding-top: 10px;">
+                                        <a href="{{ route('web.product_detail', ['slug' => $od->stock->product->slug, 'product_id' => $od->stock->product->id]) }}">{{ $od->stock->product->product_name }}</a>
+                                        <div class="cart-price" style="text-align: left;">
+                                            <div class="quantity">
+                                                <p><small>₹{{ number_format($od->discount, 2) }}</small> ₹{{ number_format($od->price, 2) }} </p> <b>|</b> 
+                                                <label class="" style="margin-bottom: 0;">Quantity:</label>&nbsp;&nbsp;{{ $od->quantity }}
+                                            </div>                                      
+                                        </div>
+                                        <div class="varient">
+                                            <b class="sub-tag">Color : <span style="background:{{ $od->stock->color->color_code }}"></span></b>
+                                            <b class="sub-tag spl">Size : {{ $od->stock->size }} </b>
+                                        </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                       </div>
                       <div class="col-md-5"> 

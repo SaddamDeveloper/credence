@@ -46,6 +46,7 @@
                         <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
                             <label for="top_cate_name">Top-Category</label>
                             <input class="form-control" value="{{ $top_category->top_cate_name }}" required readonly>
+                            <input type="hidden" name="top_cate_name" value="{{ $top_category->top_cate_name}}">
                         </div>
 
                          <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
@@ -117,11 +118,11 @@
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
                                     <label for="size">Size Name</label>
                                     <input type="hidden" value="{{ $item->id }}" name="stock_id[]" required >
-                                    <input type="text" class="form-control"  placeholder="Enter size" name="size[]" value="{{ $item->size }}" required>
+                                    <input type="text" class="form-control"  placeholder="Enter size" name="size[]" value="{{ $item->size }}">
                                 </div>
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
                                     <label for="stock">Stock</label>
-                                    <input type="number" min="0" class="form-control" value="{{ $item->stock }}" placeholder="Enter stock" name="stock[]" required>
+                                    <input type="number" min="0" class="form-control" value="{{ $item->stock }}" placeholder="Enter stock" name="stock[]">
                                 </div>
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
                                     <label for="price">Price</label>
@@ -130,15 +131,6 @@
                                 <div class = "col-md-2 col-sm-12 col-xs-12 mb-3">
                                     <label for="mrp">MRP</label>
                                     <input type="number" min="0" class="form-control" name="discount" value="{{ $product_record->discount }}">
-                                </div>
-                                <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
-                                @if ($item->status == 1)
-                                    <a class="btn btn-success">Active</a>
-                                    <a class="btn btn-danger" href="{{ route('admin.update_product_stock_status', ['stock_id' => $item->id, 'status' => 2]) }}">In-Active</a>
-                                @else
-                                    <a class="btn btn-danger">In-Active</a>
-                                    <a class="btn btn-success" href="{{ route('admin.update_product_stock_status', ['stock_id' => $item->id, 'status' => 1]) }}">Active</a>
-                                @endif
                                 </div>
                             </div>
                         @endforeach
@@ -149,16 +141,16 @@
                         <div class="col-md-12 col-sm-12 col-xs-12 mb-3" id="stock_div">
                             <div class="col-md-10 col-sm-12 col-xs-12 mb-3 input_fields_wrap">
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3"> 
-                                    <input type="text" class="form-control" name="size[]" placeholder="Size" required>
+                                    <input type="text" class="form-control" name="size[]" placeholder="Size">
                                 </div>
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3"> 
-                                    <input type="number" min="0" class="form-control" placeholder="Stock" name="stock[]" required>
+                                    <input type="number" min="0" class="form-control" placeholder="Stock" name="stock[]">
                                 </div>
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                    <input type="number" class="form-control" placeholder="Price" name="price[]" required>
+                                    <input type="number" class="form-control" placeholder="Price" name="price[]">
                                 </div>
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
-                                    <input type="number" class="form-control" name="discount[]" placeholder="MRP" required>
+                                    <input type="number" class="form-control" name="discount[]" placeholder="MRP">
                                 </div>
                                 <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
                                     <button type="button" class="btn btn-primary" id="add_stock_btn">Add</button>
@@ -177,20 +169,11 @@
                             @foreach ($colors as $key => $item)
                                 <div class="col-md-12 col-sm-12 col-xs-12 mb-3">
                                     <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
-                                        <input type="hidden" name="color_id[]" required value="{{ $item->id }}">
-                                        <input type="text" class="form-control"  placeholder="Enter Color" name="color[]" value="{{ $item->color }}" required>
+                                        <input type="hidden" name="color_id[]" value="{{ $item->id }}">
+                                        <input type="text" class="form-control"  placeholder="Enter Color" name="color[]" value="{{ $item->color }}">
                                     </div>
                                     <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
-                                        <input type="color" class="form-control"  placeholder="Enter Color Code" name="color_code[]" value="{{ $item->color_code }}" required>
-                                    </div>
-                                    <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
-                                        @if ($item->status == 1)
-                                            <a class="btn btn-success">Active</a>
-                                            <a class="btn btn-danger" href="{{ route('admin.update_product_color_status', ['color_id' => $item->id, 'status' => 2]) }}">In-Active</a>
-                                        @else
-                                            <a class="btn btn-danger">In-Active</a>
-                                            <a class="btn btn-success" href="{{ route('admin.update_product_color_status', ['color_id' => $item->id, 'status' => 1]) }}">Active</a>
-                                        @endif
+                                        <input type="color" class="form-control"  placeholder="Enter Color Code" name="color_code[]" value="{{ $item->color_code }}">
                                     </div>
                                 </div>
                             @endforeach

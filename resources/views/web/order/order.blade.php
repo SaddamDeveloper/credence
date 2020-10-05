@@ -25,9 +25,9 @@
                               @foreach ($order->orderDetails as $od)
                                 <div class="row">
                                     <div class="col-md-2 singleorderimg">
-                                        <a href="#"><img src="{{ asset('assets/product_images/'.$od->product_image.'') }}" alt=""></a>
+                                        <a href="{{ route('web.product_detail', ['slug' => $od->stock->product->slug, 'product_id' => $od->stock->product->id]) }}"><img src="{{ asset('assets/product_images/'.$od->product_image.'') }}" alt=""></a>
                                     </div>
-                                    <div class="col-md-10 singleordercontent"><a href="#">{{ $od->stock->product->product_name }}</a>
+                                    <div class="col-md-10 singleordercontent"><a href="{{ route('web.product_detail', ['slug' => $od->stock->product->slug, 'product_id' => $od->stock->product->id]) }}">{{ $od->stock->product->product_name }}</a>
                                         <div class="cart-price" style="text-align: left;">
                                             <div class="quantity">
                                               <p><small>₹{{ number_format($od->discount, 2) }}</small> ₹{{ number_format($od->price, 2) }} </p> <b>|</b>

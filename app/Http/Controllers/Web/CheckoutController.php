@@ -77,16 +77,16 @@ class CheckoutController extends Controller
                         'payment_status' => 2,
                         'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
                     ]);
-
                     foreach (Cart::content() as $key => $item) {
-                               	DB::table('order_detail')
-                                		->insert([
-                                			'order_id' => $order_id,
-                                			'stock_id' => $item->options->size->id,
-                                			'price' => $item->price,
-                                			'discount' => $item->options->discount,
-                                			'quantity' => $item->qty
-                                    ]);
+                            DB::table('order_detail')
+                                    ->insert([
+                                        'order_id' => $order_id,
+                                        'stock_id' => $item->options->size->id,
+                                        'price' => $item->price,
+                                        'discount' => $item->options->discount,
+                                        'quantity' => $item->qty,
+                                        'product_image' => $item->options->product_image
+                                ]);
 
                         // Stock
                         for ($i=0; $i < $item->qty; $i++) { 

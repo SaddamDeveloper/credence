@@ -217,9 +217,9 @@ class ProductController extends Controller
                 }
             }
                          
-                /** Creating folder **/
-                if(!File::exists(public_path()."/assets"))
-                File::makeDirectory(public_path()."/assets");
+            /** Creating folder **/
+            if(!File::exists(public_path()."/assets"))
+            File::makeDirectory(public_path()."/assets");
 
             if(!File::exists(public_path()."/assets/product_images"))
                 File::makeDirectory(public_path()."/assets/product_images");
@@ -489,8 +489,12 @@ class ProductController extends Controller
         $productAdditionalImages = ProductAdditionalImage::find($pId);
         $deleteThumb = ProductAdditionalImage::where('id', $pId)->where('product_id', $id)->delete();
         if($deleteThumb){
-            File::delete(public_path('assets/product_images/'.$productAdditionalImages->additional_image));
-            File::delete(public_path('assets/product_images/thumb/'.$productAdditionalImages->additional_image));
+            if(File::exists(public_path('assets/product_images/'.$productAdditionalImages->additional_image))){
+                File::delete(public_path('assets/product_images/'.$productAdditionalImages->additional_image));
+            }
+            if(File::exists(public_path('assets/product_images/thumb/'.$productAdditionalImages->additional_image))){
+                File::delete(public_path('assets/product_images/thumb/'.$productAdditionalImages->additional_image));
+            }
             return redirect()->back()->with('msg', "Deleted Successfully");
         }else{
             return redirect()->back()->with('error', "Something went wrong!");
@@ -577,201 +581,57 @@ class ProductController extends Controller
 
     public function updateProduct(Request $request, $product_id)
     {
-        $request->validate([
+        $this->validate($request,[
+        	'top_cate_name' => 'required',
             'product_name'  => 'required',
             'slug'  => 'required',
-            'desc'          => 'required',
-            'product_type'       => 'required'
+            'desc'  => 'required',
         ]);
+        
+        // Lowest Price 
+        $lowest_price = min($request->input('price'));
+        // MRP price
+        $mrp_price = min($request->input('discount'));
 
-        // dd($request);
-
-        /** If Product name already exist **/
-        $count_product_name = DB::table('product')
-            ->where('product_name', ucwords(strtolower($request->input('product_name'))))
-            ->where('product.id', '!=', $product_id)
-            ->count();
-
-        if ($count_product_name > 0) {
-            return redirect()->back()->with('error', 'Product Name already exist');
-        }
-
-        $product_detail = DB::table('product')
-            ->where('id', $product_id)
-            ->first();
-
-        if ($request->input('product_type') == 1) {
-
-            if($request->hasFile('size_chart')){
-
-                File::delete(public_path()."/assets/product_size_chart/".$product_detail->size_chart);
-
-                /** Creating folder **/
-                if(!File::exists(public_path()."/assets"))
-                    File::makeDirectory(public_path()."/assets");
-
-                if(!File::exists(public_path()."/assets/product_size_chart"))
-                    File::makeDirectory(public_path()."/assets/product_size_chart");
-
-                /** Banner inserting **/
-                $original_file = $request->file('size_chart');
-                $size_chart_file   = time().'.'.$original_file->getClientOriginalExtension();
-                        
-                $destinationPath = public_path('/assets/product_size_chart');
-                $img = Image::make($original_file->getRealPath());
-                $img->save($destinationPath.'/'.$size_chart_file);
-
-                DB::table('product')
-                ->where('id', $product_id)
-                ->update([
-                    'size_chart' => $size_chart_file
-                ]);
-            }
-
-            /** Product Info. Inserting **/
-            DB::table('product')
-                ->where('id', $product_id)
-                ->update([ 
-                    'product_name' => ucwords(strtolower($request->input('product_name'))), 
-                    'slug' => strtolower(Str::slug($request->input('slug'), '-')),
-                    'sku_id' => $request->input('sku_id'),
-                    'product_type' => $request->input('product_type'), 
-                    'sub_category_id' => $request->input('sub_cate_name'),
-                    'third_level_sub_category_id' => $request->input('third_level_sub_cate_name'), 
-                    'brand_id' => $request->input('brand'), 
-                    'desc' => $request->desc, 
-                    'price' => $request->input('price'), 
-                    'discount' => $request->input('discount'), 
-                    'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                ]);
-            
-            /** Product Stock and Size **/
-            if($request->has('size')) 
-            {
+        $product = Product::find($product_id);
+        $product->product_name = $request->input('product_name');
+        $product->slug = $request->input('slug');
+        $product->top_category_id = $request->input('top_cate_name');
+        $product->sub_category_id = $request->input('sub_cate_name');
+        $product->third_level_sub_category_id = $request->input('third_level_sub_cate_name');
+        $product->brand_id = $request->input('brand');
+        $product->desc = $request->desc;
+        $product->price = $lowest_price;
+        $product->discount = $mrp_price;
+        if($product->save()){
+             /** Product Stock and Size **/
+            if($request->has('size')){
                 for($i = 0; $i < count($request->input('size')); $i++) 
                 {
-                    if(!empty($request->input('stock_id')[$i]))
-                    {
-                        DB::table('product_stock')
-                            ->where('id', $request->input('stock_id')[$i])
-                            ->update([
-                                'size' => $request->input('size')[$i], 
-                                'stock' => $request->input('stock')[$i], 
-                                'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
-                            ]);
-                    }
-                    else {
-
-                        if(!empty($request->input('size')[$i]) && !empty($request->input('stock')[$i])){
-                            DB::table('product_stock')
-                                ->insert([ 
-                                    'product_id' => $product_id,
-                                    'size' => $request->input('size')[$i], 
-                                    'stock' => $request->input('stock')[$i], 
-                                    'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                                ]);
-                        }
-                    }
+                    DB::table('product_stock')
+                        ->insert([ 
+                            'product_id' => $product->id,
+                            'size' => $request->input('size')[$i], 
+                            'stock' => $request->input('stock')[$i], 
+                            'price' => $request->input('price')[$i], 
+                            'discount' => $request->input('discount')[$i], 
+                            'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
+                        ]);
                 }
             }
-
             /** Product Color **/
             if($request->has('color')){
                 for($i = 0; $i < count($request->input('color')); $i++) 
                 {
-                    if(!empty($request->input('color_id')[$i]))
-                    {
-                        DB::table('product_color_mapping')
-                            ->where('id', $request->input('color_id')[$i])
-                            ->update([
-                                'color' => $request->input('color')[$i], 
-                                'color_code' => $request->input('color_code')[$i], 
-                                'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
-                            ]);
-                    }
-                    else {
-                        if(!empty($request->input('color')[$i]) && !empty($request->input('color_code')[$i])){
-                            DB::table('product_color_mapping')
-                                ->insert([ 
-                                    'product_id' => $product_id,
-                                    'color' => $request->input('color')[$i], 
-                                    'color_code' => $request->input('color_code')[$i], 
-                                    'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                                ]);
-                        }
-                    }
+                    DB::table('product_color_mapping')
+                        ->insert([ 
+                            'product_id' => $product->id,
+                            'color' => $request->input('color')[$i], 
+                            'color_code' => $request->input('color_code')[$i], 
+                            'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
+                        ]);
                 }
             }
-        } 
-        elseif ($request->input('product_type') == 2) {
-
-            /** Product Info. Inserting **/
-            DB::table('product')
-                ->where('id', $product_id)
-                ->update([ 
-                    'product_name' => ucwords(strtolower($request->input('product_name'))), 
-                    'slug' => strtolower(Str::slug($request->input('slug'), '-')),
-                    'sku_id' => $request->input('sku_id'),
-                    'product_type' => $request->input('product_type'), 
-                    'sub_category_id' => $request->input('sub_cate_name'),
-                    'third_level_sub_category_id' => $request->input('third_level_sub_cate_name'), 
-                    'brand_id' => $request->input('brand'), 
-                    'desc' => $request->desc,  
-                    'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                ]);
-
-            /** Product Stock and Size **/
-            if($request->has('size')){
-                for($i = 0; $i < count($request->input('size')); $i++) 
-                {
-                    if(!empty($request->input('stock_id')[$i]))
-                    {
-                        DB::table('product_stock')
-                            ->where('id', $request->input('stock_id')[$i])
-                            ->update([
-                                'size' => $request->input('size')[$i], 
-                                'stock' => $request->input('stock')[$i], 
-                                'discount' => $request->input('discount')[$i],
-                                'price' => $request->input('price')[$i],
-                                'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
-                            ]);
-                    }
-                    else {
-
-                        if(!empty($request->input('size')[$i]) && !empty($request->input('stock')[$i])){
-                            DB::table('product_stock')
-                                ->insert([ 
-                                    'product_id' => $product_id,
-                                    'size' => $request->input('size')[$i], 
-                                    'stock' => $request->input('stock')[$i], 
-                                    'discount' => $request->input('discount')[$i],
-                                    'price' => $request->input('price')[$i],
-                                    'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                                ]);
-                        }
-                    }
-                }
-            }
-        } 
-        else {
-
-            /** Product Info. Inserting **/
-            DB::table('product')
-                ->where('id', $product_id)
-                ->update([ 
-                    'product_name' => ucwords(strtolower($request->input('product_name'))), 
-                    'slug' => strtolower(Str::slug($request->input('slug'), '-')),
-                    'sku_id' => $request->input('sku_id'),
-                    'product_type' => $request->input('product_type'), 
-                    'sub_category_id' => $request->input('sub_cate_name'),
-                    'third_level_sub_category_id' => $request->input('third_level_sub_cate_name'), 
-                    'brand_id' => $request->input('brand'), 
-                    'stock' => $request->input('stock'),
-                    'desc' => $request->desc, 
-                    'price' => $request->input('price'), 
-                    'discount' => $request->input('discount'), 
-                    'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
-                ]);
         }
 
         return redirect()->back()->with('msg', 'Product has been updated successfully');

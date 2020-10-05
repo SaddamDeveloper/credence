@@ -1,7 +1,6 @@
 @extends('admin.template.master')
 
 @section('content')
-
 <!-- page content -->
         <div class="right_col" role="main">
           <div class="">

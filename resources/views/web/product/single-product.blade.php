@@ -77,48 +77,48 @@
                         @csrf
 
 						@if (!empty($product_detail->productColorMapping) && (count($product_detail->productColorMapping) > 0))
-                        <div class="attributes">
-                          <div class="attribute-label">Color:</div>
-                          <div class="attribute-list">
-                            <ul class="list-color" id="list-color">
-                              @foreach ($product_detail->productColorMapping as $key => $item)
-                                @if($key == 0)
-                                <li class="col-sel color-sel">
-                                  <span style="background:{{ $item->color_code }};"></span>
-                                  <input type="radio" name="product_color_id" value="{{ $item->id }}" checked="" hidden="">
-                                </li>
-                                @else
-                                <li class="col-sel color-sel">
-                                  <span style="background:{{ $item->color_code }};"></span>
-                                  <input type="radio" name="product_color_id" value="{{ $item->id }}" hidden="">
-                                </li>
-                                @endif
-                              @endforeach
-                            </ul>
-                          </div>
-                        </div>  
+                            <div class="attributes">
+                            <div class="attribute-label">Color:</div>
+                            <div class="attribute-list">
+                                <ul class="list-color" id="list-color">
+                                @foreach ($product_detail->productColorMapping as $key => $item)
+                                    @if($key == 0)
+                                    <li class="col-sel color-sel selected">
+                                    <span style="background:{{ $item->color_code }};"></span>
+                                    <input type="radio" name="product_color_id" value="{{ $item->id }}" checked="" hidden="">
+                                    </li>
+                                    @else
+                                    <li class="col-sel color-sel">
+                                    <span style="background:{{ $item->color_code }};"></span>
+                                    <input type="radio" name="product_color_id" value="{{ $item->id }}" hidden="">
+                                    </li>
+                                    @endif
+                                @endforeach
+                                </ul>
+                            </div>
+                            </div>  
                         @endif
                         @if (!empty($product_detail->productStock) && (count($product_detail->productStock) > 0))
-                        <div class="attributes">
-                          <div class="attribute-label">Size:</div>
-                          <div class="attribute-list">
-                            <ul class="list-size" id="list-size">
-                              @foreach ($product_detail->productStock as $key => $item)
-                                @if ($key == 0)
-                                <li class="col-sel size-sel">
-                                  <span>{{ $item->size }}</span>
-                                  <input type="radio" name="product_size_id" value="{{ $item->id }}" checked="" hidden="">
-                                </li>
-                                @else 
-                                <li class="col-sel size-sel">
-                                  <span>{{ $item->size }}</span>
-                                  <input type="radio" name="product_size_id" value="{{ $item->id }}" hidden="">
-                                </li>
-                                @endif
-                              @endforeach
-                            </ul>
-                          </div>
-                        </div>
+                            <div class="attributes">
+                                <div class="attribute-label">Size:</div>
+                                <div class="attribute-list">
+                                    <ul class="list-size" id="list-size">
+                                    @foreach ($product_detail->productStock as $key => $item)
+                                        @if ($key == 0)
+                                            <li class="col-sel size-sel selected">
+                                            <span>{{ $item->size }}</span>
+                                            <input type="radio" name="product_size_id" value="{{ $item->id }}" checked="" hidden="">
+                                            </li>
+                                        @else 
+                                            <li class="col-sel size-sel">
+                                            <span>{{ $item->size }}</span>
+                                            <input type="radio" name="product_size_id" value="{{ $item->id }}" hidden="">
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                    </ul>
+                                </div>
+                            </div>
                         @endif
                         @if (session()->has('msg'))
                             <span style="color: red;">{{session()->get('msg')}}</span>
@@ -133,9 +133,9 @@
                                 <button onClick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty )) result.value++;return false;" class="increase items-count" type="button"><i class="fa fa-plus">&nbsp;</i></button>
                               </div>
                             </div>
-                            @if(isset($product_detail->ProductStock->stock) && !empty($product_detail->ProductStock->stock))
+                            @if(isset($min_size->stock) && !empty($min_size->stock))
                                 <input type="hidden" value="{{ $product_detail->id }}" name="product_id">
-                              <button class="button btn-cart" title="Add to Cart" type="submit">Add to Cart</button>
+                                <button class="button btn-cart" title="Add to Cart" type="submit">Add to Cart</button>
                             @else
                               <button class="button btn-cart" title="Out of Stock" type="button" disabled>Out of Stock</button>
                             @endif
