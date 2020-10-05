@@ -590,8 +590,14 @@ class ProductController extends Controller
         
         // Lowest Price 
         $lowest_price = min($request->input('price'));
+        if($lowest_price == NULL){
+            $lowest_price = $request->input('price')[0];
+        }
         // MRP price
         $mrp_price = min($request->input('discount'));
+        if($mrp_price == NULL){
+            $mrp_price = $request->input('discount')[0];
+        }
 
         $product = Product::find($product_id);
         $product->product_name = $request->input('product_name');
@@ -603,6 +609,7 @@ class ProductController extends Controller
         $product->desc = $request->desc;
         $product->price = $lowest_price;
         $product->discount = $mrp_price;
+        
         if($product->save()){
              /** Product Stock and Size **/
             if($request->has('size')){
@@ -615,7 +622,7 @@ class ProductController extends Controller
                             'stock' => $request->input('stock')[$i], 
                             'price' => $request->input('price')[$i], 
                             'discount' => $request->input('discount')[$i], 
-                            'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
+                            'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
                         ]);
                 }
             }
@@ -628,7 +635,7 @@ class ProductController extends Controller
                             'product_id' => $product->id,
                             'color' => $request->input('color')[$i], 
                             'color_code' => $request->input('color_code')[$i], 
-                            'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
+                            'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(), 
                         ]);
                 }
             }

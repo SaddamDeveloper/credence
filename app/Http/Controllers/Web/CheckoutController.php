@@ -65,18 +65,25 @@ class CheckoutController extends Controller
                 $order_id = null;
                 DB::transaction(function () use($address_id, &$order_id) {
                     $order_id = DB::table('order')
-                    ->insertGetId([
+                        ->insertGetId([
                         'order_id' => time(),
                         'user_id' => Auth()->user()->id,
                         'address_id' => $address_id,
                         // 'payment_id' => $request->input('razorpay_payment_id'),
                         // 'payment_order_id' => $request->input('razorpay_order_id'),
                         // 'payment_signature' => $request->input('razorpay_signature'),
-                        'cashondelivery' => 1,
+                        'payment_type' => 1,
                         'amount' => Cart::subtotal(),
-                        'payment_status' => 2,
+                        'payment_status' => 1,
                         'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
                     ]);
+                    if($order_id){
+                        $payment_status = DB::table('order')
+                        ->where('id', $order_id)
+                        ->update([
+                            'payment_status' => 3
+                        ]);
+                    }
                     foreach (Cart::content() as $key => $item) {
                             DB::table('order_detail')
                                     ->insert([

@@ -126,11 +126,11 @@
                                 </div>
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
                                     <label for="price">Price</label>
-                                    <input type="number" min="1" step="0.01" class="form-control" name="price" value="{{ $product_record->price }}">
+                                    <input type="number" min="1" step="0.01" class="form-control" name="price[]" value="{{ $product_record->price }}">
                                 </div>
                                 <div class = "col-md-2 col-sm-12 col-xs-12 mb-3">
                                     <label for="mrp">MRP</label>
-                                    <input type="number" min="0" class="form-control" name="discount" value="{{ $product_record->discount }}">
+                                    <input type="number" min="0" class="form-control" name="discount[]" value="{{ $product_record->discount }}">
                                 </div>
                             </div>
                         @endforeach
