@@ -47,9 +47,13 @@
                           <td>{{ $order->order_id }}</td>
                         </tr>
                         <tr>
-                          <th>Payment ID : </th>
+                            @if($order->payment_type == 1)
+                            <th>Payment Type : </th>
+                          @else
+                            <th>Payment Id : </th>
+                          @endif
                           <td>
-                            @if($order->cashondelivery == 1)
+                            @if($order->payment_type == 1)
                               COD
                             @else
                               {{ $order->payment_id }}
@@ -62,11 +66,11 @@
                                 @if($order->payment_status == 1)
                                       Failed
                                 @elseif($order->payment_status == 2) 
-                                                     @if($order->cashondelivery == 1)
-                                                          COD PAY
-                                                      @else
-                                                          Paid VIA Online Pay
-                                                          @endif
+                                  @if($order->cashondelivery == 1)
+                                      COD PAY
+                                  @else
+                                      Paid VIA Online Pay
+                                  @endif
                                 @else
                                     No Action
                                 @endif

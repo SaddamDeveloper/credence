@@ -230,6 +230,21 @@ class ProductController extends Controller
                     $products->orderBy('product.price', 'DESC');
                 }
             }
+            if (count($brand) > 0) {
+                $products->where(function($q) use ($brand) {
+                    $brand_count = true;
+                    foreach ($brand as $key => $brands) {
+                        if (isset($brands) && !empty($brands)) {
+                            if ($brand_count) {
+                                $q->where('products.brand_id',$brands);
+                                $brand_count = false;
+                            }else{
+                                $q->orWhere('products.brand_id',$brands);
+                            }
+                        }
+                    }
+                });
+            }
         }elseif($type == 2){
             $cate_name = SubCategory::with('topCategory')->find($category_id);
             $label = $cate_name->TopCategory->top_cate_name;
@@ -243,6 +258,21 @@ class ProductController extends Controller
             }
             if ($sorted_by == 3) {
                 $products->orderBy('product.price', 'DESC');
+            }
+            if (count($brand) > 0) {
+                $products->where(function($q) use ($brand) {
+                    $brand_count = true;
+                    foreach ($brand as $key => $brands) {
+                        if (isset($brands) && !empty($brands)) {
+                            if ($brand_count) {
+                                $q->where('products.brand_id',$brands);
+                                $brand_count = false;
+                            }else{
+                                $q->orWhere('products.brand_id',$brands);
+                            }
+                        }
+                    }
+                });
             }
         }else{
             $cate_name = ThirdLevelCategory::with(['topCategory', 'subCategory'])->find($category_id);
@@ -258,6 +288,21 @@ class ProductController extends Controller
             if ($sorted_by == 3) {
                 $products->orderBy('product.price', 'DESC');
             }  
+            if (count($brand) > 0) {
+                $products->where(function($q) use ($brand) {
+                    $brand_count = true;
+                    foreach ($brand as $key => $brands) {
+                        if (isset($brands) && !empty($brands)) {
+                            if ($brand_count) {
+                                $q->where('product.brand_id',$brands);
+                                $brand_count = false;
+                            }else{
+                                $q->orWhere('product.brand_id',$brands);
+                            }
+                        }
+                    }
+                });
+            }
         }
         $products = $products->paginate(18);
 

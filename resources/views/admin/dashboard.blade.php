@@ -46,7 +46,7 @@
                             <th class="column-title">Sl No. </th>
                             <th class="column-title">Order Id </th>
                             <th class="column-title">User Name </th>
-                            <th class="column-title">Payment Id </th>
+                            <th class="column-title">Payment Type </th>
                             <th class="column-title">Payment Status </th>
                             <th class="column-title">Order Date </th>
                             <th class="column-title no-link last">
@@ -61,18 +61,26 @@
                                    $sl_no = 1;
                               @endphp
                               @foreach($latest_ten_order as $key => $item)
-                                   @php
-                                        if($item->payment_status == 2)
-                                             $payment_status = "Paid";
-                                        else
-                                             $payment_status = "Failed";
-                                   @endphp
+                                @php
+                                  if($item->payment_status == 2)
+                                        $payment_status = "<label class='label label-success'>Paid></label>";
+                                  else if($item->payment_status == 3)
+                                      $payment_status = "<label class='label label-primary'>COD</label>";
+                                  else
+                                        $payment_status = "<label class='label label-warning'>Failed</label>";
+
+                                    if($item->payment_type == 1){
+                                        $payment_type = "COD";
+                                    }else{
+                                        $payment_type = "ONLINE";
+                                    }
+                                @endphp
                           <tr class="odd pointer">
                             <td class=" ">{{ $sl_no++ }}</td>
                             <td class=" ">{{ $item->order_id }}</td>
                             <td class=" "><a href="{{ route('admin.users_profile', ['user_id' => encrypt($item->user_id)]) }}" title="Click Me" target="_blank">{{ $item->name }}</a></td>
-                            <td class=" ">{{ $item->payment_id }}</td>
-                            <td class=" ">{{ $payment_status }}</td>
+                            <td class=" ">{{ $payment_type  }}</td>
+                            <td class=" ">{!! $payment_status !!}</td>
                             <td class="a-right a-right ">{{ \Carbon\Carbon::parse($item->created_at)->toDayDateTimeString() }}</td>
                             <td class=" last"><a href="{{ route('admin.order_detail', ['order_id' => encrypt($item->id) ]) }}" target="_blank">View</a>
                             </td>

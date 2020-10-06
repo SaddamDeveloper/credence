@@ -41,7 +41,8 @@
               </div>
             </article>
             <!--  ///*///======    End article  ========= //*/// --> 
-          </div>
+		  </div>
+		  
           <div class="sidebar col-sm-3 col-xs-12 col-sm-pull-9">
             <aside class="sidebar">
               <div class="block-title">Shop By Catagories</div>
@@ -117,7 +118,7 @@
                         <ul class="check-box-list">
                             @foreach ($brand as $item)
                               <li>
-                                  <input type="checkbox" id="" name="{{ $item->brand_name }}" value="{{ $item->brand_name }}">
+                                  <input type="checkbox" id="brand" name="brand" onclick="filterProduct();" value="{{ $item->brand_name }}">
                                   <label for="p1"> 
                                     {{ $item->brand_name }}
                                   </label>
@@ -179,6 +180,7 @@
             var category_id = $("#category_id").val();
             var type = $("#type").val();
             var sort = $("#sort").val();
+
             var brand = new Array();
             $("input:checkbox[name=brand]:checked").each(function(){
                 brand.push($(this).val());
@@ -202,9 +204,6 @@
       $('#sort').on('change', function() {
         filterProduct();
       });
-    //   $('#brand').on('click', function(){
-    //     filterProduct();
-    //   });
     });
 
       
