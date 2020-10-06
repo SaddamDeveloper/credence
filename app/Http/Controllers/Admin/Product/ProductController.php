@@ -445,7 +445,6 @@ class ProductController extends Controller
                     $product_image->product_id = $additional_image_record->product_id;
                     $product_image->additional_image = $file;
                     $product_image->save();
-
             }
          
             // $destinationPath = public_path('/assets/product_images');
