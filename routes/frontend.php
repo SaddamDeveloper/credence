@@ -1,5 +1,8 @@
 <?php
 
+use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Route;
+
 Route::group(['namespace'=>'Web'],function(){
 
 	// Cart Destro
@@ -101,13 +104,13 @@ Route::group(['namespace'=>'Web'],function(){
 
 //========= Product =========//
 
-Route::get('/product-list', function () {
-    return view('web.product.product-list');
-})->name('web.product.product-list');
+// Route::get('/product-list', function () {
+//     return view('web.product.product-list');
+// })->name('web.product.product-list');
 
-Route::get('/single-product', function () {
-    return view('web.product.single-product');
-})->name('web.product.single-product');
+// Route::get('/single-product', function () {
+//     return view('web.product.single-product');
+// })->name('web.product.single-product');
 
 //========= user =========//
 

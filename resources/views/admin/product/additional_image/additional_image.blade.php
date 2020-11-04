@@ -8,7 +8,12 @@
               </div>
             </div>
             <div class="clearfix"></div>
-
+            @if(session()->has('msg'))
+              <div class="alert alert-success">{{ session()->get('msg') }}</div>
+            @endif
+            @if (Session::has('error'))
+                <div class="alert alert-danger">{{ Session::get('error') }}</div>
+            @endif
             <div class="row">
               <div class="col-md-12">
                 <div class="x_panel">
@@ -18,7 +23,6 @@
                       </div>
 
                       <div class="clearfix"></div>
-
                       @if(!$additional_image_record->isEmpty())
                             @foreach($additional_image_record as $value)
                                 <div class="col-md-4 col-sm-4 col-xs-12 profile_details">
@@ -56,6 +60,11 @@
                         <div class="col-md-3"></div>
                           <p  class="col-xs-12 col-sm-4 ratings">
                             <input type="file" name="additional_image[]"  accept="image/*" multiple required class="form-control">
+                            @if($errors->has('additional_image'))
+                                <span class="invalid-feedback" role="alert" style="color:red">
+                                    <strong>{{ $errors->first('additional_image') }}</strong>
+                                </span>
+                            @enderror
                         </p>
                         <div class="col-xs-12 col-sm-1 emphasis">
                             <input type="submit" class="btn btn-primary" value="Submit">
