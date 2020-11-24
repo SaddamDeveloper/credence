@@ -46,7 +46,23 @@ class CartController extends Controller
             //         $color = 0;
             //     }
             // }
-            $add = Cart::add(['id' => $product_id,  'name' => $pro->product_name,  'qty' => $qty, 'price' => $size->price, 'options' => ['size' => $size, 'color' => $color,  'sku_id' => $pro->sku_id, 'product_image' => $pro->banner, 'slug' => $pro->slug,  'discount' => $size->discount]]);
+            $add = Cart::add(
+                                [
+                                    'id' => $product_id,
+                                    'name' => $pro->product_name,
+                                    'qty' => $qty, 
+                                    'price' => $size->price, 
+                                    'options' => 
+                                        [
+                                            'size' => $size, 
+                                            'color' => $color,  
+                                            'sku_id' => $pro->sku_id, 
+                                            'product_image' => $pro->banner, 
+                                            'slug' => $pro->slug,  
+                                            'discount' => $size->discount
+                                        ]
+                                    ]
+                                );
             Cart::store(Auth::guard('users')->user()->id);
 
             // $data = Cart::restore(Auth::guard('users')->user()->id);
@@ -174,7 +190,23 @@ class CartController extends Controller
             //     }
 
             // }
-            $add = Cart::add(['id' => $product_id,  'name' => $pro->product_name,  'qty' => $qty, 'price' => $pro->price, 'options' => ['size' => $size, 'color' => $color,  'sku_id' => $pro->sku_id, 'product_image' => $pro->banner, 'slug' => $pro->slug,  'discount' => $size->discount]]);
+            $add = Cart::add(
+                                [
+                                    'id' => $product_id,  
+                                    'name' => $pro->product_name,  
+                                    'qty' => $qty, 
+                                    'price' => $pro->price, 
+                                    'options' => 
+                                        [
+                                            'size' => $size, 
+                                            'color' => $color,  
+                                            'sku_id' => $pro->sku_id, 
+                                            'product_image' => $pro->banner, 
+                                            'slug' => $pro->slug,  
+                                            'discount' => $size->discount
+                                        ]
+                                    ]
+                                );
         }
         return redirect()->route('web.view_cart');
     }

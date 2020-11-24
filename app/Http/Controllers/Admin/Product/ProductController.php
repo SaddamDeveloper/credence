@@ -168,7 +168,7 @@ class ProductController extends Controller
             'product_name'  => 'required',
             'slug'  => 'required',
             'desc'  => 'required',
-            'product_images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240|dimensions:max_width=700,max_height=700',
+            'product_images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
         // Lowest Price 
         $lowest_price = min($request->input('price'));

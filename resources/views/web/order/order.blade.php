@@ -42,7 +42,7 @@
                                     <div class="col-md-12" style=""><hr style="margin: 0"></div>
                                     <div class="col-md-12 singleordercontent" style="padding: 10px 15px;">
                                         <div class="varient">
-                                          <b class="sub-tag">Delivery Status : <strong>Delivered</strong> </b>
+                                          <b class="sub-tag">Delivery Status : <strong>Pending</strong> </b>
                                           <a href="#" class="editproduct oth" style="margin-left: 10px">Return</a>
                                         </div>
                                     </div>
