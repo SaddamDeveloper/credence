@@ -9,6 +9,7 @@ class TopCategory extends Model
     protected $table = 'top_category';
     protected $fillable = [
         'top_cate_name',
+        'tax',
         'slug',
         'status',
         'hasSubcategory'

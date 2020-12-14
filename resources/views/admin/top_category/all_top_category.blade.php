@@ -26,37 +26,38 @@
                         <tr>
                             <th>Sl No</th>
                             <th>Name</th>
-							<th>Slug</th>
-							<th>Status</th>
-							<th>Created Time</th>
-							<th>Last Updated Time</th>
+                            <th>Tax</th>
+                            <th>Slug</th>
+                            <th>Status</th>
+                            <th>Created Time</th>
+                            <th>Last Updated Time</th>
                             <th>Action</th>
                         </tr>
                       </thead>
                       <tbody class="form-text-element">
                         @if (count($top_categories) > 0)
-
-                            @foreach ($top_categories as $key => $item)
+                              @foreach ($top_categories as $key => $item)
 
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->top_cate_name }}</td>
-									<td>{{ $item->slug }}</td>
-									<td>
+                                    <td>{{ $item->tax }}%</td>
+                                    <td>{{ $item->slug }}</td>
+                                    <td>
                                         @if($item->status == 1)
                                             <a class="btn btn-success">Active</a>
                                         @else
                                             <a class="btn btn-danger">In-Active</a>
                                         @endif
                                     </td>
-									<td>{{ $item->created_at }}</td>
-									<td>{{ $item->updated_at }}</td>
-                                    <td>
-										@if($item->status == 1)
+                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $item->updated_at }}</td>
+                                                      <td>
+                                      @if($item->status == 1)
                                             <a href="{{ route('admin.update_top_category_status', ['top_category_id' => $item->id, 'status' => 2]) }}" class="btn btn-danger">In-Active</a>
                                         @else
                                             <a href="{{ route('admin.update_top_category_status', ['top_category_id' => $item->id, 'status' => 1]) }}" class="btn btn-success">Active</a>
-										@endif
+									    	@endif
 										
                                         <a href="{{ route('admin.edit_top_category', ['topCategoryId' => $item->id]) }}" class="btn btn-warning">Edit</a>
                                     </td>

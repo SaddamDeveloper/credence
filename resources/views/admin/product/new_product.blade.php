@@ -122,11 +122,11 @@
                                 </div>
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3"> 
                                     <label for="stock">Stock</label> 
-                                    <input type="number" min="0" class="form-control" name="stock[]" value="{{ old('stock.*') }}" required>
+                                    <input type="number" min="0" class="form-control" name="stock[]" value="{{ old('stock.*') }}" >
                                 </div>
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
                                     <label for="price">Price</label> 
-                                    <input type="number" class="form-control" name="price[]" value="{{ old('price.*') }}" required>
+                                    <input type="number" class="form-control" name="price[]" value="{{ old('price.*') }}" >
                                     @if($errors->has('price.*'))
                                         <span class="invalid-feedback" role="alert" style="color:red">
                                             <strong>{{ $errors->first('price') }}</strong>
@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
                                     <label for="discount">MRP</label> 
-                                    <input type="number" class="form-control" name="discount[]" value="{{ old('discount.*') }}" required>
+                                    <input type="number" class="form-control" name="discount[]" value="{{ old('discount.*') }}" >
                                     @if($errors->has('discount.*'))
                                     <span class="invalid-feedback" role="alert" style="color:red">
                                         <strong>{{ $errors->first('discount') }}</strong>
@@ -183,7 +183,7 @@
                     <div class="form-row mb-3">
                         <div class="col-md-12 col-sm-12 col-xs-12 mb-3">
                             <label for="desc">Description</label>
-                            <textarea class="form-control form-text-element ckeditor" name="desc" required>
+                            <textarea class="form-control form-text-element ckeditor" name="desc" >
                                 {{ old('desc') }}
                             </textarea>
                             @if($errors->has('desc'))
@@ -234,10 +234,10 @@ $(document).ready(function(){
             success: function(response) {
 
                 if (response == "<option value=\"\" disabled selected>Choose Sub-Category</option>") {
-                    $("#sub_cate_name").prop('required', false);
+                    // $("#sub_cate_name").prop('required', false);
                     $('#sub_cate_name').html(response);
                 } else {
-                    $("#sub_cate_name").prop('required', true);
+                    // $("#sub_cate_name").prop('required', true);
                     $('#sub_cate_name').html(response);
                 }
             }
@@ -264,10 +264,10 @@ $(document).ready(function(){
             success: function(response) {
 
                 if (response == "<option value=\"\" disabled selected>Choose Sub-Category</option>") {
-                    $("#third_level_sub_cate_name").prop('required', false);
+                    // $("#third_level_sub_cate_name").prop('required', false);
                     $('#third_level_sub_cate_name').html(response);
                 } else {
-                    $("#third_level_sub_cate_name").prop('required', true);
+                    // $("#third_level_sub_cate_name").prop('required', true);
                     $('#third_level_sub_cate_name').html(response);
                 }
             }
@@ -305,7 +305,7 @@ $(document).ready(function(){
     $(add_color_btn).on('click', function(e){
         e.stopPropagation();
         color_cnt++;
-        $("#color_div").append('<div class=\"col-md-12 col-sm-12 col-xs-12 mb-3\" id=\"color_row'+color_cnt+'\"> <div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <input type=\"text\" class=\"form-control\" placeholder=\"Enter color\" name=\"color[]\" required> </div><div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <input type=\"color\" class=\"form-control\" placeholder=\"Enter color code\" name=\"color_code[]\" required> </div><div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <button type=\"button\" onclick=\"removeColorRow('+color_cnt+')\" class=\"btn btn-danger\">Remove</button> </div></div>');
+        $("#color_div").append('<div class=\"col-md-12 col-sm-12 col-xs-12 mb-3\" id=\"color_row'+color_cnt+'\"> <div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <input type=\"text\" class=\"form-control\" placeholder=\"Enter color\" name=\"color[]\" > </div><div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <input type=\"color\" class=\"form-control\" placeholder=\"Enter color code\" name=\"color_code[]\"> </div><div class=\"col-md-4 col-sm-12 col-xs-12 mb-3\"> <button type=\"button\" onclick=\"removeColorRow('+color_cnt+')\" class=\"btn btn-danger\">Remove</button> </div></div>');
     });
 
     var max_fields      = 10; //maximum input boxes allowed
@@ -318,7 +318,7 @@ $(document).ready(function(){
         e.preventDefault();
         if(x < max_fields){ //max input box allowed
                 x++; //text box increment
-                $(wrapper).append('<div class=\"col-md-12 col-sm-12 col-xs-12 mb-3\" id=\"stock_row'+x+'\"><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"text\" class=\"form-control\" name=\"size[]\" required></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"number\" min=\"0\" class=\"form-control\" name=\"stock[]\" required></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"number\" min=\"0\" class=\"form-control\" name=\"price[]\" required></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"number\" class=\"form-control\" name=\"discount[]\" required></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><button type=\"button\" onclick=\"removeCosPerRow('+x+')\" class=\"btn btn-danger\">Remove</button></div></div>'); //add input box
+                $(wrapper).append('<div class=\"col-md-12 col-sm-12 col-xs-12 mb-3\" id=\"stock_row'+x+'\"><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"text\" class=\"form-control\" name=\"size[]\" ></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"number\" min=\"0\" class=\"form-control\" name=\"stock[]\" ></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"number\" min=\"0\" class=\"form-control\" name=\"price[]\" ></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><input type=\"number\" class=\"form-control\" name=\"discount[]\" ></div><div class=\"col-md-2 col-sm-12 col-xs-12 mb-3\"><button type=\"button\" onclick=\"removeCosPerRow('+x+')\" class=\"btn btn-danger\">Remove</button></div></div>'); //add input box
             }
     });
 

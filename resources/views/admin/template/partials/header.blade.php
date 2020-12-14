@@ -122,6 +122,11 @@
                       <li><a href="{{ route('admin.all_top_category') }}">Top-Category</a></li>
                     </ul>
                   </li>
+                  <li><a><i class="fa fa-cogs" aria-hidden="true"></i> Configuration <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li class="sub_menu"><a href="{{ route('admin.charges_list') }}">Charges List</a></li>
+                      <li class="sub_menu"><a href="{{ route('admin.coupon_list') }}">Coupon List</a></li>
+                    </ul>
                 </ul>
                 
               </div>

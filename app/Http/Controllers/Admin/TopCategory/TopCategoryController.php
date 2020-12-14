@@ -22,6 +22,7 @@ class TopCategoryController extends Controller
         $request->validate([
             'top_cate_name' => 'required',
             'slug' => 'required',
+            'tax' => 'required'
         ]);
 
         /** Checking if top-category already exist **/
@@ -37,6 +38,7 @@ class TopCategoryController extends Controller
             DB::table('top_category')
                 ->insert([ 
                     'top_cate_name' =>  ucwords(strtolower($request->input('top_cate_name'))),
+                    'tax'=>$request->input('tax'),
                     'slug' => strtolower(Str::slug($request->input('top_cate_name'), '-')),
                     'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
                 ]);
@@ -93,9 +95,10 @@ class TopCategoryController extends Controller
     {
         $request->validate([
             'top_cate_name' => 'required',
+            'tax' => 'required',
             'slug' => 'required',
         ]);
-
+           
         /** Checking if top-category already exist **/
         $top_category_cnt = DB::table('top_category')
             ->where('top_cate_name', ucwords(strtolower($request->input('top_cate_name'))))
@@ -110,6 +113,7 @@ class TopCategoryController extends Controller
                 ->where('id', $top_category_id)
                 ->update([ 
                     'top_cate_name' =>  ucwords(strtolower($request->input('top_cate_name'))),
+                    'tax'=> $request->input('tax'),
                     'slug' => strtolower(Str::slug($request->input('slug'), '-')),
                     'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
                 ]);

@@ -13,7 +13,7 @@
         "intervention/image": "^2.5",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
-        "olimortimer/laravelshoppingcart": "^4.0",
+        "laravelcollective/html": "^6.2",
         "razorpay/razorpay": "^2.5",
         "unisharp/laravel-ckeditor": "^4.7"
     },

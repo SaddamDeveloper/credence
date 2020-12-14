@@ -69,6 +69,7 @@
                                 <th>Color</th>
                                 <th>Quantity</th>
                                 <th>Rate</th>
+                                
                                 <th>Sub-Total</th>
                               </tr>
                             </thead>
@@ -83,8 +84,11 @@
                                     @endphp
                                     @foreach($order_detail as $key => $item)
                                     @php
+                                        $tax=$item->stock->product->topCategory->tax / 100;
+                                        $tax = ($item->price * $tax);
                                         $sub_total = $item->price * $item->quantity;
-                                        $total = $total + $sub_total;
+                                        $shipping_charge = $item->charges->amount;
+                                        $total = $total + $sub_total+$shipping_charge;
                                     @endphp
                                     <tr>
                                         <td>{{ $slno++ }}</td>
@@ -115,15 +119,18 @@
                               <tbody>
                                 <tr>
                                   <th style="width:50%">Subtotal:</th>
-                                  <td>₹ {{ number_format($total, 2) }}</td>
+                                  <td>₹ {{ number_format($sub_total, 2) }}</td>
                                 </tr>
                                 <tr>
                                   <th>Shipping:</th>
-                                  <td></td>
+                                  <td>₹ {{ number_format($shipping_charge,2) }}</td>
                                 </tr>
                                 <tr>
+                                  <th>Tax</th>
+                                  <td>₹ {{ number_format($tax,2) }}</td>
+                                <tr>
                                   <th>Total:</th>
-                                  <td>₹ {{ number_format($total, 2) }}</td>
+                                  <td>₹ {{ number_format($total + $tax, 2) }}</td>
                                 </tr>
                               </tbody>
                             </table>

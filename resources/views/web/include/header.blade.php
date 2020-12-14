@@ -121,7 +121,10 @@
                   <div data-toggle="dropdown" data-hover="dropdown" class="basket dropdown-toggle"> 
                     <a href="{{ route('web.view_cart') }}"> 
                         <span class="cart_count">
-                          {{ Cart::content()->count() }}
+                          @php
+                            $cart_data = $header_data['cart_data'];
+                          @endphp
+                          {{ count($cart_data) }}
                         {{-- @if(!empty($header_data['cart_data']) && count($header_data['cart_data']) > 0)
                               {{ count($header_data['cart_data']) }}
                           @else
@@ -132,15 +135,16 @@
                 </div>
                   <div>
                     <div class="jtv-top-cart-content"> 
-                        @if(Cart::content()->count() > 0)
+                        @if( !empty($cart_data) && count($cart_data) > 0)
                             <ul class="mini-products-list" id="cart-sidebar">
-                                @foreach(Cart::content() as $item)
+                                @foreach($cart_data as $item)
+                              
                                     <li class="item first">
-                                        <div class="item-inner"> <a class="product-image" title="{{ $item->name }}" href="{{ route('web.product_detail', ['slug' => $item->slug, 'product_id' => $item->id]) }}" target="_blank"><img alt="{{ $item->name }}" src="{{ asset('assets/product_images/'.$item->options->product_image.'') }}"> </a>
+                                        <div class="item-inner"> <a class="product-image" title="{{ $item['name'] }}" href="{{ route('web.product_detail', ['slug' => $item['slug'], 'product_id' => $item['product_id']]) }}" target="_blank"><img alt="{{ $item['name'] }}" src="{{ asset('assets/product_images/'.$item['image'].'') }}"> </a>
                                         <div class="product-details">
-                                            <div class="access"><a class="jtv-btn-remove" title="Remove This Item" href="{{ route('web.remove_cart_item', ['product_id' => $item->rowId]) }}">Remove</a> </div>
-                                            <p class="product-name"><a href="{{ route('web.product_detail', ['slug' => $item->slug, 'product_id' => $item->id]) }}" target="_blank">{{ $item->name }}</a> </p>
-                                            <strong>{{ $item->qty }}</strong> x <span class="price">
+                                            <div class="access"><a class="jtv-btn-remove" title="Remove This Item" href="{{ route('web.remove_cart_item', ['product_id' => $item['product_id']]) }}">Remove</a> </div>
+                                            <p class="product-name"><a href="{{ route('web.product_detail', ['slug' => $item['slug'], 'product_id' => $item['product_id']]) }}" target="_blank">{{ $item['name'] }}</a> </p>
+                                            <strong>{{ $item['quantity'] }}</strong> x <span class="price">
                                             </span>
                                         </div>
                                         </div>
@@ -148,7 +152,7 @@
                                 @endforeach
                             </ul>
                             <div class="actions">
-                                <button class="btn-checkout" title="Checkout" type="button" onClick="#"><span>Checkout</span> </button>
+                                <a class="btn-checkout" title="Checkout" type="button" href="{{ route('web.checkout') }}"><span>Checkout</span></a>
                                 <a href="{{ route('web.view_cart') }}" class="view-cart"><span>View Cart</span></a>
                             </div>
                         @else

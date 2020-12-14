@@ -141,44 +141,45 @@
             </article>
             <!--  ///*///======    End article  ========= //*/// --> 
           </div>
-          @if ((Cart::count() > 0) && !empty(Cart::content()))
-          <div class="sidebar col-sm-3 col-xs-12">
-            <aside class="sidebar">
-              <div class="block-title" style="border-bottom: 0">PAYMENT INFORMATION</div>
-              <div class="cartcalculation">
-                <div class="paymttotal">
-                  <h4 style="text-align: left;">Cart Amount  </h4>
-                  <h4 style="text-align: right;" id="total">₹{{ Cart::subtotal() }}</h4>
-                </div>
-                <div class="paymttotal">
-                  <h4 style="text-align: left;">Shipping  </h4>
-                  <h4 style="text-align: right;" id="total">0.00</h4>
-                </div>
-                <div class="paymttotal">
-                  <h4 style="text-align: left;font-weight: 700">Grand Total </h4>
-                  <h4 style="text-align: right;font-weight: 700" id="total">₹{{ Cart::subtotal() }}</h4>
-                </div>
+          @if(count($all_address)>0)
+            <div class="sidebar col-sm-3 col-xs-12">
+              <aside class="sidebar">
+                <div class="block-title" style="border-bottom: 0">PAYMENT INFORMATION</div>
+                <div class="cartcalculation">
+                  <div class="paymttotal">
+                    <h4 style="text-align: left;">Cart Amount  </h4>
+                    <h4 style="text-align: right;" id="total">₹{{ $total }}</h4>
+                    
+                  </div>
+                  <div class="paymttotal">
+                    <h4 style="text-align: left;">Shipping  </h4>
+                    <h4 style="text-align: right;" id="total">₹{{ $shipping_charge }}</h4>
+                  </div>
+                  <div class="paymttotal">
+                    <h4 style="text-align: left;font-weight: 700">Grand Total </h4>
+                    <h4 style="text-align: right;font-weight: 700" id="total">₹{{ $grand_total}}</h4>
+                  </div>
 
-                <div class="paymtmthd">
-                  <label>Payment Methord *</label>
-                  <label class="radio-container">
-                    <input type="radio" name="payment_type" value="1" required checked class="payment_type_radio">
-                    <span class="checkmark"></span>
-                    Cash On Delivery
-                  </label>
-                  <label class="radio-container">
-                    <input type="radio" name="payment_type" value="2" required class="payment_type_radio">
-                    <span class="checkmark"></span>
-                    Pay Online
-                  </label> 
-                </div>                                    
-                <div class="paymttotal" style="float: right;margin-top: 10px">
-                    {{-- <button class="button button--aylen btn" type="button" name="checkout">Proceed to Checkout</button> --}}
-                    <input type="submit" class="button button--aylen btn" value="Proceed to Checkout">
+                  <div class="paymtmthd">
+                    <label>Payment Methord *</label>
+                    <label class="radio-container">
+                      <input type="radio" name="payment_type" value="1" required checked class="payment_type_radio">
+                      <span class="checkmark"></span>
+                      Cash On Delivery
+                    </label>
+                    <label class="radio-container">
+                      <input type="radio" name="payment_type" value="2" required class="payment_type_radio">
+                      <span class="checkmark"></span>
+                      Pay Online
+                    </label> 
+                  </div>                                    
+                  <div class="paymttotal" style="float: right;margin-top: 10px">
+                      {{-- <button class="button button--aylen btn" type="button" name="checkout">Proceed to Checkout</button> --}}
+                      <input type="submit" class="button button--aylen btn" value="Proceed to Checkout">
+                  </div>
                 </div>
-              </div>
-            </aside>
-          </div>
+              </aside>
+            </div>
           @endif
         </div>
       </div>
@@ -226,24 +227,29 @@
 	                }
                 });
                 var name = $('#name').val();
-                var email = $('#email').val();
+                var email = $('#email_address').val();
+                console.log(email);
                 var address = $('#address').val();
                 var mobile_no = $('#mobile_no').val();
-                var pin_code = $('#pin_code').val();
+                var pin_code = $('#postal_code').val();
                 var city = $('#city').val();
                 var state = $('#state').val();
-                $.ajax({
-                    url: "{{route('web.add_address')}}",
-                    method: "POST",
-                    data: {name: name, email: email, address: address, mobile_no: mobile_no, pin_code: pin_code, city: city, state: state},
-                    success: function(data){
-                        if(data == 1){
-                            window.location.reload();
-                        }else if(data == 2){
-                            alert("Something went wrong!");
-                        }
-                    }
-                });
+                if(name == '' || email == '' || address == '' || mobile_no == '' || pin_code == '' || city == '' || state == ''){
+                  alert("Can't be empty");
+                }else{
+                  $.ajax({
+                      url: "{{route('web.add_address')}}",
+                      method: "POST",
+                      data: {name: name, email: email, address: address, mobile_no: mobile_no, pin_code: pin_code, city: city, state: state},
+                      success: function(data){
+                          if(data == 1){
+                              window.location.reload();
+                          }else if(data == 2){
+                              alert("Something went wrong!");
+                          }
+                      }
+                  });
+                }
         });
       });
     </script>

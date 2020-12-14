@@ -33,6 +33,13 @@
                                 <span style="font-weight: bold; color: red;">{{ $message }}</span>
                             @enderror
                         </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
+                          <label for="slug">Tax</label>%
+                          <input type="number" class="form-control" name="tax" placeholder="Enter tax" id="tax">
+                          @error('tax')
+                              <span style="font-weight: bold; color: red;">{{ $message }}</span>
+                          @enderror
+                      </div>
                     </div>
                 </div>
 

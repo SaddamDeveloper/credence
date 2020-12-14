@@ -211,6 +211,7 @@ class OrdersController extends Controller
         //     ->select('product_stock.product_id', 'product_stock.size_id', 'product_stock.color_id', 'product.product_name', 'size.size', 'color.color', 'order_detail.*')
         //     ->get();
         $order_detail = OrderDetails::where('order_id', $order_id)->get();
+        
         return view('admin.orders.action.invoice', ['order' => $order, 'address' => $address, 'order_detail' => $order_detail]);
     }
 

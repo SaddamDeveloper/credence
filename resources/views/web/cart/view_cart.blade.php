@@ -9,7 +9,7 @@
   @section('content')
     <section class="main-container col2-left-layout">
       <div class="container-fluid">
-        @if ((Cart::count() > 0) && !empty(Cart::content()))
+        @if (!empty($cart_data) && count($cart_data) > 0)
           <div class="row">
             <div class="col-sm-9">
               <article class="col-main" style="width: 100%;">              
@@ -25,42 +25,49 @@
                       <div class="col-md-1"></div>
                       <div class="col-md-9">
                           <div class="row singleorder">
-                            @foreach (Cart::content() as $item)
+                            @php
+                                $grand_total = 0;
+                            @endphp
+                            @foreach ($cart_data as $item)
                               <div classs="row">
                                   <div class="col-md-2 singleorderimg">
-                                      <a href="#"><img src="{{ asset('assets/product_images/'.$item->options->product_image ) }}" alt=""></a>
+                                      <a href="{{ route('web.product_detail', ['slug' => $item['slug'], 'product_id'=>$item['product_id']]) }}"><img src="{{ asset('assets/product_images/'.$item['image'] ) }}" alt=""></a>
                                   </div>
-                                  <div class="col-md-10 singleordercontent"><a href="#">{{ $item->name }}</a>
+                                  <div class="col-md-10 singleordercontent"><a href="#">{{ $item['name'] }}</a>
                                       <div class="cart-price" style="text-align: left;">
+                                        @php
+                                            $total = $item['price'] * $item['quantity'];
+                                            $grand_total += $total; 
+                                        @endphp
                                           <div class="quantity">
-                                            <p><small>₹{{ number_format($item->options->discount, 2) }}</small> ₹{{ number_format($item->price, 2) }}</p> <b>|</b> 
-                                            @if(session()->has('msg'.$item->id))
-                                              <span style="color: red">{{ session()->get('msg'.$item->id) }}</span>
+                                            <p><small>₹{{ number_format($item['mrp'], 2) }}</small> ₹{{ number_format($item['price'], 2) }}</p> <b>|</b> 
+                                            @if(session()->has('msg'.$item['product_id']))
+                                              <span style="color: red">{{ session()->get('msg'.$item['product_id']) }}</span>
                                             @endif
                                             <form action ="{{ route('web.update_cart') }}" method="POST" autocomplete="off">
                                               @csrf
                                             <label class="hidden-xs" style="margin-bottom: 0;">Quantity:</label>&nbsp;&nbsp;
                                             <button onClick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 0 ) result.value--;return false;" class="reduced items-count" type="button"><i class="fa fa-minus">&nbsp;</i></button>
-                                            <input type="text" class="input-text qty" title="Qty" value="{{ $item->qty }}" maxlength="12" id="qty" name="qty">
+                                            <input type="text" class="input-text qty" title="Qty" value="{{ $item['quantity'] }}" maxlength="12" id="qty" name="qty">
                                             <button onClick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty )) result.value++;return false;" class="increase items-count" type="button"><i class="fa fa-plus">&nbsp;</i></button>
-                                            <input type="hidden" name="product_id" value="{{ $item->rowId }}">
+                                            <input type="hidden" name="product_id" value="{{ $item['product_id'] }}">
                                             <button type="submit" class="editproduct oth">Update</button>
                                             </form>
                                           </div>                                      
                                       </div>
                                       <div class="varient">
-                                        @if ($item->options->has('color'))
-                                          <b class="sub-tag">Color : <span style="background: {{ $item->options->color->color_code }}"></span></b>
+                                        @if (!empty($item['color']))
+                                          <b class="sub-tag">Color : <span style="background: {{ $item['color_code'] }}"></span></b>
                                         @endif
-                                        @if ($item->options->has('size'))
-                                          <b class="sub-tag spl">Size : {{ $item->options->size->size }} </b>
+                                        @if (!empty($item['size']))
+                                          <b class="sub-tag spl">Size : {{ $item['size'] }} </b>
                                         @endif
                                       </div>
                                   </div>
                                   <div class="col-md-12" style=""><hr style="margin: 0"></div>
                                   <div class="col-md-12 singleordercontent" style="padding: 10px 15px;">                                
                                       {{-- <a href="#" class="editproduct">Move to whishlist</a> --}}
-                                      <a href="{{ route('web.remove_cart_item', ['id' => $item->rowId]) }}" class="editproduct oth">Remove</a>
+                                      <a href="{{ route('web.remove_cart_item', ['id' => $item['product_id']]) }}" class="editproduct oth">Remove</a>
                                   </div>
                               </div>
                             @endforeach
@@ -102,7 +109,11 @@
                 <div class="cartcalculation">
                   <div class="paymttotal">
                     <h4 style="text-align: left;">Cart Amount  </h4>
-                    <h4 style="text-align: right;" id="total">₹{{ Cart::subtotal() }}</h4>
+                    <h4 style="text-align: right;" id="total">₹ {{ number_format($grand_total,2) }}</h4>
+                    <h4 style="text-align: right;" id="total">Shipping Charge</h4>
+                    <h4 style="text-align: right;" id="total">₹ {{ number_format($item['shipping_charge'],2) }}</h4>
+                    <h4 style="text-align: right;" id="total">Grand Total</h4>
+                    <h4 style="text-align: right;" id="total">₹ {{ number_format(($item['shipping_charge']  + $grand_total),2)}}</h4>
                   </div>
                   <div class="paymttotal" style="float: right;margin-top: 10px">
                       <a href="{{route('web.checkout')}}" class="button button--aylen btn">Proceed to Checkout</a>

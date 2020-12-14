@@ -68,4 +68,8 @@ class Product extends Model
             ->where('product_stock.price', $this->productSize->max('price'))
             ->where('product_stock.status', 1);
         }
+
+        public function topCategory(){
+            return $this->belongsTo('App\Models\Categories\TopCategory','top_category_id','id');
+        }
 }

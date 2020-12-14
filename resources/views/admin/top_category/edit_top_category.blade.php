@@ -27,12 +27,20 @@
                                 <span style="font-weight: bold; color: red;">{{ $message }}</span>
                             @enderror
                         </div>
+                        
                         <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
                             <label for="slug">Slug</label>
                             <input type="text" class="form-control" name="slug" placeholder="Enter Slug" id="slug" value="{{ $top_category_record->slug }}">
                             @error('slug')
                                 <span style="font-weight: bold; color: red;">{{ $message }}</span>
                             @enderror
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12 mb-3">
+                          <label for="tax">Tax</label>%
+                          <input type="number" class="form-control" name="tax" placeholder="Enter Tax" id="tax" value="{{ $top_category_record->tax }}">
+                          @error('tax')
+                              <span style="font-weight: bold; color: red;">{{ $message }}</span>
+                          @enderror
                         </div>
                     </div>
                 </div>

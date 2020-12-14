@@ -259,6 +259,22 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
         Route::get('order-status-update/{order_id}/{status}', 'OrdersController@orderStatusUpdate')->name('admin.order_status_update');
     });
 
+    Route::group(['prefix'=>'charges'],function(){
+        Route::get('list','ConfigurationController@chargesList')->name('admin.charges_list');
+        Route::get('edit/{id}', 'ConfigurationController@chargesEdit')->name('admin.charges_edit');
+        Route::post('update/{id}', 'ConfigurationController@chargesUpdate')->name('admin.charges_update');
+        
+    });
+
+    Route::group(['prefix'=>'coupon'],function(){
+        Route::get('list','ConfigurationController@couponList')->name('admin.coupon_list');
+        Route::get('add/form','ConfigurationController@addCoupon')->name('admin.coupon_add_form');
+        Route::post('insert/form', 'ConfigurationController@couponInsertForm')->name('admin.coupon_insert_form');
+        Route::get('edit/{id}', 'ConfigurationController@couponEdit')->name('admin.coupon_edit');
+        Route::put('update/{id}', 'ConfigurationController@couponUpdate')->name('admin.coupon_update');
+        Route::get('status/{id}/{status}', 'ConfigurationController@couponStatus')->name('admin.coupon_status');
+    });
+
     // Route::group(['namespace'=>'Review'],function(){
 
     //     /** New Reviews List **/

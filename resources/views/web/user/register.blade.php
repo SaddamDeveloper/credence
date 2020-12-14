@@ -40,7 +40,7 @@
                                 <li>
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <label for="email">Email Address <span class="required">*</span></label>
+                                            <label for="email">Email Address </label>
                                             <br>
                                             <input type="email" class="input-text required-entry" value="{{ old('email') }}" name="email">
                                             @error('email')

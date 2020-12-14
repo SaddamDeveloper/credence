@@ -29,6 +29,7 @@ class AddressController extends Controller
             //     'pin_code' => 'required|numeric',
             //     'mobile_no' => 'required|numeric',
             // ]);
+            
             $add = DB::table('address')
                 ->insert([
                     'user_id' => Auth()->user()->id,

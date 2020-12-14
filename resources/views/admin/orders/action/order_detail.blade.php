@@ -141,8 +141,12 @@
                         @endphp
                         @foreach($order_detail as $key => $item)
                         @php
+                            $tax=$item->stock->product->topCategory->tax / 100;
+                            $tax = ($item->price * $tax);
                             $sub_total = $item->price * $item->quantity;
-                            $total = $total + $sub_total;
+                            $shipping_charge = $item->charges->amount;
+                            $total = $total + $sub_total+$tax+$shipping_charge;
+                            
                             // dd($item->stock->product->product_name);
                         @endphp
                         <tr>
@@ -160,6 +164,14 @@
                         <td colspan="6" align="right">Total: </td>
                         <td>₹ {{ number_format($total, 2) }}</td>
                     </tr>
+                    <tr>
+                      <td colspan="6" align="right">Shipping Charge: </td>
+                      <td>₹ {{ number_format($shipping_charge,2) }}</td>
+                  </tr>
+                    <tr>
+                      <td colspan="6" align="right">Tax: </td>
+                      <td>₹ {{ number_format($tax, 2) }}</td>
+                  </tr>
                     <tr>
                         <td colspan="6" align="right">Net Payable Amount: </td>
                         <td>₹ {{ number_format($total, 2) }}</td>

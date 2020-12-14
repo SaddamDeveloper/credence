@@ -2,14 +2,18 @@
 
 namespace App\Providers;
 
+use App\Models\Cart;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use DB;
-use Session;
-use Auth;
-use Cart;
 use App\Models\Categories\TopCategory;
 use App\Models\Categories\SubCategory;
+use App\Models\Product;
+use App\Models\ProductColorMapping;
+use App\Models\ProductStock;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -55,205 +59,62 @@ class AppServiceProvider extends ServiceProvider
             {
                 $user_id = Auth::guard('users')->user()->id;
 
-                // $cart = Cart::content();
-                // if (count($cart) > 0) {
-                //     for ($i = 0; $i < count($cart); $i++) {
-                                
-                //         $product_cnt = DB::table('product')
-                //             ->where('product.id', $cart[$i]->product_id)
-                //             ->where('product.status', 2)
-                //             ->count();
+                $cart = Cart::where('user_id', $user_id)->get();
 
-                //         if($product_cnt > 0) {
-                //             DB::table('cart')
-                //                 ->where('user_id', $user_id)
-                //                 ->where('cart.product_id', $cart[$i]->product_id)
-                //                 ->delete();
-                //         }
-                //     }
-                // }
-
-                // $cart = Cart::restore(Auth::guard('users')->user()->id);
-                // if (count($cart) > 0) {
-                //     for ($i = 0; $i < count($cart); $i++) {
-
-                //         if(($cart[$i]->size_id != 0) && ($cart[$i]->color_id == 0)) {
-                                    
-                //             $product = DB::table('product')
-                //                 ->leftJoin('product_stock', 'product.id', '=', 'product_stock.product_id')
-                //                 ->where('product.id', $cart[$i]->product_id)
-                //                 ->where('product_stock.id', $cart[$i]->size_id)
-                //                 ->select('product.*', 'product_stock.size')
-                //                 ->distinct()
-                //                 ->first();
-                //         }
-
-                //         if(($cart[$i]->size_id == 0) && ($cart[$i]->color_id != 0)) {
-                                    
-                //             $product = DB::table('product')
-                //                 ->leftJoin('product_color_mapping', 'product.id', '=', 'product_color_mapping.product_id')
-                //                 ->where('product.id', $cart[$i]->product_id)
-                //                 ->where('product_color_mapping.id', $cart[$i]->color_id)
-                //                 ->select('product.*', 'product_color_mapping.color', 'product_color_mapping.color_code')
-                //                 ->distinct()
-                //                 ->first();
-                //         }
-
-                //         if(($cart[$i]->size_id != 0) && ($cart[$i]->color_id != 0)) {
-                                    
-                //             $product = DB::table('product')
-                //                 ->leftJoin('product_stock', 'product.id', '=', 'product_stock.product_id')
-                //                 ->leftJoin('product_color_mapping', 'product.id', '=', 'product_color_mapping.product_id')
-                //                 ->where('product.id', $cart[$i]->product_id)
-                //                 ->where('product_stock.id', $cart[$i]->size_id)
-                //                 ->where('product_color_mapping.id', $cart[$i]->color_id)
-                //                 ->select('product.*', 'product_color_mapping.color', 'product_color_mapping.color_code', 'product_stock.size')
-                //                 ->distinct()
-                //                 ->first();
-                //         }
-
-                //         if(($cart[$i]->size_id == 0) && ($cart[$i]->color_id == 0)) {
-                                
-                //             $product = DB::table('product')
-                //                 ->where('product.id', $cart[$i]->product_id)
-                //                 ->select('product.*')
-                //                 ->distinct()
-                //                 ->first();
-                //         }
-                //         if (isset($product->size))
-                //             $size = $product->size;
-                //         else
-                //             $size = "";
-
-                //         if (isset($product->color_code))
-                //             $color_code = $product->color_code;
-                //         else
-                //             $color_code = "";
-
-                //         $cart_data[] = [
-                //             'product_id' => $product->id,
-                //             'slug' => $product->slug,
-                //             'banner' => $product->banner,
-                //             'product_name' => $product->product_name,
-                //             'price' => $product->price,
-                //             'discount' => $product->discount,
-                //             'quantity' => $cart[$i]->quantity,
-                //             'size' => $size,
-                //             'color_code' => $color_code
-                //         ];
-                            
-                //     }
-                // }
+                if (count($cart) > 0) {
+                    foreach ($cart as $item) {
+                        $product = Product::where('id', $item->product_id)->where('status', 1)->first();
+                        $size = ProductStock::find($item->size_id);
+                        $color = ProductColorMapping::where('product_id', $product->id)->first();
+                        $cart_data[] = [
+                            'product_id' => $product->id,
+                            'name' => $product->product_name,
+                            'slug'=>$product->slug,
+                            'image' => $product->banner,
+                            'quantity' => $item->quantity,
+                            'size_id' => $item->size_id,
+                            'size' => $size->size,
+                            'color' => $color->color,
+                            'color_code' => $color->color_code,
+                            'price' => $size->price,
+                            'mrp' => $product->discount,
+                            'stock' => $size->stock
+                        ];
+                    }
+                }
+                
             } 
             else 
             {
-                if (Session::has('cart') && !empty(Session::get('cart'))) {
                 $cart = Session::get('cart');
-                    // if (count($cart) > 0) {
-                    //     foreach ($cart as $product_id => $item) {
-                                    
-                    //         if (!empty($product_id)) {
-                    //             $product_cnt = DB::table('product')
-                    //                 ->where('product.id', $product_id)
-                    //                 ->where('product.status', 2)
-                    //                 ->count();
-                    //             if($product_cnt > 0){
-                    //                 Session::forget('cart.'.$product_id);
-                    //             }
-                    //         }
-                    //     }
-                    // }
-
-
-                    // $cart = Session::get('cart');
-                    // if (count($cart) > 0) {
-                    //     foreach ($cart as $product_id => $item) {
-                    //         if (!empty($product_id)) {
-
-                    //             $product = explode(',', $item);
-                    //             $quantity = $product[0];
-                    //             $size_id1 = $product[1];
-                    //             $color_id1 = $product[2];
-
-                    //             // size exists and color not exist
-                    //             if(($size_id1 != 0) && ($color_id1 == 0)) {
-                    //                 $product = DB::table('product')
-                    //                     ->leftJoin('product_stock', 'product.id', '=', 'product_stock.product_id')
-                    //                     ->where('product.id', $product_id)
-                    //                     ->where('product_stock.id', $size_id1)
-                    //                     ->select('product.*', 'product_stock.size')
-                    //                     ->first();
-                    //             }
-                    //             // size not exists and color exist
-                    //             if(($size_id1 == 0) && ($color_id1 != 0)) {
-                                    
-                    //                 $product = DB::table('product')
-                    //                     ->leftJoin('product_color_mapping', 'product.id', '=', 'product_color_mapping.product_id')
-                    //                     ->where('product.id', $product_id)
-                    //                     ->where('product_color_mapping.id', $color_id1)
-                    //                     ->select('product.*', 'product_color_mapping.color', 'product_color_mapping.color_code')
-                    //                     ->distinct()
-                    //                     ->first();
-                    //             }
-                    //             // size exists and color exists
-                    //             if(($size_id1 != 0) && ($color_id1 != 0)) {
-                    //                 $product = DB::table('product')
-                    //                     ->leftJoin('product_stock', 'product.id', '=', 'product_stock.product_id')
-                    //                     ->leftJoin('product_color_mapping', 'product.id', '=', 'product_color_mapping.product_id')
-                    //                     ->where('product.id', $product_id)
-                    //                     ->where('product_stock.id', $size_id1)
-                    //                     ->where('product_color_mapping.id', $color_id1)
-                    //                     ->select('product.*', 'product_color_mapping.color', 'product_color_mapping.color_code', 'product_stock.size')
-                    //                     ->distinct()
-                    //                     ->first();
-                    //             }
-
-                    //             if(($size_id1 == 0) && ($color_id1 == 0)) {
-                                
-                    //                 $product = DB::table('product')
-                    //                     ->where('product.id', $product_id)
-                    //                     ->select('product.*')
-                    //                     ->distinct()
-                    //                     ->first();
-                    //             }
-
-                    //             if (isset($product->size)){
-                    //                 $size = $product->size;
-                    //             }else {
-                    //                 $size = "";
-                    //             }
-
-                    //             if (isset($product->color_code)){
-                    //                 $color_code = $product->color_code;
-
-                    //             }else{
-                    //                 $color_code = "";
-                    //             }
-                    //             // $cart_data[] = [
-                    //             //     'product_id' => $product->id,
-                    //             //     'slug' => $product->slug,
-                    //             //     'banner' => $product->banner,
-                    //             //     'product_name' => $product->product_name,
-                    //             //     'price' => $product->price,
-                    //             //     'discount' => $product->discount,
-                    //             //     'quantity' => $quantity,
-                    //             //     'size' => $size,
-                    //             //     'color_code' => $color_code
-                    //             // ];
-                    //         }
-                        // }
+                $cart_data = [];
+                if (count($cart) > 0) {
+                    foreach ($cart as $product_id => $value) {
+                        $product = Product::where('id', $product_id)->where('status', 1)->first();
+                        $size = ProductStock::find($value['size_id']);
+                        $color = ProductColorMapping::where('product_id', $product->id)->first();
+                        $cart_data[] = [
+                            'product_id' => $product->id,
+                            'name' => $product->name,
+                            'slug'=>$product->slug,
+                            'image' => $product->banner,
+                            'quantity' => $value['quantity'],
+                            'size_id' => $value['size_id'],
+                            'size' => $size->size,
+                            'color' => $color->color,
+                            'color_code' => $color->color_code,
+                            'price' => $size->price,
+                            'mrp' => $product->discount,
+                            'stock' => $size->stock
+                        ];
                     }
-
-                    // dd($cart_data);
-                // }
+                }
             }
-
-            // dd($categories);
-            
+ 
             $data = [
                 'categories' => $categories,
                 'wish_list_data' => $wish_list_data,
-                // 'cart_data' => $cart_data
+                'cart_data' => $cart_data
             ];
             $view->with('header_data', $data);
         });
