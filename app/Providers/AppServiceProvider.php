@@ -61,7 +61,7 @@ class AppServiceProvider extends ServiceProvider
 
                 $cart = Cart::where('user_id', $user_id)->get();
 
-                if (count($cart) > 0) {
+                if (!empty($cart) && count($cart) > 0) {
                     foreach ($cart as $item) {
                         $product = Product::where('id', $item->product_id)->where('status', 1)->first();
                         $size = ProductStock::find($item->size_id);
@@ -88,7 +88,7 @@ class AppServiceProvider extends ServiceProvider
             {
                 $cart = Session::get('cart');
                 $cart_data = [];
-                if (count($cart) > 0) {
+                if (!empty($cart) && count($cart) > 0) {
                     foreach ($cart as $product_id => $value) {
                         $product = Product::where('id', $product_id)->where('status', 1)->first();
                         $size = ProductStock::find($value['size_id']);

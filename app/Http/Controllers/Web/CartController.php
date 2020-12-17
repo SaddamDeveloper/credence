@@ -12,6 +12,7 @@ use App\Models\ProductColorMapping;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\Cart;
+use App\Models\Categories\TopCategory;
 use App\Models\Charges;
 
 class CartController extends Controller
@@ -86,17 +87,23 @@ class CartController extends Controller
     public function viewCart()
     {
         $shipping_charge = Charges::first();
+       
         $shipping_charge = $shipping_charge->amount;
         $total = 0;
+        $tax_amount=0;
         if (Auth::guard('users')->user() && !empty(Auth::guard('users')->user()->id)) {
             $cart_data = [];
             $user_id = Auth::guard('users')->user()->id;
-            
+           
             $cart = Cart::where('user_id', $user_id)->get();
-            if (count($cart) > 0) {
+            if (!empty($cart) && count($cart) > 0) {
                 foreach ($cart as $item) {
                     $product = Product::where('id', $item->product_id)->where('status', 1)->first();
                     $size = ProductStock::find($item->size_id);
+                   
+                    $top_cat = TopCategory::where('id',$item->product->topCategory->id)->first();
+                  
+                    $tax_amount = $top_cat->tax;
                     $color = ProductColorMapping::where('product_id', $product->id)->first();
                     $cart_data[] = [
                         'product_id' => $product->id,
@@ -111,7 +118,8 @@ class CartController extends Controller
                         'price' => $size->price,
                         'mrp' => $product->discount,
                         'stock' => $size->stock,
-                        'shipping_charge' => $shipping_charge
+                        'shipping_charge' => $shipping_charge,
+                        'tax_amount'=>$tax_amount,
                     ];
                 }
             } 
@@ -122,10 +130,15 @@ class CartController extends Controller
             if (Session::has('cart') && !empty(Session::get('cart'))) {
                 $cart = Session::get('cart');
                 $cart_data = [];
-                if (count($cart) > 0) {
+                if (!empty($cart) && count($cart) > 0) {
+                   
                     foreach ($cart as $product_id => $value) {
                         $product = Product::where('id', $product_id)->where('status', 1)->first();
                         $size = ProductStock::find($value['size_id']);
+                        $top_cat = TopCategory::where('id',$product->topCategory->id)->first();
+                  
+                        $tax_amount = $top_cat->tax;
+                      
                         $color = ProductColorMapping::where('product_id', $product->id)->first();
                         $cart_data[] = [
                             'product_id' => $product->id,
@@ -140,7 +153,8 @@ class CartController extends Controller
                             'price' => $size->price,
                             'mrp' => $product->discount,
                             'stock' => $size->stock,
-                            'shipping_charge' => $shipping_charge
+                            'shipping_charge' => $shipping_charge,
+                            'tax_amount'=>$tax_amount,
                         ];
                     }
                 } else {
@@ -151,7 +165,7 @@ class CartController extends Controller
             }
         }
         // dd($cart_data);
-        return view('web.cart.view_cart', compact('cart_data', 'total', 'shipping_charge'));
+        return view('web.cart.view_cart', compact('cart_data', 'tax_amount','total','shipping_charge'));
     }
 
     public function removeCartItem($id)

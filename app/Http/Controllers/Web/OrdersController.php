@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Auth;
 use DB;
 use App\Models\Order;
+use App\Models\OrderDetails;
 class OrdersController extends Controller
 {
     public function myOrderHistory(Request $request)
@@ -67,7 +68,14 @@ class OrdersController extends Controller
         return view('web.order_history.order_history', ['order_history' => $order_history]);
 	}
 	public function orderDetail(){
-		$orders = Order::orderBy('created_at', 'DESC')->paginate(10);
+		$orders = Order::latest()->paginate(10);
 		return view('web.order.order', compact('orders'));
+	}
+
+	public function orderDetailss($id){
+		$order_details = OrderDetails::where('id',$id)->get();
+		
+		return view('web.order.order_details',compact('order_details'));
+
 	}
 }

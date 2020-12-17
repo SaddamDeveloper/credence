@@ -148,16 +148,20 @@
                 <div class="cartcalculation">
                   <div class="paymttotal">
                     <h4 style="text-align: left;">Cart Amount  </h4>
-                    <h4 style="text-align: right;" id="total">₹{{ $total }}</h4>
+                    <h4 style="text-align: right;" id="total">₹{{ number_format($total,2) }}</h4>
                     
                   </div>
                   <div class="paymttotal">
                     <h4 style="text-align: left;">Shipping  </h4>
-                    <h4 style="text-align: right;" id="total">₹{{ $shipping_charge }}</h4>
+                    <h4 style="text-align: right;" id="total">₹{{ number_format($shipping_charge,2) }}</h4>
+                  </div>
+                  <div class="paymttotal">
+                    <h4 style="text-align: left;">Tax  </h4>
+                    <h4 style="text-align: right;" id="total">₹{{ number_format($tax,2) }}</h4>
                   </div>
                   <div class="paymttotal">
                     <h4 style="text-align: left;font-weight: 700">Grand Total </h4>
-                    <h4 style="text-align: right;font-weight: 700" id="total">₹{{ $grand_total}}</h4>
+                    <h4 style="text-align: right;font-weight: 700" id="total">₹{{ number_format($grand_total,2)}}</h4>
                   </div>
 
                   <div class="paymtmthd">

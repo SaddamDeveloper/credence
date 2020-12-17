@@ -27,6 +27,7 @@
                           <div class="row singleorder">
                             @php
                                 $grand_total = 0;
+                                $grand_tax = 0;
                             @endphp
                             @foreach ($cart_data as $item)
                               <div classs="row">
@@ -36,8 +37,10 @@
                                   <div class="col-md-10 singleordercontent"><a href="#">{{ $item['name'] }}</a>
                                       <div class="cart-price" style="text-align: left;">
                                         @php
+                                            $tax = ($item['price'] * $item['tax_amount'])/100;
                                             $total = $item['price'] * $item['quantity'];
-                                            $grand_total += $total; 
+                                            $grand_total += $total;
+                                            $grand_tax += $tax;  
                                         @endphp
                                           <div class="quantity">
                                             <p><small>₹{{ number_format($item['mrp'], 2) }}</small> ₹{{ number_format($item['price'], 2) }}</p> <b>|</b> 
@@ -112,8 +115,10 @@
                     <h4 style="text-align: right;" id="total">₹ {{ number_format($grand_total,2) }}</h4>
                     <h4 style="text-align: right;" id="total">Shipping Charge</h4>
                     <h4 style="text-align: right;" id="total">₹ {{ number_format($item['shipping_charge'],2) }}</h4>
+                    <h4 style="text-align: right;" id="total">Tax</h4>
+                    <h4 style="text-align: right;" id="total">₹ {{ number_format($grand_tax, 2) }}</h4>
                     <h4 style="text-align: right;" id="total">Grand Total</h4>
-                    <h4 style="text-align: right;" id="total">₹ {{ number_format(($item['shipping_charge']  + $grand_total),2)}}</h4>
+                    <h4 style="text-align: right;" id="total">₹ {{ number_format(($item['shipping_charge']  + $grand_total+$grand_tax),2)}}</h4>
                   </div>
                   <div class="paymttotal" style="float: right;margin-top: 10px">
                       <a href="{{route('web.checkout')}}" class="button button--aylen btn">Proceed to Checkout</a>

@@ -96,6 +96,7 @@ Route::group(['namespace'=>'Web'],function(){
 				//========= order =========//
 
 		Route::get('/Order', 'OrdersController@orderDetail')->name('web.order.order');
+		Route::get('/order/details/{id}','OrdersController@orderDetailss')->name('web.order.order_details');
 
 
 		
@@ -108,9 +109,9 @@ Route::group(['namespace'=>'Web'],function(){
 //     return view('web.product.product-list');
 // })->name('web.product.product-list');
 
-// Route::get('/single-product', function () {
-//     return view('web.product.single-product');
-// })->name('web.product.single-product');
+Route::get('/single-product', function () {
+    return view('web.product.single-product');
+})->name('web.product.single-product');
 
 //========= user =========//
 
