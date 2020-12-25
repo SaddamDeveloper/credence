@@ -40,7 +40,6 @@ class CheckoutController extends Controller
             return ($row->sizes->price * $row->product->topCategory->tax)/100;
         });
         $grand_total = $total + $shipping_charge+$tax;
-       
         
     	return view('web.checkout.checkout', ['all_address' => $all_address,'tax'=>$tax,'shipping_charge'=>$shipping_charge, 'total' => $total, 'grand_total' => $grand_total]);
     }

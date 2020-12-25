@@ -23,9 +23,11 @@ class CartController extends Controller
             $product_id = $request->input('product_id');
             $stock_id = $request->input('product_size_id');
             $qty = $request->input('qty');
-            $color = $request->input('color');
+            $color = $request->input('product_color_id');
             $product = Product::findOrFail($product_id);
             $stock = ProductStock::find($stock_id);
+            $shipping_charge = Charges::first();
+            $shipping_charge = $shipping_charge->amount;
             /** Checking Product Size **/
             if (!empty($stock)) {
                 if ($stock->stock < $qty) {
@@ -44,7 +46,10 @@ class CartController extends Controller
                 $cart = new Cart();
                 $cart->user_id = Auth::guard('users')->user()->id;
                 $cart->product_id = $product_id;
+                $cart->color_id = $color;
                 $cart->size_id = $stock_id;
+                $cart->shipping_charge = $shipping_charge;
+                $cart->tax_id = $product->topCategory->id;
                 $cart->quantity = $qty;
                 
                 $cart->save();
@@ -58,22 +63,29 @@ class CartController extends Controller
             $product_id = $request->input('product_id');
             $stock_id = $request->input('product_size_id');
             $qty = $request->input('qty');
-
+            $shipping_charge = Charges::first();
+            $shipping_charge = $shipping_charge->amount;
             $product = Product::findOrFail($product_id);
             $stock = ProductStock::find($stock_id);
-
+            $color = $request->input('product_color_id');
             // Get from session
             if (Session::has('cart') && !empty(Session::get('cart'))) {
                 $cart = Session::get('cart');
                 $cart[$product_id] = [
                     'quantity' => $qty,
                     'size_id' => $stock_id,
+                    'shipping_charge' => $shipping_charge,
+                    'tax_id' => $product->topCategory->id,
+                    'color_id' => $color
                 ];
             } else {
                 $cart = [
                     $product_id => [
                         'quantity' => $qty,
                         'size_id' => $stock_id,
+                        'shipping_charge' => $shipping_charge,
+                        'tax_id' => $product->topCategory->id,
+                        'color_id' => $color
                     ],
                 ];
             }
@@ -104,7 +116,7 @@ class CartController extends Controller
                     $top_cat = TopCategory::where('id',$item->product->topCategory->id)->first();
                   
                     $tax_amount = $top_cat->tax;
-                    $color = ProductColorMapping::where('product_id', $product->id)->first();
+                    $color = ProductColorMapping::where('product_id', $product->id)->where('id', $item->color_id)->first();
                     $cart_data[] = [
                         'product_id' => $product->id,
                         'name' => $product->product_name,
@@ -131,15 +143,12 @@ class CartController extends Controller
                 $cart = Session::get('cart');
                 $cart_data = [];
                 if (!empty($cart) && count($cart) > 0) {
-                   
                     foreach ($cart as $product_id => $value) {
                         $product = Product::where('id', $product_id)->where('status', 1)->first();
                         $size = ProductStock::find($value['size_id']);
                         $top_cat = TopCategory::where('id',$product->topCategory->id)->first();
-                  
+                        $color = ProductColorMapping::where('id', $value['color_id'])->first();
                         $tax_amount = $top_cat->tax;
-                      
-                        $color = ProductColorMapping::where('product_id', $product->id)->first();
                         $cart_data[] = [
                             'product_id' => $product->id,
                             'slug'=>$product->slug,
@@ -148,11 +157,11 @@ class CartController extends Controller
                             'quantity' => $value['quantity'],
                             'size_id' => $value['size_id'],
                             'size' => $size->size,
-                            'color' => $color->color,
-                            'color_code' => $color->color_code,
                             'price' => $size->price,
                             'mrp' => $product->discount,
                             'stock' => $size->stock,
+                            'color' => $color->color,
+                            'color_code' => $color->color_code,
                             'shipping_charge' => $shipping_charge,
                             'tax_amount'=>$tax_amount,
                         ];

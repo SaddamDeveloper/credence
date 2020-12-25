@@ -75,8 +75,7 @@
 
                         <form action="{{ route('web.add_cart') }}" method="POST" autocomplete="off" id="product">
                         @csrf
-
-						@if (!empty($product_detail->productColorMapping) && (count($product_detail->productColorMapping) > 0))
+						    @if (!empty($product_detail->productColorMapping) && (count($product_detail->productColorMapping) > 0))
                             <div class="attributes">
                             <div class="attribute-label">Color:</div>
                             <div class="attribute-list">
@@ -84,13 +83,13 @@
                                 @foreach ($product_detail->productColorMapping as $key => $item)
                                     @if($key == 0)
                                     <li class="col-sel color-sel selected">
-                                    <span style="background:{{ $item->color_code }};"></span>
-                                    <input type="radio" name="product_color_id" value="{{ $item->id }}" checked="" hidden="">
+                                        <span style="background:{{ $item->color_code }};"></span>
+                                        <input type="radio" name="product_color_id" value="{{ $item->id }}" checked="" hidden="">
                                     </li>
                                     @else
                                     <li class="col-sel color-sel">
-                                    <span style="background:{{ $item->color_code }};"></span>
-                                    <input type="radio" name="product_color_id" value="{{ $item->id }}" hidden="">
+                                        <span style="background:{{ $item->color_code }};"></span>
+                                        <input type="radio" name="product_color_id" value="{{ $item->id }}" hidden="">
                                     </li>
                                     @endif
                                 @endforeach
