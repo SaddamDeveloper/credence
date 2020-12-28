@@ -344,7 +344,9 @@ a.button:hover {
     background: #fff;
 }
 .singleorder .quantity b{
-    padding-right: 15px;
+  margin: 0 15px;
+  border-left: 1px solid #323d61;
+  line-height: 29px;
 }
 .singleorder .quantity p{
     width: 25%;
@@ -372,6 +374,7 @@ a.button:hover {
   border:1px solid #ee2265;
   color: #ee2265;
   background: #fff;
+  margin-left: 20px;
 }
 .singleorder .singleordercontent .editproduct:hover{
   background: #dc1e5d;
@@ -414,14 +417,15 @@ a.button:hover {
   border-bottom: 0px dotted #ccc;
 }
 .cartcalculation {
-    background-color: #ee226599;
-    padding: 15px;
-    border: 1px solid #eaeaea;
-    display: table;
-    width: 100%;    
-    border-top: 0;
-    color: #000;
-    border-radius: 10px;
+  background-color: #ee226599;
+  padding: 15px;
+  border: 1px solid #eaeaea;
+  display: grid;
+  width: 100%;
+  border-top: 0;
+  color: #000;
+  border-radius: 10px;
+  position: relative;
 }
 .paymttotal h4 {
     width: 50%;
@@ -430,6 +434,117 @@ a.button:hover {
     border-bottom: 1px solid #eaeaea;
     font-size: 15px;
     margin: 0;
+}
+.paymtmthd {
+  position: relative;
+  padding-top: 10px;
+}
+.paymtmthd label:first-child, label.this {
+  color: #323d61;
+  text-decoration: underline;
+  font-weight: 700;
+}
+.coupon-form input[type="text"] {
+  float: left;
+  margin: 0;
+  width: 100%;
+  border: 0;
+}
+.coupon-form button {
+  position: absolute;
+  right: 10px;
+  border: 0;
+  height: 34px;
+  background: #ee2265;
+  color: #fff;
+  border-radius: 0 4px 4px 0;
+  outline: none!important;
+}
+.coupon-response {
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin-top: 7px;
+  display: inline-block;
+}
+.coupon-response p.cou-suc {
+  color: rgb(19, 172, 19);
+  font-size: 12px;
+  margin-bottom: 0;
+}
+.coupon-response p.cou-inv {
+  color: rgb(192, 11, 11);
+  font-size: 12px;
+  margin-bottom: 0;
+}
+#pincode {
+	display: flex;
+}
+#pincode input {
+    height: 31px;
+    display: inline-block;
+    width: 75%;
+    border: none;
+    background: #fff;
+    box-shadow: none;
+    font-size: 12px;
+    padding-left: 15px;
+    margin-top: 0;
+} 
+#pincode .input-group {
+    /* border: 1px solid #eeeeee; */
+    display: inline-block;
+    overflow: hidden;
+    width: 250px;
+    /* background: #fff; */
+    border-radius: 3px;
+}
+#pincode button:hover {
+    background: #323d61;
+    border: none;
+    color: #ffffff;
+    border-left: 1px #e8e6e2 solid;
+}
+#pincode button {
+    line-height: 1;
+    padding: 9px 12px 9px;
+    display: inline-block;
+    background: #ee2265;
+    border: none;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    right: 0px;
+    z-index: 99;
+}
+#pincode button i {
+    font-size: 17px;
+} 
+#pincode .delivery-info {
+	padding: 0 5px;
+	display: flex;
+}  
+#pincode .delivery-info h6{
+	padding: 12px 6px;
+    background: #5cb85c;
+    color: #fff;
+    line-height: 0;
+    height: 0;
+    margin-top: 5px;
+    border-radius: 3px;
+}
+#pincode .delivery-info h5{
+ margin: 9px 10px 0;
+}
+#pincode .delivery-info h5 .fa-check, #pincode .delivery-info h5 .fa-times {
+	font-size: 15px;
+	margin-right: 3px;
+}	
+#pincode .delivery-info h5 .fa-check{
+	color: #5cb85c;
+}
+#pincode .delivery-info h5 .fa-times{
+	color: #ff0000db;
 }
 .ordernav{
     padding-bottom: 10px;

@@ -147,9 +147,21 @@
                 <div class="block-title" style="border-bottom: 0">PAYMENT INFORMATION</div>
                 <div class="cartcalculation">
                   <div class="paymttotal">
+                    <label class="this">Apply Coupon</label>
+                    <div class="coupon-form">
+                      <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Enter Coupon">
+                      <button type="button" class="btn btn-default">Apply</button>
+                    </div>
+                    <div class="coupon-response">
+                      {{-- if --}}
+                      <p class="cou-suc"><i class="fa fa-check"></i>&nbsp;Your Copan is applied</p>
+                      {{-- else --}}
+                      <p class="cou-inv"><i class="fa fa-times"></i>&nbsp;Your Copan is Invalid</p>
+                    </div>             
+                  </div>
+                  <div class="paymttotal">
                     <h4 style="text-align: left;">Cart Amount  </h4>
-                    <h4 style="text-align: right;" id="total">₹{{ number_format($total,2) }}</h4>
-                    
+                    <h4 style="text-align: right;" id="total">₹{{ number_format($total,2) }}</h4>                    
                   </div>
                   <div class="paymttotal">
                     <h4 style="text-align: left;">Shipping  </h4>

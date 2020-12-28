@@ -122,6 +122,30 @@
                         @if (session()->has('msg'))
                             <span style="color: red;">{{session()->get('msg')}}</span>
                         @endif
+                        
+                          
+                        <div class="product-color-size-area">
+                          <h2 class="saider-bar-title">Delivery Availability</h2>
+                          <div id="pincode">
+                            <div class="input-group flex">
+                                <input type="text" class="form-control" placeholder="Enter Pincode" id="pincode_data">
+                              <button class="btn-search" type="button" onclick="checkDelivery()">Check</button>
+                            </div>
+                            {{-- Start --}}
+                            <div class="delivery-info" id="delivery_info">
+                              <p style="margin-top: 7px;">&nbsp;<span style="color: red">*</span>Please check the availablity of product on your pincode </p>
+                            </div> 
+                            {{-- if --}}
+                            <div class="delivery-info">
+                              <p style="margin-top: 7px;color:#ff0000c7;font-weight:bold">&nbsp;Sorry Delivery Option Is Not Available In This Pin Code</p>
+                            </div>
+                            {{-- else --}}
+                            <div class="delivery-info">
+                              <p style="margin-top: 7px;color: #0aa90fc7;font-weight:bold">&nbsp;Delivery available in this pincode </p>
+                            </div>
+                            
+                          </div>
+                        </div>
                         <div class="add-to-box">
                           <div class="add-to-cart" >
                             <div class="pull-left">
@@ -196,15 +220,18 @@
                         <div class="item-title"> <a title="{{ $item->product_name }}" href="{{ route('web.product_detail', ['slug' => $item->slug, 'product_id' => $item->id]) }}"> {{ $item->product_name }} </a> </div>
                         <div class="item-content">
                           <div class="item-price">
-                            <div class="price-box"> <span class="regular-price"> 
-                              <span class="price">
-                                @if (!empty($item->price))
-									<span class="old-price"> ₹{{ number_format($item->discount, 2) }}</span>
-									<span class="special-price">₹{{ number_format($item->price, 2) }}</span>
-                                @else
-                                  ₹{{ $item->price }}
-                                @endif
-                              </span> </span> </div>
+                            <div class="price-box"> 
+                              <span class="regular-price"> 
+                                <span class="price">
+                                  @if (!empty($item->price))
+                                    <span class="old-price"> ₹{{ number_format($item->discount, 2) }}</span>
+                                    <span class="special-price">₹{{ number_format($item->price, 2) }}</span>
+                                  @else
+                                    ₹{{ $item->price }}
+                                  @endif
+                                </span> 
+                              </span> 
+                            </div>
                           </div>
                           <div class="action">
                             <a class="link-wishlist" href="{{ route('web.add_wish_list', ['product_id' => encrypt($item->id)]) }}"><i class="icon-heart icons"></i><span class="hidden">Wishlist</span></a>

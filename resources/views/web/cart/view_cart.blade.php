@@ -42,8 +42,8 @@
                                             $grand_total += $total;
                                             $grand_tax += $tax;  
                                         @endphp
-                                          <div class="quantity">
-                                            <p><small>₹{{ number_format($item['mrp'], 2) }}</small> ₹{{ number_format($item['price'], 2) }}</p> <b>|</b> 
+                                          <div class="quantity flex">
+                                            <p><small>₹{{ number_format($item['mrp'], 2) }}</small> ₹{{ number_format($item['price'], 2) }}</p> <b></b> 
                                             @if(session()->has('msg'.$item['product_id']))
                                               <span style="color: red">{{ session()->get('msg'.$item['product_id']) }}</span>
                                             @endif
@@ -113,11 +113,11 @@
                   <div class="paymttotal">
                     <h4 style="text-align: left;">Cart Amount  </h4>
                     <h4 style="text-align: right;" id="total">₹ {{ number_format($grand_total,2) }}</h4>
-                    <h4 style="text-align: right;" id="total">Shipping Charge</h4>
+                    <h4 style="text-align: left;" id="total">Shipping Charge</h4>
                     <h4 style="text-align: right;" id="total">₹ {{ number_format($item['shipping_charge'],2) }}</h4>
-                    <h4 style="text-align: right;" id="total">Tax</h4>
+                    <h4 style="text-align: left;" id="total">Tax</h4>
                     <h4 style="text-align: right;" id="total">₹ {{ number_format($grand_tax, 2) }}</h4>
-                    <h4 style="text-align: right;" id="total">Grand Total</h4>
+                    <h4 style="text-align: left;" id="total">Grand Total</h4>
                     <h4 style="text-align: right;" id="total">₹ {{ number_format(($item['shipping_charge']  + $grand_total+$grand_tax),2)}}</h4>
                   </div>
                   <div class="paymttotal" style="float: right;margin-top: 10px">

@@ -16,7 +16,7 @@
               <div class="ordernav" style="padding-bottom: 0.8%;">
                   <ul>
                     <li style="border-color: #323d61"><div>Cart information</div></li>
-                    <li style="border-color: #0036e7"><div>shipping information</div></li>
+                    <li style="border-color: #323d61"><div>shipping information</div></li>
                     <li class="step"><div>Order confirmation</div></li>
                   </ul>
               </div>
