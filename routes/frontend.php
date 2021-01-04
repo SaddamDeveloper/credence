@@ -52,7 +52,10 @@ Route::group(['namespace'=>'Web'],function(){
 	Route::post('verfication-code', 'UsersLoginController@verficationCode')->name('web.verfication_code');
 	Route::get('set-pass-form/{user_id}', 'UsersLoginController@showSetPasswordForm')->name('web.set_pass_form');
 	Route::get('set-password/{user_id}', 'UsersLoginController@setPassword')->name('web.set_password');
-
+	/** Coupon Check **/
+	Route::post('/pincode', 'PinController@pincode')->name('web.pincode_check');
+	Route::post('/coupon', 'CouponController@coupon')->name('web.coupon_check');
+	
 	Route::group(['middleware'=>'auth:users'],function(){
 		Route::get('confirm/{order_id}/{address_id}', 'CheckoutController@showConfirm')->name('web.confirm');
 		/** Checkout Page **/
@@ -63,10 +66,6 @@ Route::group(['namespace'=>'Web'],function(){
 		Route::post('pay-success/', 'CheckoutController@paySuccess')->name('web.pay_success');
 		/** Thank You Page On Cash **/
 		Route::get('thank-you', 'CheckoutController@thankYou')->name('web.thankYou');
-
-		/** Coupon Check **/
-		Route::post('/pincode', 'PinController@pincode')->name('web.pincode_check');
-		Route::post('/coupon', 'CouponController@coupon')->name('web.coupon_check');
 
 		/** Address List **/
 		Route::get('address-list', 'AddressController@addressList')->name('web.address_list');
