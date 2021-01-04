@@ -41,6 +41,26 @@
             </div>
           </div>
         </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Enter Dispatch Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <textarea class="form-control" placeholder="e.g Package Dispatched through ecom express with tracking no: AWB342334" id="awb_no"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="submit">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
 @endsection
 
 @section('script')
@@ -71,6 +91,33 @@ $(document).ready(function(){
             { "data": "action" },
         ],    
     });
+    $(document).on('click', '#out', function(){
+      $('#exampleModal').modal('toggle');
+      var id = $(this).data('id');
+    $(document).on('click', '#submit', function(){
+      const awb_no = $('#awb_no').val();
+      const order_id = id;
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+      $.ajax({
+          type:"POST",
+          url:"{{ route('admin.out_for_delivery') }}",
+          data: {awb_no: awb_no, order_id: order_id},
+          success:function(data){
+             if(data == 1){
+               alert('Successfully for out for delivery');
+               $('#exampleModal').modal('toggle');
+               window.location.reload();
+             }else{
+               alert('Something went wrong!');
+             }
+          }
+      });
+    });
+  });
 });
 </script>
 @endsection

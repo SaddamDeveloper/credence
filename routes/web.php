@@ -224,6 +224,7 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 
         /** Out for Delivery Orders List **/
         Route::get('out-for-delivery-orders-list', 'OrdersController@outForDeliveryOrdersList')->name('admin.out_for_delivery_orders_list');
+        Route::post('out/for/delivery', 'OrdersController@outForDelivery')->name('admin.out_for_delivery');
 
         /** Delivered Orders List **/
         Route::get('delivered-orders-list', 'OrdersController@deliveredOrdersList')->name('admin.delivered_orders_list');
