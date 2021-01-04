@@ -325,7 +325,7 @@
         });
         $.ajax({
             method: "POST",
-            url   : "{{ route('pincode_check') }}",
+            url   : "{{ route('web.pincode_check') }}",
             data  : {
                 'pincode': pincode
             },

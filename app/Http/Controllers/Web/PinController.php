@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -17,6 +17,8 @@ class PinController extends Controller
             Session::save();
             return 1;
         }else {
+            Session::put('pincode', $pincode);
+            Session::save();
             return 0;
         }
     }

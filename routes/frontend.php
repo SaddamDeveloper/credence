@@ -60,12 +60,13 @@ Route::group(['namespace'=>'Web'],function(){
 		/** Place Order **/
 		Route::post('place-order', 'CheckoutController@placeOrder')->name('web.place_order');
 		/** Thank You Page On Online **/
-		Route::get('pay-success/{order_id}', 'CheckoutController@paySuccess');
+		Route::post('pay-success/', 'CheckoutController@paySuccess')->name('web.pay_success');
 		/** Thank You Page On Cash **/
 		Route::get('thank-you', 'CheckoutController@thankYou')->name('web.thankYou');
 
 		/** Coupon Check **/
-		Route::post('check-coupon', 'CheckoutController@checkCoupon')->name('web.check_coupon');
+		Route::post('/pincode', 'PinController@pincode')->name('web.pincode_check');
+		Route::post('/coupon', 'CouponController@coupon')->name('web.coupon_check');
 
 		/** Address List **/
 		Route::get('address-list', 'AddressController@addressList')->name('web.address_list');

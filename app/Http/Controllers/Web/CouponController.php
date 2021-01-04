@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,6 +14,7 @@ class CouponController extends Controller
         // Eligibility check
         $grand_total = $request->input('grand_total');
         $coupon = $request->input('coupon');
+        
         
         // old User
         $orders = Order::where('user_id', Auth::guard('users')->user()->id)->where('order_status', 3)->count();
@@ -29,11 +30,15 @@ class CouponController extends Controller
 
     private function couponApply($userType, $coupon, $grand_total){
         $coupon = Coupon::where('code', $coupon)->where('usertype', $userType)->first();
-        $afterCoupon = ($grand_total * $coupon->discount)/ 100;
-        $grand_total = ($grand_total - $afterCoupon);
-        $coupon_data = [
-            number_format($afterCoupon, 2), number_format($grand_total, 2)
-        ];
-        return $coupon_data;
+        if($coupon){
+            $afterCoupon = ($grand_total * $coupon->discount)/ 100;
+            $grand_total = ($grand_total - $afterCoupon);
+            $coupon_data = [
+                number_format($afterCoupon, 2), number_format($grand_total, 2)
+            ];
+            return $coupon_data;
+        }else{
+            return null;
+        }
     }
 }

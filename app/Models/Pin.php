@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pin extends Model
 {
-    //
+    protected $table = 'pins';
+    protected $fillable = ['pincode'];
 }

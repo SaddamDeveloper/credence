@@ -34,4 +34,10 @@ return [
         'secret' => env('SPARKPOST_SECRET'),
     ],
 
+    'razorpay' => [
+        'id'       => env('RAZOR_PAY_ID'),
+        'key'    => env('RAZOR_PAY_KEY'),
+    ],
+
+
 ];

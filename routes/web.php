@@ -10,8 +10,7 @@ Route::get('/admin/logout', 'Admin\AdminLoginController@logout')->name('admin.lo
 
 Route::post('/admin/login', 'Admin\AdminLoginController@adminLogin');
 Route::post('/register/admin', 'Admin\AdminRegisterController@createAdmin');
-Route::post('/pincode', 'Admin\PinController@pincode')->name('pincode_check');
-Route::post('/coupon', 'Admin\CouponController@coupon')->name('coupon_check');
+
 /** End of Admin Login Route */
 
 Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin'],function(){
