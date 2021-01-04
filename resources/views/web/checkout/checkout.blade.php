@@ -149,14 +149,14 @@
                   <div class="paymttotal">
                     <label class="this">Apply Coupon</label>
                     <div class="coupon-form">
-                      <input type="text" class="form-control" id="coupon" placeholder="Enter Coupon">
+                      <input type="text" class="form-control" id="coupon" name="coupon" placeholder="Enter Coupon">
                       <button type="button" onclick="couponApply({{ $grand_total }})" class="btn btn-default">Apply</button>
                     </div>
                     <div class="coupon-response" style="display:none;">
                       {{-- if --}}
-                      <p class="cou-suc" style="display:none;"><i class="fa fa-check"></i>&nbsp;Your Copan is applied</p>
+                      <p class="cou-suc" style="display:none;"><i class="fa fa-check"></i>&nbsp;Your Coupan is applied</p>
                       {{-- else --}}
-                      <p class="cou-inv" style="display:none;"><i class="fa fa-times"></i>&nbsp;Your Copan is Invalid</p>
+                      <p class="cou-inv" style="display:none;"><i class="fa fa-times"></i>&nbsp;Your Coupan is Invalid</p>
                     </div>             
                   </div>
                   <div class="paymttotal">
@@ -178,6 +178,7 @@
                   <div class="paymttotal">
                     <h4 style="text-align: left;font-weight: 700">Grand Total </h4>
                     <h4 style="text-align: right;font-weight: 700" id="grand_total">₹{{ number_format($grand_total,2)}}</h4>
+                  
                   </div>
 
                   <div class="paymtmthd">
@@ -297,14 +298,15 @@
                 $('#grand_total').text('₹'+grand_total);
                 $('.coupon-response').show();
                 $('.cou-suc').show();
-              
+                $('#grand_total_hidden').val(grand_total);
+                $('#discount_hidden').val(discount);
               }else{
                     $('.cou-suc').hide();
                     $('.coupon-response').show();
                     $('.cou-inv').show();
                     $('#discount').text('₹'+0.00);
                     $('#grand_total').text('₹'+grand_total);
-                
+
               }
             }
         });

@@ -10,6 +10,7 @@ use Mail;
 use App\Models\Address;
 use App\Models\Pin;
 use App\Models\Cart;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetails;
 use App\Models\Product;
@@ -84,8 +85,19 @@ class CheckoutController extends Controller
             
             return $row->sizes->price * $row->quantity;
         });
-    
-        $grand_total = $total + $shipping_charge+$tax;
+        if(!empty($request->input('coupon'))){
+            $coupon = Coupon::where('code',$request->input('coupon'))->first();
+            if(!empty($coupon)){
+                $grand_total = $total + $shipping_charge+$tax;
+                $afterCoupon = ($grand_total * $coupon->discount)/ 100;
+                $grand_total = ($grand_total - $afterCoupon);
+            }else{
+                $grand_total = $total + $shipping_charge+$tax;
+            }
+        }else{
+            $grand_total = $total + $shipping_charge+$tax;
+        }
+       
         if($pin_check >0){
          
                 try {

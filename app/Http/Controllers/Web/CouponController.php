@@ -15,7 +15,6 @@ class CouponController extends Controller
         $grand_total = $request->input('grand_total');
         $coupon = $request->input('coupon');
         
-        
         // old User
         $orders = Order::where('user_id', Auth::guard('users')->user()->id)->where('order_status', 3)->count();
         
