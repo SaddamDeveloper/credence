@@ -41,7 +41,6 @@
                                             <div class="col-md-12" style=""><hr style="margin: 0"></div>
                                             <div class="col-md-12 singleordercontent" style="padding: 10px 15px;">
                                                 <div class="varient">
-                                                  {{ dd($order) }}
                                                 <b class="sub-tag">Delivery Status : 
                                                   @if ($order->order->order_status == 1)
                                                       <label class="label label-warning">Pending</label>
