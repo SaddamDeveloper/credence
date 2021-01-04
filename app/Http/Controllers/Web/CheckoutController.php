@@ -130,6 +130,7 @@ class CheckoutController extends Controller
                                             'order_id' => $order->id,
                                             'product_id' =>$product->id,
                                             'stock_id' => $item->size_id,
+                                            'color_id' => $color->id,
                                             'price' => $item->sizes->price,
                                             'discount' => $item->sizes->discount,
                                             'quantity' => $item->quantity,
@@ -244,7 +245,6 @@ class CheckoutController extends Controller
                         'email' => $order_update->user->email,
                         'mobile' => $order_update->user->contact_no,
                     ];
-                    dd($order_update->user);
                     return view('web.checkout.ra-payment',compact('response'));
                 }
              } catch (\Exception $e) {
