@@ -25,6 +25,7 @@
                         <tr>
                             <th>Sl No</th>
                             <th>Order Id</th>
+                            <th>Track ID</th>
                             <th>User Name</th>
                             <th>Payment Id</th>
                             <th>Payment Status</th>
@@ -64,6 +65,7 @@ $(document).ready(function(){
         "columns": [
             { "data": "id" },
             { "data": "order_id" },
+            { "data": "dispatch_id" },
             { "data": "user_name" },
             { "data": "payment_id" },
             { "data": "payment_status" },

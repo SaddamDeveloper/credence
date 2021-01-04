@@ -26,6 +26,7 @@
                               <thead>
                               <tr>
                                   <th class="text-center">Order ID</th>
+                                  <th class="text-center">Track ID</th>
                                   <th class="text-center">Order Date</th>
                                   <th class="text-center">Order Status</th>
                                   <th class="text-center">Action</th>
@@ -34,9 +35,23 @@
                               <tbody>
                                   @foreach ($orders as $order)
                                       <tr>
-                                          <td>{{ $order->id }}</td>
+                                          <td>{{ $order->order_id }}</td>
+                                          <td>
+                                            @if ($order->order_status == 1)
+                                                <label class="label label-warning">Pending</label>
+                                            @else
+                                              {{ $order->awb_no }}</td>
+                                            @endif
                                           <td>{{ $order->created_at }}</td>
-                                          <td>Delivered</td>
+                                          <td>
+                                            @if ($order->order_status == 1)
+                                                <label class="label label-warning">Pending</label>
+                                            @elseif($order->order_status == 2)
+                                                <label class="label label-info">Out for Delivery</label>
+                                            @else
+                                                <label class="label label-success">Delivered</label>
+                                            @endif
+                                          </td>
                                           <td><a class="btn btn-primary" href="{{ route('web.order.order_details', ['id' =>$order->id]) }}">View details</a></td>
                                       </tr>
                                   @endforeach

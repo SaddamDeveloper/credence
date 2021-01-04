@@ -41,8 +41,16 @@
                                             <div class="col-md-12" style=""><hr style="margin: 0"></div>
                                             <div class="col-md-12 singleordercontent" style="padding: 10px 15px;">
                                                 <div class="varient">
-                                                <b class="sub-tag">Delivery Status : <strong>Delivered</strong> </b>
-                                                <a href="#" class="editproduct oth" style="margin-left: 10px">Return</a>
+                                                  {{ dd($order) }}
+                                                <b class="sub-tag">Delivery Status : 
+                                                  @if ($order->order->order_status == 1)
+                                                      <label class="label label-warning">Pending</label>
+                                                  @elseif($order->order->order_status == 2)
+                                                      <label class="label label-info">Out for Delivery</label>
+                                                  @else
+                                                      <label class="label label-success">Delivered</label>
+                                                  @endif 
+                                                </b>
                                                 </div>
                                             </div>
                                         </div>

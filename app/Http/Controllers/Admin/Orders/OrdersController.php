@@ -10,11 +10,26 @@ use App\Models\Order;
 use App\Models\OrderDetails;
 use App\Models\Address;
 use App\Models\User\User;
+use Illuminate\Contracts\Encryption\DecryptException;
+
 class OrdersController extends Controller
 {
     public function newOrdersList()
     {
     	return view('admin.orders.new_orders');
+    }
+
+    public function outForDelivery(Request $request){
+        $awb_no = $request->input('awb_no');
+        $id = $request->input('order_id');
+        $order = Order::find($id);
+        $order->awb_no = $awb_no;
+        $order->order_status = 2;
+        if($order->save()){
+            return 1;
+        }else{
+            return 2;
+        }
     }
 
     public function outForDeliveryOrdersList()
@@ -37,6 +52,7 @@ class OrdersController extends Controller
         $columns = array( 
                             0 => 'id', 
                             2 => 'order_id',
+                            2 => 'dispatch_id',
                             3 => 'user_name',
                             4 => 'payment_id',
                             5 => 'payment_status',
@@ -99,11 +115,11 @@ class OrdersController extends Controller
             foreach ($order_data as $single_data) {
 
                 if($single_data->order_status == 1)
-                    $val = "&emsp;<a href=\"".route('admin.order_status_update', ['order_id' => encrypt($single_data->id), 'status' => encrypt(2)])."\" class=\"btn btn-primary\">Out for Delivery</a>&emsp;<a href=\"".route('admin.order_status_update', ['order_id' => encrypt($single_data->id), 'status' => encrypt(4)])."\" class=\"btn btn-danger\">Cancel Order</a>";
+                    $val = "&emsp;<a class=\"btn btn-primary\" id=\"out\" data-id=\"$single_data->id\">Out for Delivery</a>&emsp;<a href=\"".route('admin.order_status_update', ['order_id' => encrypt($single_data->id), 'status' => encrypt(4)])."\" class=\"btn btn-danger\">Cancel Order</a>";
                 else if($single_data->order_status == 2)
                     $val = "&emsp;<a href=\"".route('admin.order_status_update', ['order_id' => encrypt($single_data->id), 'status' => encrypt(3)])."\" class=\"btn btn-primary\">Delivered Order</a>&emsp;<a href=\"".route('admin.order_status_update', ['order_id' => encrypt($single_data->id), 'status' => encrypt(4)])."\" class=\"btn btn-danger\">Cancel Order</a>";
                 else if($single_data->order_status == 4)
-                    $val = "&emsp;<a href=\"".route('admin.order_status_update', ['order_id' => encrypt($single_data->id), 'status' => encrypt(2)])."\" class=\"btn btn-primary\">Out for Delivery</a>";
+                    $val = "&emsp;<a href=\"".route('admin.order_status_update', ['order_id' => encrypt($single_data->id), 'status' => encrypt(2)])."\" class=\"btn btn-primary\" id=\"out\">Out for Delivery</a>";
                 else
                     $val = "&emsp;";
 
@@ -113,12 +129,15 @@ class OrdersController extends Controller
                 {
                 	if($single_data->payment_status == 1)
 	                	$payment_status = "Failed";
-	                else
-	                	$payment_status = "Paid";
+	                else if($single_data->payment_status == 3)
+                        $payment_status = "COD";
+                    else 
+                        $payment_status = "PAID";
                 }
 
                 $nestedData['id']             = $cnt;
                 $nestedData['order_id']       = $single_data->order_id;
+                $nestedData['dispatch_id']       = $single_data->awb_no ?? '';
                 $nestedData['user_name']      = "<a href=\"".route('admin.users_profile', ['user_id' => encrypt($single_data->user_id)])."\" title=\"View User Detail\" target=\"_blank\">$single_data->name</a>";
                 $nestedData['payment_id']     = $single_data->payment_id;
                 $nestedData['payment_status'] = $payment_status;
