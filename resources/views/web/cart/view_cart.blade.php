@@ -54,6 +54,7 @@
                                             <input type="text" class="input-text qty" title="Qty" value="{{ $item['quantity'] }}" maxlength="12" id="qty" name="qty">
                                             <button onClick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty )) result.value++;return false;" class="increase items-count" type="button"><i class="fa fa-plus">&nbsp;</i></button>
                                             <input type="hidden" name="product_id" value="{{ $item['product_id'] }}">
+                                            <input type="hidden" name="stock" id="" value="{{ $item['size_id'] }}">
                                             <button type="submit" class="editproduct oth">Update</button>
                                             </form>
                                           </div>                                      

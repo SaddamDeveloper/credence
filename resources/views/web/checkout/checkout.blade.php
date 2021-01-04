@@ -149,8 +149,8 @@
                   <div class="paymttotal">
                     <label class="this">Apply Coupon</label>
                     <div class="coupon-form">
-                      <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Enter Coupon">
-                      <button type="button" class="btn btn-default">Apply</button>
+                      <input type="text" class="form-control" id="coupon" placeholder="Enter Coupon">
+                      <button type="button" onclick="couponApply({{ $grand_total }})" class="btn btn-default">Apply</button>
                     </div>
                     <div class="coupon-response">
                       {{-- if --}}
@@ -172,8 +172,12 @@
                     <h4 style="text-align: right;" id="total">₹{{ number_format($tax,2) }}</h4>
                   </div>
                   <div class="paymttotal">
+                    <h4 style="text-align: left;">Discount  </h4>
+                    <h4 style="text-align: right;" id="discount">₹0.00</h4>
+                  </div>
+                  <div class="paymttotal">
                     <h4 style="text-align: left;font-weight: 700">Grand Total </h4>
-                    <h4 style="text-align: right;font-weight: 700" id="total">₹{{ number_format($grand_total,2)}}</h4>
+                    <h4 style="text-align: right;font-weight: 700" id="grand_total">₹{{ number_format($grand_total,2)}}</h4>
                   </div>
 
                   <div class="paymtmthd">
@@ -268,6 +272,28 @@
                 }
         });
       });
+      function couponApply(grand_total){
+        var coupon = $("#coupon").val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        });
+        $.ajax({
+            method: "POST",
+            url   : "{{ route('coupon_check') }}",
+            data  : {
+              'coupon': coupon,
+              'grand_total': grand_total
+            },
+            success: function(response) {
+              const discount = response[0];
+              const grand_total = response[1];
+              $('#discount').text('₹'+discount);
+              $('#grand_total').text('₹'+grand_total);
+            }
+        });
+      }
     </script>
   @endsection
 

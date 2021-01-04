@@ -121,7 +121,6 @@ class ProductController extends Controller
             $related_product->where('top_category_id', $product_detail->top_category_id);
         }
         $related_product = $related_product->inRandomOrder()->get();
-
         return view('web.product.single-product', compact('product_detail', 'related_product'));
     }
 

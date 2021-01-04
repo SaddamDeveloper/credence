@@ -198,11 +198,13 @@ class CartController extends Controller
 
         $product_id = $request->input('product_id');
         $quantity = $request->input('qty');
-        $stock = $request->input('stock');
+        $stock_id = $request->input('stock');
         if (Auth::guard('users')->user() && !empty(Auth::guard('users')->user()->id)) {
             $product = Product::findOrFail($product_id);
-            if ($stock >= $request->input('qty')) {
-                $updateCart = Cart::where('user_id', Auth::guard('users')->user()->id)->where('product_id', $product_id)
+            $stock = ProductStock::find($stock_id);
+            if ($stock->stock >= $quantity && $quantity > 0) {
+                $updateCart = Cart::where('user_id', Auth::guard('users')->user()->id)
+                ->where('product_id', $product_id)
                 ->update([
                     'quantity' => $quantity
                 ]);
@@ -210,18 +212,18 @@ class CartController extends Controller
                 return redirect()->back()->with('msg', 'Required quantity not available');
             }
            
-            return redirect()->route('web.cart')->with('message', 'Cart Updated Successfully');
+            return redirect()->route('web.view_cart')->with('message', 'Cart Updated Successfully');
         } elseif (Session::has('cart') && !empty(Session::get('cart'))) {
-
             $product_id = $request->input('product_id');
+
             $quantity = $request->input('qty');
             $cart = Session::get('cart');
             $stock = ProductStock::find($cart[$product_id]['size_id']);
-            if ($stock->stock >= $request->input('qty')) {
+            if ($stock->stock >= $quantity && $quantity > 0) {
                 $item = $cart[$product_id]['quantity'] = $quantity;
                 Session::put('cart', $cart);
                 Session::save();
-            } else {
+            }else {
                 return redirect()->back()->with('msg', 'Required quantity not available');
             }
 

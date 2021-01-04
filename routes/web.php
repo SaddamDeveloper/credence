@@ -1,16 +1,4 @@
 <?php
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/frontend.php';
@@ -22,6 +10,8 @@ Route::get('/admin/logout', 'Admin\AdminLoginController@logout')->name('admin.lo
 
 Route::post('/admin/login', 'Admin\AdminLoginController@adminLogin');
 Route::post('/register/admin', 'Admin\AdminRegisterController@createAdmin');
+Route::post('/pincode', 'Admin\PinController@pincode')->name('pincode_check');
+Route::post('/coupon', 'Admin\CouponController@coupon')->name('coupon_check');
 /** End of Admin Login Route */
 
 Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin'],function(){
@@ -274,7 +264,6 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
         Route::put('update/{id}', 'ConfigurationController@couponUpdate')->name('admin.coupon_update');
         Route::get('status/{id}/{status}', 'ConfigurationController@couponStatus')->name('admin.coupon_status');
     });
-
     // Route::group(['namespace'=>'Review'],function(){
 
     //     /** New Reviews List **/

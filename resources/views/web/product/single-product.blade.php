@@ -128,7 +128,14 @@
                           <h2 class="saider-bar-title">Delivery Availability</h2>
                           <div id="pincode">
                             <div class="input-group flex">
-                                <input type="text" class="form-control" placeholder="Enter Pincode" id="pincode_data">
+                                @if (Session::has('pincode') && !empty(Session::get('pincode')))
+                                  @php
+                                    $pincode = Session::get('pincode');
+                                  @endphp
+                                  <input type="number" class="form-control" placeholder="Enter Pincode" value="{{ $pincode }}"id="pin">
+                                @else
+                                  <input type="number" class="form-control" placeholder="Enter Pincode" id="pin">
+                                @endif
                               <button class="btn-search" type="button" onclick="checkDelivery()">Check</button>
                             </div>
                             {{-- Start --}}
@@ -136,13 +143,10 @@
                               <p style="margin-top: 7px;">&nbsp;<span style="color: red">*</span>Please check the availablity of product on your pincode </p>
                             </div> 
                             {{-- if --}}
-                            <div class="delivery-info">
-                              <p style="margin-top: 7px;color:#ff0000c7;font-weight:bold">&nbsp;Sorry Delivery Option Is Not Available In This Pin Code</p>
+                            <div class="delivery-infos">
+                              {{-- <p style="margin-top: 7px;color:#ff0000c7;font-weight:bold">&nbsp;Sorry Delivery Option Is Not Available In This Pin Code</p> --}}
                             </div>
                             {{-- else --}}
-                            <div class="delivery-info">
-                              <p style="margin-top: 7px;color: #0aa90fc7;font-weight:bold">&nbsp;Delivery available in this pincode </p>
-                            </div>
                             
                           </div>
                         </div>
@@ -311,5 +315,29 @@
         });
 
       });
+
+      function checkDelivery(){
+        var pincode = $("#pin").val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        });
+        $.ajax({
+            method: "POST",
+            url   : "{{ route('pincode_check') }}",
+            data  : {
+                'pincode': pincode
+            },
+            success: function(response) {
+              if(response == 1){
+                $('.delivery-infos').html('<p style="margin-top: 7px;color: #0aa90fc7;font-weight:bold">&nbsp;Delivery available in this pincode </p>');
+              }else if(response == 0){
+                $('.delivery-infos').html('<p style="margin-top: 7px;color:#ff0000c7;font-weight:bold">&nbsp;Sorry Delivery Option Is Not Available In This Pin Code</p>');
+              }
+            }
+        });
+
+      }
     </script>
   @endsection

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use DB;
 use Carbon\Carbon;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class ReviewController extends Controller
 {
