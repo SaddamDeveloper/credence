@@ -22,7 +22,7 @@
                       <div class="row singleorder">
                           @if (isset($orders) && !empty($orders))
                           <div>
-                          <table class="table table-responsive text-center">
+                          <table class="table table-responsive text-center" style="margin-bottom:0">
                               <thead>
                               <tr>
                                   <th class="text-center">Order ID</th>
@@ -92,6 +92,11 @@
                                             @if($order->order_status ==3 && $order->order_status !=5)
                                             <a class="btn btn-info"  onclick="if (!confirm('Are you sure?')) return false;" href="{{route('web.order.exchange_request',['id'=>$order->id])}}">Exchange Order</a>
                                             @endif
+                                          </td>
+                                          <td>
+                                            <a class="btn btn-xs btn-primary" href="{{ route('web.order.order_details', ['id' =>$order->id]) }}">View details</a>
+                                            <a class="btn btn-xs btn-warning" href="{{route('web.order.exchange')}}">Exchange</a>
+                                            <a class="btn btn-xs btn-danger" href="{{route('web.order.return')}}">Return</a>
                                           </td>
                                       </tr>
                                   @endforeach

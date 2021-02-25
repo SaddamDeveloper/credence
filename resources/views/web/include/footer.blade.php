@@ -72,7 +72,8 @@
   </div>
 
     <!-- jquery js --> 
-    <script type="text/javascript" src="{{asset('web/js/jquery.min.js')}}"></script> 
+    {{-- <script type="text/javascript" src="{{asset('web/js/jquery.min.js')}}"></script>  --}}
+    <script src="{{asset('web/js/jquery3.3.min.js')}}"></script>    
 
     <!-- bootstrap js --> 
     <script type="text/javascript" src="{{asset('web/js/bootstrap.min.js')}}"></script> 
