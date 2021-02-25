@@ -129,39 +129,38 @@
 
   @section('script')  
     <!--jQuery-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    
     <!--Plugin JavaScript file-->
     <script src="{{asset('web/js/ion.rangeSlider.js')}}"></script>
     @if(isset($price_range) && !empty($price_range) && !empty($price_range['min']) && !empty($price_range['max']))
-    <script type="text/javascript">
-        $(".js-range-slider").ionRangeSlider({
-        min: '{{ $price_range['min'] }}',
-        max: '{{ $price_range['max'] }}',
-        type: 'double',
-        prefix: "Rs ",
-        prettify: false,
-        hasGrid: false,
-        onFinish: function (data) {
-            var prices = data.from+";"+data.to;
-            filterProduct(prices);
-        },
-        });
-    </script>
+      <script type="text/javascript">
+          $(".js-range-slider").ionRangeSlider({
+          min: '{{ $price_range['min'] }}',
+          max: '{{ $price_range['max'] }}',
+          type: 'double',
+          prefix: "Rs ",
+          prettify: false,
+          hasGrid: false,
+          onFinish: function (data) {
+              var prices = data.from+";"+data.to;
+              filterProduct(prices);
+          },
+          });
+      </script>
     @else
-    <script type="text/javascript">
-        $(".js-range-slider").ionRangeSlider({
-        min: 0,
-        max: 1000,
-        type: 'double',
-        prefix: "Rs ",
-        prettify: false,
-        hasGrid: false,
-        onFinish: function (data) {
-            var prices = data.from+";"+data.to;
-            filterProduct(prices);
-        },
-    });
-    </script>
+      <script type="text/javascript">
+          $(".js-range-slider").ionRangeSlider({
+            min: 0,
+            max: 1000,
+            type: 'double',
+            prefix: "Rs ",
+            prettify: false,
+            hasGrid: false,
+            onFinish: function (data) {
+                var prices = data.from+";"+data.to;
+                filterProduct(prices);
+            },
+        });
+      </script>
     @endif
     <!-- Custom Range Price slide JavaScript file-->
     <script type="text/javascript">
@@ -190,21 +189,19 @@
                 }
             });
         }
-    $(function(){
-      $('#sort').on('change', function() {
-        filterProduct();
-      });
-    });
+        $(function(){
+          $('#sort').on('change', function() {
+            filterProduct();
+          });
+        });      
+        // function get_filter(id_name) {
+        //   var filter = [];
+        //   $('#' + id_name + ':checked').each(function() {
+        //       filter.push($(this).val());
+        //   });
+        //   return filter;
+        // }
+        // });
 
-      
-    // function get_filter(id_name) {
-    //   var filter = [];
-    //   $('#' + id_name + ':checked').each(function() {
-    //       filter.push($(this).val());
-    //   });
-    //   return filter;
-    // }
-    // });
-
-  </script>
+    </script>
   @endsection

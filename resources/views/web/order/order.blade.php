@@ -22,7 +22,7 @@
                       <div class="row singleorder">
                           @if (isset($orders) && !empty($orders))
                           <div>
-                          <table class="table table-responsive text-center">
+                          <table class="table table-responsive text-center" style="margin-bottom:0">
                               <thead>
                               <tr>
                                   <th class="text-center">Order ID</th>
@@ -52,7 +52,11 @@
                                                 <label class="label label-success">Delivered</label>
                                             @endif
                                           </td>
-                                          <td><a class="btn btn-primary" href="{{ route('web.order.order_details', ['id' =>$order->id]) }}">View details</a></td>
+                                          <td>
+                                            <a class="btn btn-xs btn-primary" href="{{ route('web.order.order_details', ['id' =>$order->id]) }}">View details</a>
+                                            <a class="btn btn-xs btn-warning" href="{{route('web.order.exchange')}}">Exchange</a>
+                                            <a class="btn btn-xs btn-danger" href="{{route('web.order.return')}}">Return</a>
+                                          </td>
                                       </tr>
                                   @endforeach
                               </tbody>

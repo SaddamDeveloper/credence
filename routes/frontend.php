@@ -104,17 +104,20 @@ Route::group(['namespace'=>'Web'],function(){
 });
 
 //========= Product =========//
+Route::get('/Return', function () {
+    return view('web.order.return');
+})->name('web.order.return');
 
-// Route::get('/product-list', function () {
-//     return view('web.product.product-list');
-// })->name('web.product.product-list');
+Route::get('/Exchange', function () {
+    return view('web.order.exchange');
+})->name('web.order.exchange');
 
+//========= Product =========//
 Route::get('/single-product', function () {
     return view('web.product.single-product');
 })->name('web.product.single-product');
 
 //========= user =========//
-
 Route::get('/Login', function () {
     return view('web.user.login');
 })->name('web.user.login');
@@ -132,7 +135,6 @@ Route::get('/Forgot-password/Change-password', function () {
 })->name('web.user.forgot-change-password');
 
 //========= Address =========//
-
 Route::get('/address', function () {
     return view('web.address.address');
 })->name('web.address.address');
@@ -142,7 +144,6 @@ Route::get('/address/Edit', function () {
 })->name('web.address.edit-address');
 
 //========= profile =========//
-
 Route::get('/Profile', function () {
     return view('web.profile.profile');
 })->name('web.profile.profile');
@@ -156,19 +157,16 @@ Route::get('/Profile/Change-password', function () {
 })->name('web.profile.change-password');
 
 //========= checkout =========//
-
 Route::get('/cart', function () {
     return view('web.checkout.cart');
 })->name('web.checkout.cart');
 
+//========= Order Placed =========//
 Route::get('/Order-placed', function () {
     return view('web.checkout.corfirm');
 })->name('web.checkout.corfirm');
 
-
-
 //========= wishlist =========//
-
 Route::get('/Wishlist', function () {
     return view('web.wishlist.wishlist');
 })->name('web.wishlist.wishlist');
