@@ -97,6 +97,13 @@ Route::group(['namespace'=>'Web'],function(){
 
 		Route::get('/Order', 'OrdersController@orderDetail')->name('web.order.order');
 		Route::get('/order/details/{id}','OrdersController@orderDetailss')->name('web.order.order_details');
+		Route::get('/order/cancel/{order_id}','OrdersController@cancelOrder')->name('web.order.cancel_order');
+		Route::get('/order/refund/{order_id}','OrdersController@refundForm')->name('web.order.refund_form');
+		Route::post('/refund/order/','OrdersController@refund')->name('web.order.refund');
+		Route::get('/return/request/{id}','OrdersController@returnRequest')->name('web.order.return_request');
+		Route::post('/request/return/','OrdersController@requestReturn')->name('web.order.request_return');
+		Route::get('/exchange/request/{id}','OrdersController@exchangeRequest')->name('web.order.exchange_request');
+		Route::post('/request/exchange/','OrdersController@postExchangeRequest')->name('web.order.request_exchange');
 
 
 		

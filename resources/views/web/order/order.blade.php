@@ -47,12 +47,52 @@
                                             @if ($order->order_status == 1)
                                                 <label class="label label-warning">Pending</label>
                                             @elseif($order->order_status == 2)
-                                                <label class="label label-info">Out for Delivery</label>
-                                            @else
+                                                <label class="label label-info">Shipped</label>
+                                            @elseif($order->order_status == 3)
                                                 <label class="label label-success">Delivered</label>
+                                            @elseif($order->order_status == 4)
+                                                <label class="label label-danger">Canceled</label>
+                                            @elseif($order->order_status == 5)
+                                                <label class="label label-warning">Return Requested</label>
+                                            @elseif($order->order_status == 6)
+                                                <label class="label label-success">Return Request Accepted</label>
+                                            @elseif($order->order_status == 7)
+                                                <label class="label label-danger">Return Request Rejected</label>
+                                            @elseif($order->order_status ==8)
+                                                <label class="label label-success">Returned</label>
+                                            @elseif($order->order_status ==9)
+                                              <label class="label label-warning">Exchange Requested</label>
+                                            @elseif($order->order_status ==10)
+                                              <label class="label label-success">Exchange Request Accepted</label>
+                                            @elseif($order->order_status ==11)
+                                              <label class="label label-danger">Exchange Request Rejected</label>
+                                            @elseif($order->order_status ==12)
+                                              <label class="label label-success">Exchanged</label>
                                             @endif
                                           </td>
-                                          <td><a class="btn btn-primary" href="{{ route('web.order.order_details', ['id' =>$order->id]) }}">View details</a></td>
+                                          <td>
+                                            <a class="btn btn-primary" href="{{ route('web.order.order_details', ['id' =>$order->id]) }}">View details</a>
+                                            @if($order->order_status ==1 || $order->order_status ==2 )
+                                              <a class="btn btn-danger"  onclick="if (!confirm('Are you sure?')) return false;" href="{{ route('web.order.cancel_order', ['order_id' =>$order->id]) }}">Cancel Order</a>
+                                            @endif
+                                            @php
+                                                $delivery_date = $order->updated_at;
+                                                $today_date = Carbon\Carbon::now();
+                                                $new = Carbon\Carbon::parse($delivery_date);
+                                                $today= Carbon\Carbon::now()->toDateString();
+                                                if( $new->diffInDays($today) <=7){
+                                                  $status =1;
+                                                }else{
+                                                  $status =2;
+                                                }
+                                            @endphp
+                                            @if($order->order_status ==3 && $status ==1 && $order->order_status != 5 && $order->order_status !=9 && $order->order_status != 8)
+                                              <a class="btn btn-warning"  onclick="if (!confirm('Are you sure?')) return false;" href="{{route('web.order.return_request',['id'=>$order->id])}}">Return Order</a>
+                                            @endif
+                                            @if($order->order_status ==3 && $order->order_status !=5)
+                                            <a class="btn btn-info"  onclick="if (!confirm('Are you sure?')) return false;" href="{{route('web.order.exchange_request',['id'=>$order->id])}}">Exchange Order</a>
+                                            @endif
+                                          </td>
                                       </tr>
                                   @endforeach
                               </tbody>

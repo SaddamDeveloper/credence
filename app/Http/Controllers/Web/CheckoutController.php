@@ -56,6 +56,7 @@ class CheckoutController extends Controller
         }catch(DecryptException $e) {
             abort(404);
         }
+        $cart = Cart::where('user_id',Auth::user()->id)->delete();
         $orders = Order::find($id);
         $address = Address::find($address_id);
         
@@ -71,7 +72,7 @@ class CheckoutController extends Controller
         $address_id = $request->input('address_id');
         $pin = Address::where('id',$address_id)->first();
         $order_id = null;
-      
+        $payment_type = $request->input('payment_type');
         $pin_check = Pin::where('pincode',$pin->pin_code)->count();
         $shipping_charge = DB::table('charges')->first();
         $shipping_charge = $shipping_charge->amount;
@@ -102,13 +103,13 @@ class CheckoutController extends Controller
          
                 try {
                 
-                    DB::transaction(function () use($address_id, $user_id, $grand_total, &$order_id) {
+                    DB::transaction(function () use($address_id, $user_id, $grand_total, $payment_type,&$order_id) {
 
                         $order = new Order();
                         $order->order_id = time();
                         $order->user_id = $user_id;
                         $order->address_id = $address_id;
-                        $order->payment_type =1;
+                         $order->payment_type =$payment_type;
                         
                         $order->amount = $grand_total;
                         $order->payment_status = 1;

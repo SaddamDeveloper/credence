@@ -66,58 +66,52 @@
 @section('script')
 <script type="text/javascript">
     
+
+
+var table = $('#all_orders_table').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: "{{ route('admin.new_orders_list_ajax') }}",
+    columns: [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        {data: 'order_id', name: 'order_id',searchable: true},
+        {data: 'username', name: 'username',searchable: true},
+        {data: 'payment_id', name: 'payment_id' ,searchable: true},
+        {data: 'payment_status', name: 'payment_status' ,searchable: true},  
+        {data: 'order_date', name: 'order_date', searchable: true},                
+        {data: 'action', name: 'action', orderable: false, searchable: false},
+    ]
+});
 $(document).ready(function(){
-
-    $('#all_orders_table').DataTable({
-
-        "processing": true,
-        "serverSide": true,
-        "ajax":{
-            "url": "{{ route('admin.orders_list_data') }}",
-            "dataType": "json",
-            "type": "POST",
-            "data":{ 
-                _token: "{{csrf_token()}}",
-                'status': 1
+  $(document).on('click', '#out', function(){
+        $('#exampleModal').modal('toggle');
+        var id = $(this).data('id');
+      $(document).on('click', '#submit', function(){
+        const awb_no = $('#awb_no').val();
+        const order_id = id;
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        },
-        "columns": [
-            { "data": "id" },
-            { "data": "order_id" },
-            { "data": "user_name" },
-            { "data": "payment_id" },
-            { "data": "payment_status" },
-            { "data": "order_date" },
-            { "data": "action" },
-        ],    
-    });
-    $(document).on('click', '#out', function(){
-      $('#exampleModal').modal('toggle');
-      var id = $(this).data('id');
-    $(document).on('click', '#submit', function(){
-      const awb_no = $('#awb_no').val();
-      const order_id = id;
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-      });
-      $.ajax({
-          type:"POST",
-          url:"{{ route('admin.out_for_delivery') }}",
-          data: {awb_no: awb_no, order_id: order_id},
-          success:function(data){
-             if(data == 1){
-               alert('Successfully for out for delivery');
-               $('#exampleModal').modal('toggle');
-               window.location.reload();
-             }else{
-               alert('Something went wrong!');
-             }
-          }
+        });
+        $.ajax({
+            type:"POST",
+            url:"{{ route('admin.out_for_delivery') }}",
+            data: {awb_no: awb_no, order_id: order_id},
+            success:function(data){
+              if(data == 1){
+                alert('Successfully Shipped');
+                $('#exampleModal').modal('toggle');
+                window.location.reload();
+              }else{
+                alert('Something went wrong!');
+              }
+            }
+        });
       });
     });
   });
-});
+
+
 </script>
 @endsection

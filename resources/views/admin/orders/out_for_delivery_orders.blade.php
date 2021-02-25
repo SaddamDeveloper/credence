@@ -9,7 +9,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Out for Delivery Orders List</h2>
+                    <h2>Shipped Orders List</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -47,32 +47,20 @@
 @section('script')
 <script type="text/javascript">
     
-$(document).ready(function(){
-
-    $('#all_orders_table').DataTable({
-
-        "processing": true,
-        "serverSide": true,
-        "ajax":{
-            "url": "{{ route('admin.orders_list_data') }}",
-            "dataType": "json",
-            "type": "POST",
-            "data":{ 
-                _token: "{{csrf_token()}}",
-                'status': 2
-            }
-        },
-        "columns": [
-            { "data": "id" },
-            { "data": "order_id" },
-            { "data": "dispatch_id" },
-            { "data": "user_name" },
-            { "data": "payment_id" },
-            { "data": "payment_status" },
-            { "data": "order_date" },
-            { "data": "action" },
-        ],    
-    });
+    var table = $('#all_orders_table').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: "{{ route('admin.out_for_delivery_list_ajax') }}",
+    columns: [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        {data: 'order_id', name: 'order_id',searchable: true},
+        {data: 'awb_no', name: 'awb_no',searchable: true},
+        {data: 'username', name: 'username',searchable: true},
+        {data: 'payment_id', name: 'payment_id' ,searchable: true},
+        {data: 'payment_status', name: 'payment_status' ,searchable: true},  
+        {data: 'order_date', name: 'order_date', searchable: true},                
+        {data: 'action', name: 'action', orderable: false, searchable: false},
+    ]
 });
 </script>
 @endsection

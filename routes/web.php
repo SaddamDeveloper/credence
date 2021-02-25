@@ -221,16 +221,20 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 
         /** New Orders List **/
         Route::get('new-orders-list', 'OrdersController@newOrdersList')->name('admin.new_orders_list');
+        Route::get('new-orders-list-ajax', 'OrdersController@newOrdersListAjax')->name('admin.new_orders_list_ajax');
 
         /** Out for Delivery Orders List **/
         Route::get('out-for-delivery-orders-list', 'OrdersController@outForDeliveryOrdersList')->name('admin.out_for_delivery_orders_list');
-        Route::post('out/for/delivery', 'OrdersController@outForDelivery')->name('admin.out_for_delivery');
+        Route::post('shipped', 'OrdersController@outForDelivery')->name('admin.out_for_delivery');
+        Route::get('out-for-delivery-orders-list-ajax', 'OrdersController@outForDeliveryOrdersListAjax')->name('admin.out_for_delivery_list_ajax');
 
         /** Delivered Orders List **/
         Route::get('delivered-orders-list', 'OrdersController@deliveredOrdersList')->name('admin.delivered_orders_list');
+        Route::get('delivered-orders-list-ajax', 'OrdersController@deliveredOrdersListAjax')->name('admin.delivered_orders_list_ajax');
 
-        /** Delivered Orders List **/
+        /** Cancelled Orders List **/
         Route::get('canceled-orders-list', 'OrdersController@canceledOrdersList')->name('admin.canceled_orders_list');
+        Route::get('cacnceled-orders-list-ajax', 'OrdersController@cancelOrdersListAjax')->name('admin.cancel_orders_list_ajax');
 
         /** User Order History List **/
         Route::get('users-orders-history-list/{user_id}', 'OrdersController@usersOrdersHistoryList')->name('admin.users_orders_history_list');
@@ -247,6 +251,35 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 
         /** Order Status Update **/
         Route::get('order-status-update/{order_id}/{status}', 'OrdersController@orderStatusUpdate')->name('admin.order_status_update');
+
+        Route::group(['prefix'=>'return'],function(){
+            Route::get('list','OrdersController@returnRequestList')->name('admin.return_request_list');
+            Route::get('list/ajax', 'OrdersController@returnRequestListAjax')->name('admin.return_request_list_ajax');
+            
+            Route::get('accepted/list','OrdersController@returnAcceptList')->name('admin.return_accepted_list');
+            Route::get('accepted/list/ajax', 'OrdersController@returnAcceptedListAjax')->name('admin.return_accepted_list_ajax');
+
+            Route::get('rejected/list','OrdersController@returnRejectedList')->name('admin.return_rejected_list');
+            Route::get('rejected/list/ajax', 'OrdersController@returnRejectedListAjax')->name('admin.return_rejected_list_ajax');
+            
+           
+            Route::get('request/form/{id}/{status}', 'OrdersController@addReturnRequest')->name('admin.add_return_request');
+            Route::post('process/request/', 'OrdersController@processReturnRequest')->name('admin.process_return_request');
+        });
+
+        Route::group(['prefix'=>'exchange'],function(){
+            Route::get('list','OrdersController@exchangeRequestList')->name('admin.exchange_request_list');
+            Route::get('list/ajax', 'OrdersController@exchangeRequestListAjax')->name('admin.exchange_request_list_ajax');
+            
+            Route::get('accepted/list','OrdersController@exchangeAcceptList')->name('admin.exchange_accepted_list');
+            Route::get('accepted/list/ajax', 'OrdersController@exchangeAcceptedListAjax')->name('admin.exchange_accepted_list_ajax');
+
+            Route::get('rejected/list','OrdersController@exchangeRejectedList')->name('admin.exchange_rejected_list');
+            Route::get('rejected/list/ajax', 'OrdersController@exchangeRejectedListAjax')->name('admin.exchange_rejected_list_ajax');
+
+            Route::get('exchange/form/{id}/{status}', 'OrdersController@addExchangeRequest')->name('admin.add_exchange_request');
+            Route::post('process/exchange/request/', 'OrdersController@processExchangeRequest')->name('admin.process_exchange_request');
+        });
     });
 
     Route::group(['prefix'=>'charges'],function(){
@@ -264,6 +297,15 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
         Route::put('update/{id}', 'ConfigurationController@couponUpdate')->name('admin.coupon_update');
         Route::get('status/{id}/{status}', 'ConfigurationController@couponStatus')->name('admin.coupon_status');
     });
+
+    Route::group(['prefix'=>'refund'],function(){
+        Route::get('list','ConfigurationController@refundInfoList')->name('admin.refund_list');
+        Route::get('add/refund/details/{id}','ConfigurationController@addRefundDetails')->name('admin.add_refund_details');
+        Route::put('post/refund/{id}','ConfigurationController@postRefundDetails')->name('admin.post_refund_details');
+        Route::get('refund/now/{id}','ConfigurationController@refundNow')->name('admin.refund_now');
+    });
+
+    
     // Route::group(['namespace'=>'Review'],function(){
 
     //     /** New Reviews List **/

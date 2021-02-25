@@ -15,7 +15,8 @@
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.0",
         "razorpay/razorpay": "2.*",
-        "unisharp/laravel-ckeditor": "^4.7"
+        "unisharp/laravel-ckeditor": "^4.7",
+        "yajra/laravel-datatables": "1.5"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

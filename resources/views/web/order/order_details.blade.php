@@ -46,8 +46,10 @@
                                                       <label class="label label-warning">Pending</label>
                                                   @elseif($order->order->order_status == 2)
                                                       <label class="label label-info">Out for Delivery</label>
-                                                  @else
+                                                  @elseif($order->order->order_status ==3)
                                                       <label class="label label-success">Delivered</label>
+                                                  @elseif($order->order->order_status ==4)
+                                                      <label class="label label-danger">Canceled</label>
                                                   @endif 
                                                 </b>
                                                 </div>
