@@ -328,6 +328,7 @@ class OrdersController extends Controller
                     $refund->amount = $order->amount;
                     $refund->status = 1;
                     $refund->save();
+                    return redirect()->route('admin.refund_list');
                 }else{
                     return redirect()->back();
                 }
@@ -342,9 +343,9 @@ class OrdersController extends Controller
 
         }
         if($order->save() && $status ==1){
-            return redirect()->back()->with('message','Return Request accepted');
+            return redirect()->route('admin.return_request_list');
         }else{
-            return redirect()->back()->with('message','Return Request Rejected');
+            return redirect()->route('admin.return_request_list');
         }
 
     }
@@ -364,13 +365,14 @@ class OrdersController extends Controller
         }
         $order = Order::findOrFail($order_id);
         if( $status==4){
-            if($order->payment_type=2){
+            if($order->payment_type==2){
                 if($order->payment_status == 2){
                     $refund = new RefundInfo();
                     $refund->order_id = $order_id;
                     $refund->user_id = $order->user_id;
                     $refund->amount = $order->amount;
                     $refund->save();
+                    return redirect()->route('admin.refund_list');
                 }else{
                     return redirect()->back();
                 }
@@ -689,9 +691,9 @@ class OrdersController extends Controller
 
         }
         if($order->save() && $status ==1){
-            return redirect()->back()->with('message','Exchange Request accepted');
+            return redirect()->route('admin.exchange_request_list');
         }else{
-            return redirect()->back()->with('message','Exchange Request Rejected');
+            return redirect()->route('admin.exchange_request_list');
         }
 
     }

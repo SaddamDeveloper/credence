@@ -53,7 +53,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <textarea class="form-control" placeholder="e.g Package Dispatched through ecom express with tracking no: AWB342334" id="awb_no"></textarea>
+              <textarea class="form-control" placeholder="e.g Package Dispatched through ecom express with tracking no: AWB342334" id="awb_no" required></textarea>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" id="submit">Submit</button>
@@ -89,25 +89,29 @@ $(document).ready(function(){
       $(document).on('click', '#submit', function(){
         const awb_no = $('#awb_no').val();
         const order_id = id;
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type:"POST",
-            url:"{{ route('admin.out_for_delivery') }}",
-            data: {awb_no: awb_no, order_id: order_id},
-            success:function(data){
-              if(data == 1){
-                alert('Successfully Shipped');
-                $('#exampleModal').modal('toggle');
-                window.location.reload();
-              }else{
-                alert('Something went wrong!');
+        if(awb_no){
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }
-            }
-        });
+          });
+          $.ajax({
+              type:"POST",
+              url:"{{ route('admin.out_for_delivery') }}",
+              data: {awb_no: awb_no, order_id: order_id},
+              success:function(data){
+                if(data == 1){
+                  alert('Successfully Shipped');
+                  $('#exampleModal').modal('toggle');
+                  window.location.reload();
+                }else{
+                  alert('Something went wrong!');
+                }
+              }
+          });
+        }else{
+          alert('Awb No Is Required!');
+        }
       });
     });
   });

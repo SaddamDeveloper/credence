@@ -23,14 +23,16 @@
                               <h2>Exchange</h2>
                             </div>
                             <div class="static-contain account-login">
-                              <form action="http://localhost/credence/public/update-my-profile" autocomplete="off" method="POST">
+                              <form action="{{route('web.order.request_exchange')}}" autocomplete="off" method="POST">
+                                @csrf
                                 <ul class="form-list">
                                   <li>
                                       <div class="row">
                                           <div class="col-sm-12">
                                               <label for="name">Order ID <span class="required">*</span></label>
                                               <br>
-                                          <input type="text" name="name" value="CRDD459HY" class="input-text required-entry" required="">
+                                          <input type="text" name="name" readonly="readonly" class="input-text required-entry" value="{{$order->order_id}}" >
+                                          <input type="hidden" name="order_id" value="{{$order->id}}">
                                           </div>
                                       </div>
                                   </li>

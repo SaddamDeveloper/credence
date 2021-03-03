@@ -100,7 +100,7 @@ class OrdersController extends Controller
 	}
 	public function exchangeRequest($id){
 		$order = Order::findOrFail($id);
-		return view('web.order.exchange_order',compact('order'));
+		return view('web.order.exchange',compact('order'));
 
 	}
 
@@ -121,7 +121,7 @@ class OrdersController extends Controller
 
 	public function returnRequest($id){
 		$order = Order::findOrFail($id);
-		return view('web.order.return_order',compact('order'));
+		return view('web.order.return',compact('order'));
 
 	}
 

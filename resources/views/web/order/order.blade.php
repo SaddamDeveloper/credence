@@ -71,9 +71,9 @@
                                             @endif
                                           </td>
                                           <td>
-                                            <a class="btn btn-primary" href="{{ route('web.order.order_details', ['id' =>$order->id]) }}">View details</a>
+                                            <a class="btn btn-xs btn-primary" href="{{ route('web.order.order_details', ['id' =>$order->id]) }}">View details</a>
                                             @if($order->order_status ==1 || $order->order_status ==2 )
-                                              <a class="btn btn-danger"  onclick="if (!confirm('Are you sure?')) return false;" href="{{ route('web.order.cancel_order', ['order_id' =>$order->id]) }}">Cancel Order</a>
+                                              <a class="btn btn-xs btn-danger"  onclick="if (!confirm('Are you sure?')) return false;" href="{{ route('web.order.cancel_order', ['order_id' =>$order->id]) }}">Cancel Order</a>
                                             @endif
                                             @php
                                                 $delivery_date = $order->updated_at;
@@ -87,16 +87,15 @@
                                                 }
                                             @endphp
                                             @if($order->order_status ==3 && $status ==1 && $order->order_status != 5 && $order->order_status !=9 && $order->order_status != 8)
-                                              <a class="btn btn-warning"  onclick="if (!confirm('Are you sure?')) return false;" href="{{route('web.order.return_request',['id'=>$order->id])}}">Return Order</a>
+                                              <a class="btn btn-xs btn-danger" class="btn btn-warning"  onclick="if (!confirm('Are you sure?')) return false;" href="{{route('web.order.return_request',['id'=>$order->id])}}">Return Order</a>
                                             @endif
                                             @if($order->order_status ==3 && $order->order_status !=5)
-                                            <a class="btn btn-info"  onclick="if (!confirm('Are you sure?')) return false;" href="{{route('web.order.exchange_request',['id'=>$order->id])}}">Exchange Order</a>
+                                            <a class="btn btn-xs btn-warning"  onclick="if (!confirm('Are you sure?')) return false;" href="{{route('web.order.exchange_request',['id'=>$order->id])}}">Exchange Order</a>
                                             @endif
                                           </td>
                                           <td>
-                                            <a class="btn btn-xs btn-primary" href="{{ route('web.order.order_details', ['id' =>$order->id]) }}">View details</a>
-                                            <a class="btn btn-xs btn-warning" href="{{route('web.order.exchange')}}">Exchange</a>
-                                            <a class="btn btn-xs btn-danger" href="{{route('web.order.return')}}">Return</a>
+                                            {{-- <a class="btn btn-xs btn-warning" href="{{route('web.order.exchange')}}">Exchange</a> --}}
+                                            {{-- <a class="btn btn-xs btn-danger" href="{{route('web.order.return')}}">Return</a> --}}
                                           </td>
                                       </tr>
                                   @endforeach

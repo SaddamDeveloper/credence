@@ -23,14 +23,16 @@
                               <h2>Return</h2>
                             </div>
                             <div class="static-contain account-login">
-                              <form action="http://localhost/credence/public/update-my-profile" autocomplete="off" method="POST">
+                              <form action="{{route('web.order.request_return')}}" autocomplete="off" method="POST">
+                                @csrf
                                 <ul class="form-list">
                                   <li>
                                       <div class="row">
                                           <div class="col-sm-12">
                                               <label for="name">Order ID <span class="required">*</span></label>
                                               <br>
-                                          <input type="text" name="name" value="CRDD459HY" class="input-text required-entry" required="">
+                                          <input type="text" readonly="readonly" value="{{$order->order_id}}" class="input-text required-entry" >
+                                          <input type="hidden" name="order_id" value="{{$order->id}}">
                                           </div>
                                       </div>
                                   </li>
@@ -39,7 +41,7 @@
                                           <div class="col-sm-12">
                                               <label for="email">Reason<span class="required">*</span></label>
                                               <br>
-                                              <textarea class="required-entry input-text" value="" name="reason" required="" rows="3" style="width: 100%;"></textarea>
+                                              <textarea class="required-entry input-text" value="" name="reason"  rows="3" style="width: 100%;"></textarea>
                                           </div>
                                       </div>
                                   </li>

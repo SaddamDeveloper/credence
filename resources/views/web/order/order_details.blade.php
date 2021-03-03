@@ -32,6 +32,8 @@
                                                     <div class="quantity">
                                                     <p><small>₹{{ number_format($order->mrp, 2) }}</small> ₹{{ number_format($order->price, 2) }} </p> <b>|</b>
                                                     <label style="margin-bottom: 0;">Quantity:</label>&nbsp;&nbsp;{{ $order->quantity }}
+                                                    |  <label style="margin-bottom: 0;">Order ID:</label>&nbsp;&nbsp;{{ $order->order->order_id }}
+                                                    |  <label style="margin-bottom: 0;">Track ID:</label>&nbsp;&nbsp;{{ $order->order->awb_no }}
                                                 </div>
                                                 </div>
                                                 <div class="varient">
@@ -50,7 +52,22 @@
                                                       <label class="label label-success">Delivered</label>
                                                   @elseif($order->order->order_status ==4)
                                                       <label class="label label-danger">Canceled</label>
-                                                  @endif 
+                                                  @elseif($order->order->order_status ==5)
+                                                      <label class="label label-danger">Return Requested</label>
+                                                  @elseif($order->order->order_status ==6)
+                                                      <label class="label label-danger">Return Request Accepted</label>
+                                                  @elseif($order->order->order_status ==7)
+                                                      <label class="label label-danger">Return Request Rejected</label>
+                                                  @elseif($order->order->order_status ==8)
+                                                      <label class="label label-danger">Returned</label>
+                                                  @elseif($order->order->order_status ==9)
+                                                      <label class="label label-danger">Exchange Requested</label>
+                                                  @elseif($order->order->order_status ==10)
+                                                      <label class="label label-danger">Exchanged</label>
+                                                  @elseif($order->order->order_status ==11)
+                                                      <label class="label label-danger">Exchange Request Rejected</label>
+                                                  @endif
+                                                  
                                                 </b>
                                                 </div>
                                             </div>
