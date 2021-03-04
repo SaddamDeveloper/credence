@@ -6,10 +6,8 @@
               <div class="footer-links">
                 <h4>Website links</h4>
                 <ul class="links">
-                  <li><a href="#" title="Product Recall">Company Policy</a></li>
-                  <li><a href="#" title="Returns &amp; Exchange">Returns &amp; Policy</a></li>
-                  <li><a href="#" title="Shipping Options">Shipping Policy</a></li>
-                  <li><a href="#" title="Help &amp; FAQs">Help &amp; FAQs</a></li>
+                  <li><a href="{{route('web.other.terms')}}" title="Product Recall">Terms &amp; Condition </a></li>
+                  <li><a href="{{route('web.other.returnandreplacement')}}" title="Returns &amp; Exchange">Returns &amp; Replacement Policy</a></li>
                   <li><a href="#" title="Order history">Order history</a></li>
                 </ul>
               </div>

@@ -177,3 +177,16 @@ Route::get('/Order-placed', function () {
 Route::get('/Wishlist', function () {
     return view('web.wishlist.wishlist');
 })->name('web.wishlist.wishlist');
+
+//========= Terms and Condition =========//
+Route::get('/Terms&Condition', function () {
+    return view('web.other.terms');
+})->name('web.other.terms');
+
+//========= Return and replacement policy =========//
+Route::get('/Return&Replacement/policy', function () {
+    return view('web.other.returnandreplacement');
+})->name('web.other.returnandreplacement');
+
+
+
