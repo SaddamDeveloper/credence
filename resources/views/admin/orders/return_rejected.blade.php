@@ -9,7 +9,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Canceled Orders List</h2>
+                    <h2>Return Rejected</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -52,7 +52,7 @@
 var table = $('#all_orders_table').DataTable({
     processing: true,
     serverSide: true,
-    ajax: "{{ route('admin.cancel_orders_list_ajax') }}",
+    ajax: "{{ route('admin.return_rejected_list_ajax') }}",
     columns: [
         {data: 'DT_RowIndex', name: 'DT_RowIndex'},
         {data: 'order_id', name: 'order_id',searchable: true},

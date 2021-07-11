@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderDetails;
+use App\Models\RefundInfo;
 use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
@@ -69,6 +70,7 @@ class OrdersController extends Controller
 	}
 	public function orderDetail(){
 		$orders = Order::latest()->paginate(10);
+	
 		return view('web.order.order', compact('orders'));
 	}
 
@@ -76,5 +78,97 @@ class OrdersController extends Controller
 		$order_details = OrderDetails::where('id',$id)->get();
 		return view('web.order.order_details',compact('order_details'));
 
+	}
+	
+	public function cancelOrder($order_id){
+		$order = Order::findOrFail($order_id);
+		if($order->payment_type == 1){
+			$order->order_status = 4;
+			$order->save();
+			return redirect()->back();
+
+		}else{
+			if($order->payment_status==2){
+				return redirect()->route('web.order.refund_form',['order_id'=>$order_id]);
+			}else{
+				$order->order_status = 4;
+				$order->save();
+				return redirect()->back();
+			}
+		}
+
+	}
+	public function exchangeRequest($id){
+		$order = Order::findOrFail($id);
+		return view('web.order.exchange',compact('order'));
+
+	}
+
+	public function postExchangeRequest(Request $request){
+		$this->validate($request,[
+			'reason'=>'required',
+			'order_id'=>'required'
+		]);
+
+		$order = Order::findOrFail($request->input('order_id'));
+		$order->order_status = 9;
+		$order->return_request_remark = $request->input('reason');
+		if($order->save()){
+			return redirect()->route('web.order.order');
+		}
+	}
+
+
+	public function returnRequest($id){
+		$order = Order::findOrFail($id);
+		return view('web.order.return',compact('order'));
+
+	}
+
+	public function requestReturn(Request $request){
+		$this->validate($request,[
+			'reason'=>'required',
+			'order_id'=>'required'
+		]);
+
+		$order = Order::findOrFail($request->input('order_id'));
+		$order->order_status = 5;
+		$order->return_request_remark = $request->input('reason');
+		if($order->save()){
+			return redirect()->route('web.order.order');
+		}
+	}
+
+	public function refundForm($order_id){
+		return view('web.order.refund_form',compact('order_id'));
+	}
+
+	public function refund(Request $request){
+		$this->validate($request,[
+			'order_id'=>'required|numeric',
+			'reason'=>'required',
+			'ifsc'=>'required',
+			'branch'=>'required',
+			'acc_no'=>'required',
+			'acc_name'=>'required',
+		]);
+		$order = Order::findOrFail($request->input('order_id'));
+		$order->order_status =4;
+		$order->save();
+		$refund =  new RefundInfo();
+		$refund->order_id = $order->id;
+		$refund->user_id =$order->user_id;
+		$refund->amount = $order->amount;
+		$refund->reasons = $request->input('reason');
+		$refund->ac_no = $request->input('acc_no');
+		$refund->ac_name = $request->input('acc_name');
+		$refund->ifsc = $request->input('ifsc');
+		$refund->branch = $request->input('branch');
+		$refund->status =1;
+		if($refund->save()){
+			$order->is_refund=2;
+			$order->save();
+			return redirect()->route('web.order.order');
+		}
 	}
 }

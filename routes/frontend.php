@@ -97,6 +97,13 @@ Route::group(['namespace'=>'Web'],function(){
 
 		Route::get('/Order', 'OrdersController@orderDetail')->name('web.order.order');
 		Route::get('/order/details/{id}','OrdersController@orderDetailss')->name('web.order.order_details');
+		Route::get('/order/cancel/{order_id}','OrdersController@cancelOrder')->name('web.order.cancel_order');
+		Route::get('/order/refund/{order_id}','OrdersController@refundForm')->name('web.order.refund_form');
+		Route::post('/refund/order/','OrdersController@refund')->name('web.order.refund');
+		Route::get('/return/request/{id}','OrdersController@returnRequest')->name('web.order.return_request');
+		Route::post('/request/return/','OrdersController@requestReturn')->name('web.order.request_return');
+		Route::get('/exchange/request/{id}','OrdersController@exchangeRequest')->name('web.order.exchange_request');
+		Route::post('/request/exchange/','OrdersController@postExchangeRequest')->name('web.order.request_exchange');
 
 
 		
@@ -104,17 +111,20 @@ Route::group(['namespace'=>'Web'],function(){
 });
 
 //========= Product =========//
+Route::get('/Return', function () {
+    return view('web.order.return');
+})->name('web.order.return');
 
-// Route::get('/product-list', function () {
-//     return view('web.product.product-list');
-// })->name('web.product.product-list');
+Route::get('/Exchange', function () {
+    return view('web.order.exchange');
+})->name('web.order.exchange');
 
+//========= Product =========//
 Route::get('/single-product', function () {
     return view('web.product.single-product');
 })->name('web.product.single-product');
 
 //========= user =========//
-
 Route::get('/Login', function () {
     return view('web.user.login');
 })->name('web.user.login');
@@ -132,7 +142,6 @@ Route::get('/Forgot-password/Change-password', function () {
 })->name('web.user.forgot-change-password');
 
 //========= Address =========//
-
 Route::get('/address', function () {
     return view('web.address.address');
 })->name('web.address.address');
@@ -142,7 +151,6 @@ Route::get('/address/Edit', function () {
 })->name('web.address.edit-address');
 
 //========= profile =========//
-
 Route::get('/Profile', function () {
     return view('web.profile.profile');
 })->name('web.profile.profile');
@@ -156,19 +164,29 @@ Route::get('/Profile/Change-password', function () {
 })->name('web.profile.change-password');
 
 //========= checkout =========//
-
 Route::get('/cart', function () {
     return view('web.checkout.cart');
 })->name('web.checkout.cart');
 
+//========= Order Placed =========//
 Route::get('/Order-placed', function () {
     return view('web.checkout.corfirm');
 })->name('web.checkout.corfirm');
 
-
-
 //========= wishlist =========//
-
 Route::get('/Wishlist', function () {
     return view('web.wishlist.wishlist');
 })->name('web.wishlist.wishlist');
+
+//========= Terms and Condition =========//
+Route::get('/Terms&Condition', function () {
+    return view('web.other.terms');
+})->name('web.other.terms');
+
+//========= Return and replacement policy =========//
+Route::get('/Return&Replacement/policy', function () {
+    return view('web.other.returnandreplacement');
+})->name('web.other.returnandreplacement');
+
+
+

@@ -104,9 +104,35 @@
                   <li><a><i class="fa fa-edit"></i> Manage Orders <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{ route('admin.new_orders_list') }}">New Orders</a></li>
-                      <li><a href="{{ route('admin.out_for_delivery_orders_list') }}">Out for Delivery</a></li>
+                      <li><a href="{{ route('admin.out_for_delivery_orders_list') }}">Shipped</a></li>
                       <li><a href="{{ route('admin.delivered_orders_list') }}">Delivered Orders</a></li>
                       <li><a href="{{ route('admin.canceled_orders_list') }}">Cancel Orders</a></li>
+                      {{-- <li>
+                        <a href="{{ route('admin.return_request_list') }}">Return Request Orders</a>
+                        
+                      </li> --}}
+                      <li><a>Return Request<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                          <li class="sub_menu"><a href="{{ route('admin.return_request_list') }}">All</a>
+                          </li>
+                          <li class="sub_menu"><a href="{{route('admin.return_accepted_list')}}">Accepted</a>
+                          </li>
+                          <li><a href="{{route('admin.return_rejected_list')}}">Rejected</a>
+                          </li>
+                          
+                        </ul>
+                      </li>
+                      <li><a>Exchange Request<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                          <li class="sub_menu"><a href="{{ route('admin.exchange_request_list') }}">All</a>
+                          </li>
+                          <li class="sub_menu"><a href="{{route('admin.exchange_accepted_list')}}">Accepted</a>
+                          </li>
+                          <li><a href="{{route('admin.exchange_rejected_list')}}">Rejected</a>
+                          </li>
+                          
+                        </ul>
+                      </li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-edit"></i> Manage Brands <span class="fa fa-chevron-down"></span></a>
@@ -126,6 +152,7 @@
                     <ul class="nav child_menu">
                       <li class="sub_menu"><a href="{{ route('admin.charges_list') }}">Charges List</a></li>
                       <li class="sub_menu"><a href="{{ route('admin.coupon_list') }}">Coupon List</a></li>
+                      <li class="sub_menu"><a href="{{ route('admin.refund_list') }}">Refund List</a></li>
                     </ul>
                 </ul>
                 

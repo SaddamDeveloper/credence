@@ -57,9 +57,16 @@
                         </li>
                         @endforeach
                       </ul>
+                    @else
+                      <center>
+                        <div class="emptycrt">
+                          <img src="{{ asset('web/images/no-product.jpg') }}" alt="">
+                            <p style="margin: 10px 0 0">Wishlist is Empty</p>
+                        </div>
+                      </center>
                     @endif
-                </div>
                   </div>
+                </div>
               </div>
             </article>
             <!--  ///*///======    End article  ========= //*/// --> 

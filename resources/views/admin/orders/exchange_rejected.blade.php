@@ -9,7 +9,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Canceled Orders List</h2>
+                    <h2>Exchange Rejected Orders List</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -25,6 +25,7 @@
                         <tr>
                             <th>Sl No</th>
                             <th>Order Id</th>
+                            <th>Track ID</th>
                             <th>User Name</th>
                             <th>Payment Id</th>
                             <th>Payment Status</th>
@@ -46,16 +47,14 @@
 @section('script')
 <script type="text/javascript">
     
-
-   
-
-var table = $('#all_orders_table').DataTable({
+    var table = $('#all_orders_table').DataTable({
     processing: true,
     serverSide: true,
-    ajax: "{{ route('admin.cancel_orders_list_ajax') }}",
+    ajax: "{{ route('admin.exchange_rejected_list_ajax') }}",
     columns: [
         {data: 'DT_RowIndex', name: 'DT_RowIndex'},
         {data: 'order_id', name: 'order_id',searchable: true},
+        {data: 'awb_no', name: 'awb_no',searchable: true},
         {data: 'username', name: 'username',searchable: true},
         {data: 'payment_id', name: 'payment_id' ,searchable: true},
         {data: 'payment_status', name: 'payment_status' ,searchable: true},  

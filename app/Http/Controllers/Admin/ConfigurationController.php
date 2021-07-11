@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Charges;
 use App\Models\Coupon;
+use App\Models\Order;
+use App\Models\RefundInfo;
+
 class ConfigurationController extends Controller
 {
     public function chargesList()
@@ -110,6 +113,47 @@ class ConfigurationController extends Controller
             'status'=>$status,
         ]);
         return redirect()->back();
+    }
+
+    public function refundInfoList(){
+        $refund = RefundInfo::latest()->get();
+        return view('admin.refund.refund_info_list',compact('refund'));
+    }
+
+    public function addRefundDetails($id){
+        $refund = RefundInfo::findOrFail($id);
+        return view('admin.refund.add_refund',compact('refund'));
+    }
+
+    public function postRefundDetails(Request $request,$id){
+        $this->validate($request, [
+            'acc_name'=>'required',
+            'acc_no'=>'required|numeric',
+            'ifsc'=>'required',
+            'reasons'=>'required',
+            'branch'=>'required'
+        ]);
+        $refund = RefundInfo::findOrFail($id);
+        $refund->ac_name = $request->input('acc_name');
+        $refund->ac_no = $request->input('acc_no');
+        $refund->ifsc = $request->input('ifsc');
+        $refund->reasons = $request->input('reasons');
+        $refund->branch = $request->input('branch');
+        $refund->status = 1;
+        if($refund->save()){
+            return redirect()->route('admin.refund_list')->with('message', 'Refund Info Added Succesfully');
+        }
+    }
+
+    public function refundNow($id){
+        $refund = RefundInfo::findOrFail($id);
+        $refund->status=2;
+        $refund->save();
+        $order=Order::where('id',$refund->order_id)->update([
+            'is_refund'=>2,
+            'order_status'=>8
+        ]);
+        return redirect()->back()->with('message','Amount Refund Successful');
     }
 
 }
